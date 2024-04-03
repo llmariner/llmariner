@@ -8,4 +8,7 @@ kind load docker-image inference-server:latest -n "${cluster_name}"
 kind load docker-image job-manager-server:latest -n "${cluster_name}"
 
 kubectl apply -f inference-server.yaml
-kubectl apply -f job-manager.yaml
+
+job_manager_repo="../../job-manager"
+
+helm upgrade --install job-manager-server "${job_manager_repo}"/deployments/server
