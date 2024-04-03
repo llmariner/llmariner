@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-kubectl port-forward service/inference-server 11434:11434 &
-kubectl port-forward service/job-manager-server 8080:8080 &
-kubectl port-forward service/job-manager-server 8081:8081 &
+kubectl port-forward -n inference-server service/inference-server 11434:11434 &
+kubectl port-forward -n job-manager service/job-manager-server 8080:8080 &
+kubectl port-forward -n job-manager service/job-manager-server 8081:8081 &
 
 # Send a test request.
 curl http://localhost:11434/api/generate -d '{
@@ -14,6 +14,7 @@ curl http://localhost:11434/api/generate -d '{
 
 # Test the fine-tuning service.
 curl http://localhost:8080/v1/fine_tuning/jobs
+curl -X POST http://localhost:8080/v1/fine_tuning/jobs
 grpcurl -plaintext localhost:8081 list llmoperator.fine_tuning.server.v1.FineTuningService
 
 # Test OpenAI API by following https://platform.openai.com/docs/quickstart?context=python

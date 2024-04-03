@@ -1,0 +1,7 @@
+database:
+  host: postgres.postgres.svc.cluster.local
+  username: ps_user
+
+databaseSecret:
+  name: job-manager-postgres
+  key: password
