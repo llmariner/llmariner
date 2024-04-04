@@ -32,5 +32,6 @@ Additionally it provides the following components as optional:
 # An Initial Demo Scenario
 
 1. A user uploads a dataset to File Manager.
-2. The user creates a fine-tuning job in Job Manager. Job Manager generatres a LoRA adapter with the uploaded dataset and stores the LoRA adapter in Model Registry.
-3. The user runs a chatbot using the fine-tuned model.
+2. The user creates a fine-tuning job in Job Manager. Job Manager generates a LoRA adapter with the uploaded dataset and stores the LoRA adapter in Model Registry.
+3. Inference Manager is notified and imports a new model.
+4. The user runs a chatbot using the fine-tuned model.
