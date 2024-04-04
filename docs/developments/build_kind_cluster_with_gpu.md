@@ -2,9 +2,9 @@
 
 ## Overview
 
-This document follows [https://github.com/klueska/kind-with-gpus-examples] to set up a Kind cluster with GPU.
+This document follows [Kevin Klues' instruction](https://github.com/klueska/kind-with-gpus-examples) to set up a Kind cluster with GPU.
 
-The GitHub issue for the feature request is tracked in [https://github.com/kubernetes-sigs/kind/issues/3164].
+The GitHub issue for the feature request is tracked in [here](https://github.com/kubernetes-sigs/kind/issues/3164).
 
 ## Procedure
 
