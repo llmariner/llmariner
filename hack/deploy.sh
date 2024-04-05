@@ -5,9 +5,13 @@ set -euo pipefail
 cluster_name="llm-operator-demo"
 job_manager_repo="../../job-manager"
 
-kubectl create namespace inference-server
-kind load docker-image inference-server:latest -n "${cluster_name}"
-kubectl apply --namespace inference-server -f inference-server.yaml
+# Create a persistent volume where fine-tuning jobs can store generated models.
+#
+# Mount the same volume from the inference server so that it can load the models.
+
+kubectl create namespace inference-manager
+kind load docker-image llm-operator/inference-engine:latest -n "${cluster_name}"
+kubectl apply --namespace inference-manager -f inference-server.yaml
 
 kubectl create namespace postgres
 kubectl apply --namespace postgres -f postgres.yaml
@@ -15,7 +19,7 @@ kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-p
 
 kubectl create namespace job-manager
 kubectl apply -n job-manager -f job-manager-postgres-secret.yaml
-kind load docker-image job-manager-server:latest -n "${cluster_name}"
+kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
 helm upgrade \
   --install \
   -n job-manager \
@@ -23,7 +27,7 @@ helm upgrade \
   "${job_manager_repo}"/deployments/server \
   -f "${job_manager_repo}"/deployments/server/values.yaml \
   -f job-manager-server-values.yaml
-kind load docker-image job-manager-dispatcher:latest -n "${cluster_name}"
+kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
 helm upgrade \
   --install \
   -n job-manager \
