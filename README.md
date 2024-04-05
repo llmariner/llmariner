@@ -4,11 +4,11 @@ LLM Operator builds a LLM stack that provides the following functionality:
 
 - LLM fine-tuning job management
 - LLM inference (compatible with OpenAI API)
-- (LoRA) / fine-tuning Model repository
+- Repository for fine-tuned models
 
 Additionally it provides the following components as optional:
 - Vector DB (e.g., https://milvus.io/)
-- Dataset Storage
+- Object Store
 - GPU Operator
 - Monitoring
 - MLFlow
