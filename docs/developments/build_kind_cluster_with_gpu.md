@@ -1,4 +1,4 @@
-{# Build a Kind Cluster with GPU
+# Build a Kind Cluster with GPU
 
 ## Overview
 
@@ -11,7 +11,7 @@ The GitHub issue for the feature request is tracked in [here](https://github.com
 ### Step 1. Create an EC2 instance with GPU
 
 - Create a `g5.4xlarge` instance. Ubuntu is used for this example.
-- Allocate a 100 GiB of gp3 root volume as AI/ML models would require a large amount of data.
+- Allocate a 500 GiB of gp3 root volume as AI/ML models would require a large amount of data.
 
 ### Step 2. Install Required Tools
 
