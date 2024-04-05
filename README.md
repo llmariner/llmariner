@@ -1,6 +1,6 @@
 # LLM Operatror
 
-LLM Operator builds a LLM stack that provides the following functionality:
+LLM Operator builds a LLM stack that provides the *OpenAI-compatible API anywhere", including the following functionality:
 
 - LLM fine-tuning job management
 - LLM inference (compatible with OpenAI API)
