@@ -10,6 +10,10 @@ kubectl create namespace postgres
 kubectl apply --namespace postgres -f postgres.yaml
 kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE job_manager;"
 
+kubectl create namespace model-store
+kubectl apply -n inference-manager -f model-store.yaml
+kubectl apply -n job-manager -f model-store.yaml
+
 kubectl create namespace inference-manager
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 helm upgrade \

@@ -1,3 +1,10 @@
+jobNamespace: job-manager
+inferenceManagerAddr: inference-manager-engine-internal-grpc.inference-manager.svc.cluster.local:8081
+
+modelStore:
+  enable: true
+  pvClaimName: model-store-volume-claim
+
 database:
   host: postgres.postgres.svc.cluster.local
   username: ps_user

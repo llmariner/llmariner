@@ -1,2 +1,3 @@
-internalGrpcPort: 8080
-ollamaPort: 8082
+modelStore:
+  enable: true
+  pvClaimName: model-store-volume-claim
