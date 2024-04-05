@@ -17,7 +17,7 @@ resp = client.fine_tuning.jobs.list()
 print(resp)
 
 client = OpenAI(
-  base_url="http://localhost:11434/v1",
+  base_url="http://localhost:8082/v1",
   api_key="<YOUR_API_KEY>"
 )
 
