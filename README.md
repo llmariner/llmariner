@@ -35,3 +35,5 @@ Additionally it provides the following components as optional:
 2. The user creates a fine-tuning job in Job Manager. Job Manager generates a LoRA adapter with the uploaded dataset and stores the LoRA adapter in Model Registry.
 3. Inference Manager is notified and imports a new model.
 4. The user runs a chatbot using the fine-tuned model.
+
+![Demo video](https://drive.google.com/file/d/1JJR4nBx2ZzXg4OX5skKuGUFvO52jS4d1/view)
