@@ -7,15 +7,22 @@ inference_manager_repo="../../inference-manager"
 job_manager_repo="../../job-manager"
 
 kubectl create namespace postgres
+kubectl create namespace inference-manager
+kubectl create namespace job-manager
+kubectl create namespace model-store
+
 kubectl apply --namespace postgres -f postgres.yaml
 kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE job_manager;"
 
-kubectl create namespace model-store
-kubectl apply -n inference-manager -f model-store.yaml
-kubectl apply -n job-manager -f model-store.yaml
+kubectl apply -n job-manager -f job-manager-postgres-secret.yaml
 
-kubectl create namespace inference-manager
+kubectl apply -n -f model-store.yaml
+
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
+kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
+kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
+# kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
+
 helm upgrade \
   --install \
   -n inference-manager \
@@ -24,9 +31,6 @@ helm upgrade \
   -f "${inference_manager_repo}"/deployments/engine/values.yaml \
   -f inference-manager-engine-values.yaml
 
-kubectl create namespace job-manager
-kubectl apply -n job-manager -f job-manager-postgres-secret.yaml
-kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
 helm upgrade \
   --install \
   -n job-manager \
@@ -35,7 +39,6 @@ helm upgrade \
   -f "${job_manager_repo}"/deployments/server/values.yaml \
   -f job-manager-server-values.yaml
 
-kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
 helm upgrade \
   --install \
   -n job-manager \
