@@ -36,4 +36,4 @@ Additionally it provides the following components as optional:
 3. Inference Manager is notified and imports a new model.
 4. The user runs a chatbot using the fine-tuned model.
 
-![Demo video](https://drive.google.com/file/d/1JJR4nBx2ZzXg4OX5skKuGUFvO52jS4d1/view)
+Please see [the demo video](https://drive.google.com/file/d/1JJR4nBx2ZzXg4OX5skKuGUFvO52jS4d1/view).
