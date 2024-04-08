@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-kubectl port-forward -n inference-server service/inference-server 11434:11434 &
 kubectl port-forward -n job-manager service/job-manager-server-http 8080:8080 &
 kubectl port-forward -n job-manager service/job-manager-server-grpc 8081:8081 &
 kubectl port-forward -n inference-manager service/inference-manager-engine-ollama 8082:8080 &

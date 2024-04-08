@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+./deploy_kong.sh
+
 cluster_name="llm-operator-demo"
 inference_manager_repo="../../inference-manager"
 job_manager_repo="../../job-manager"
@@ -12,11 +14,12 @@ kubectl create namespace job-manager
 kubectl create namespace model-store
 
 kubectl apply --namespace postgres -f postgres.yaml
+# TODO(kenji): Run this after the postgres pod starts running.
 kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE job_manager;"
 
 kubectl apply -n job-manager -f job-manager-postgres-secret.yaml
 
-kubectl apply -n -f model-store.yaml
+kubectl apply -f model-store.yaml
 
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"

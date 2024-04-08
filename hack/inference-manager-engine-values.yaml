@@ -1,3 +1,6 @@
 modelStore:
   enable: true
   pvClaimName: model-store-volume-claim
+
+ingress:
+  ingressClassName: kong
