@@ -2,20 +2,18 @@
 
 set -euo pipefail
 
-kubectl port-forward -n job-manager service/job-manager-server-http 8080:8080 &
-kubectl port-forward -n job-manager service/job-manager-server-grpc 8081:8081 &
-kubectl port-forward -n inference-manager service/inference-manager-engine-ollama 8082:8080 &
+# Send test requests
 
-# Send a test request.
-curl http://localhost:8082/api/generate -d '{
+curl http://localhost:80/v1/models
+
+curl http://localhost:80/v1/chat/completions -d '{
   "model": "gemma:2b",
-  "prompt":"Why is the sky blue?"
+  "messages": [{"role": "user", "content": "Why is the sky blue?"}]
 }'
 
 # Test the fine-tuning service.
-curl http://localhost:8080/v1/fine_tuning/jobs
-curl -X POST http://localhost:8080/v1/fine_tuning/jobs
-grpcurl -plaintext localhost:8081 list llmoperator.fine_tuning.server.v1.FineTuningService
+curl http://localhost:80/v1/fine_tuning/jobs
+curl -X POST http://localhost:80/v1/fine_tuning/jobs
 
 # Test OpenAI API by following https://platform.openai.com/docs/quickstart?context=python
 python3 -m venv openai-env

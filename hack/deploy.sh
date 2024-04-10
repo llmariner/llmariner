@@ -5,26 +5,41 @@ set -euo pipefail
 ./deploy_kong.sh
 
 cluster_name="llm-operator-demo"
+
+model_manager_repo="../../model-manager"
 inference_manager_repo="../../inference-manager"
 job_manager_repo="../../job-manager"
 
 kubectl create namespace postgres
+kubectl create namespace model-manager
 kubectl create namespace inference-manager
 kubectl create namespace job-manager
-kubectl create namespace model-store
 
 kubectl apply --namespace postgres -f postgres.yaml
+
 # TODO(kenji): Run this after the postgres pod starts running.
 kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE job_manager;"
+kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE model_manager;"
 
-kubectl apply -n job-manager -f job-manager-postgres-secret.yaml
+kubectl apply -n job-manager -f postgres-secret.yaml
+kubectl apply -n model-manager -f postgres-secret.yaml
 
 kubectl apply -f model-store.yaml
 
+kind load docker-image llm-operator/model-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
+
 # kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
+
+helm upgrade \
+  --install \
+  -n model-manager \
+  model-manager-engine \
+  "${model_manager_repo}"/deployments/server \
+  -f "${model_manager_repo}"/deployments/server/values.yaml \
+  -f model-manager-server-values.yaml
 
 helm upgrade \
   --install \

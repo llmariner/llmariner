@@ -10,5 +10,5 @@ database:
   username: ps_user
 
 databaseSecret:
-  name: job-manager-postgres
+  name: postgres
   key: password
