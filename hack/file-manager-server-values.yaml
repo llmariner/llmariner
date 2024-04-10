@@ -1,0 +1,10 @@
+database:
+  host: postgres.postgres.svc.cluster.local
+  username: ps_user
+
+databaseSecret:
+  name: postgres
+  key: password
+
+ingress:
+  ingressClassName: kong

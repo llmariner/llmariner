@@ -6,6 +6,8 @@ set -euo pipefail
 
 curl http://localhost:80/v1/models
 
+curl http://localhost:80/v1/files
+
 curl http://localhost:80/v1/chat/completions -d '{
   "model": "gemma:2b",
   "messages": [{"role": "user", "content": "Why is the sky blue?"}]
