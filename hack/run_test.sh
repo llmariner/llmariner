@@ -21,4 +21,5 @@ python3 -m venv openai-env
 source openai-env/bin/activate
 pip3 install --upgrade openai
 
-python3 run_openai.py
+python3 run_completion.py
+python3 run_fine_tuning.py
