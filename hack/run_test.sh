@@ -13,7 +13,6 @@ curl http://localhost:80/v1/chat/completions -d '{
 
 # Test the fine-tuning service.
 curl http://localhost:80/v1/fine_tuning/jobs
-curl -X POST http://localhost:80/v1/fine_tuning/jobs
 
 # Test OpenAI API by following https://platform.openai.com/docs/quickstart?context=python
 python3 -m venv openai-env

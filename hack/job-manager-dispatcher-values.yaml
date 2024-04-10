@@ -1,5 +1,5 @@
 jobNamespace: job-manager
-inferenceManagerAddr: inference-manager-engine-internal-grpc.inference-manager.svc.cluster.local:8081
+modelManagerServerAddr: model-manager-server-internal-grpc.model-manager.svc.cluster.local:8082
 
 modelStore:
   enable: true
@@ -12,3 +12,7 @@ database:
 databaseSecret:
   name: postgres
   key: password
+
+debug:
+  # Change this to false when creating a real fine-tuning jobs.
+  useFakeJob: true
