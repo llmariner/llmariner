@@ -20,6 +20,7 @@ print ('Creating a fine-tuning job...')
 client.fine_tuning.jobs.create(
   training_file="file-abc123",
   model="gemma:2b",
+  suffix='fine-tuning',
 )
 
 resp = client.fine_tuning.jobs.list()

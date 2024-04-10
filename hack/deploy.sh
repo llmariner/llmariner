@@ -30,13 +30,13 @@ kind load docker-image llm-operator/model-manager-server:latest -n "${cluster_na
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
-
 # kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
+kind load docker-image llm-operator/experiments-fake-job:latest -n "${cluster_name}"
 
 helm upgrade \
   --install \
   -n model-manager \
-  model-manager-engine \
+  model-manager-server \
   "${model_manager_repo}"/deployments/server \
   -f "${model_manager_repo}"/deployments/server/values.yaml \
   -f model-manager-server-values.yaml
