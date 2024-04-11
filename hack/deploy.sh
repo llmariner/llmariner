@@ -13,12 +13,15 @@ job_manager_repo="../../job-manager"
 
 
 kubectl create namespace postgres
+kubectl create namespace minio
 kubectl create namespace model-manager
 kubectl create namespace file-manager
 kubectl create namespace inference-manager
 kubectl create namespace job-manager
 
 kubectl apply --namespace postgres -f postgres.yaml
+
+kubectl apply --namespace minio -f minio.yaml
 
 # TODO(kenji): Run this after the postgres pod starts running.
 kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE model_manager;"

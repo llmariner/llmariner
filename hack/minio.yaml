@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: minio-volume
+  labels:
+    type: local
+    app: minio
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 500Mi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: /data/minio
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-volume-claim
+  labels:
+    app: minio
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: quay.io/minio/minio:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/bash
+        - -c
+        args:
+        - minio server /data --console-address :9090
+        ports:
+        - name: api
+          containerPort: 9000
+          protocol: TCP
+        - name: admin
+          containerPort: 9090
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /data
+          name: miniodata
+      volumes:
+      - name: miniodata
+        persistentVolumeClaim:
+          claimName: minio-volume-claim
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  type: NodePort
+  ports:
+  - port: 9000
+    targetPort: api
+    protocol: TCP
+    name: api
+  - port: 9090
+    targetPort: admin
+    protocol: TCP
+    name: admin
+  selector:
+    app: minio
