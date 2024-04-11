@@ -1,0 +1,8 @@
+[server]
+${server.tags.Name} ansible_host=${server.public_ip}
+
+[server:vars]
+ansible_user="ubuntu"
+
+[all:vars]
+ansible_ssh_private_key_file=${private_key_path}
