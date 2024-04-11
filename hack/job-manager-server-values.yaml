@@ -1,3 +1,5 @@
+fileManagerServerAddr: file-manager-server-grpc.file-manager.svc.cluster.local:8081
+
 database:
   host: postgres.postgres.svc.cluster.local
   username: ps_user

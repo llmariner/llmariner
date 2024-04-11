@@ -13,7 +13,7 @@ fileResp = client.files.create(
   file=open("my_training_data.jsonl", "rb"),
   purpose='fine-tune',
 )
-print('Uploaded file: ID=%s', fileResp.id)
+print('Uploaded file: ID=%s' % fileResp.id)
 
 print('Creating a fine-tuning job...')
 client.fine_tuning.jobs.create(
