@@ -5,6 +5,16 @@ modelStore:
   enable: true
   pvClaimName: model-store-volume-claim
 
+objectStore:
+  s3:
+    endpointUrl: http://minio.minio.svc.cluster.local:9000
+    bucket: llm-operator
+
+awsSecret:
+  name: aws
+  accessKeyIdKey: accessKeyId
+  secretAccessKeyKey: secretAccessKey
+
 database:
   host: postgres.postgres.svc.cluster.local
   username: ps_user

@@ -38,3 +38,11 @@ aws --endpoint-url http://localhost:9000 s3 mb s3://${bucket_name}
 kubectl create secret generic -n file-manager aws \
   --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
   --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
+
+kubectl create secret generic -n job-manager aws \
+  --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
+  --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
+
+kubectl create secret generic -n inference-manager aws \
+  --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
+  --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
