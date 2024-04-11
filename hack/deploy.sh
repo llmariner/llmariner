@@ -51,6 +51,14 @@ helm upgrade \
 
 helm upgrade \
   --install \
+  -n file-manager \
+  file-manager-server \
+  "${file_manager_repo}"/deployments/server \
+  -f "${file_manager_repo}"/deployments/server/values.yaml \
+  -f file-manager-server-values.yaml
+
+helm upgrade \
+  --install \
   -n inference-manager \
   inference-manager-engine \
   "${inference_manager_repo}"/deployments/engine \
