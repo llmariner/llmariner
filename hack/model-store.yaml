@@ -48,20 +48,3 @@ spec:
   - ReadWriteMany
   hostPath:
     path: /data/model-store
-
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: model-store-volume-claim
-  namespace: inference-manager
-  labels:
-    app: model-store
-spec:
-  storageClassName: manual
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 500Mi

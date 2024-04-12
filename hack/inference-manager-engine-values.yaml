@@ -1,6 +1,15 @@
-modelStore:
-  enable: true
-  pvClaimName: model-store-volume-claim
+modelManagerServerAddr: model-manager-server-grpc.model-manager.svc.cluster.local:8081
+modelManagerInternalServerAddr: model-manager-server-internal-grpc.model-manager.svc.cluster.local:8082
+
+objectStore:
+  s3:
+    endpointUrl: http://minio.minio.svc.cluster.local:9000
+    bucket: llm-operator
+
+awsSecret:
+  name: aws
+  accessKeyIdKey: accessKeyId
+  secretAccessKeyKey: secretAccessKey
 
 ingress:
   ingressClassName: kong
