@@ -1,0 +1,85 @@
+---
+- name: Setup server
+  hosts: server
+
+  tasks:
+  - name: Upgrade packages
+    ansible.builtin.apt:
+      upgrade: yes
+      state: latest
+      update_cache: yes
+    become: yes
+  - name: Install common packages
+    ansible.builtin.apt:
+      name:
+        - make
+        - gcc
+        - curl
+        - gnupg
+        - software-properties-common
+        - apt-transport-https
+        - ca-certificates
+      update_cache: yes
+    become: yes
+
+  - name: Check go
+    ansible.builtin.command: which /usr/local/go/bin/go
+    register: result
+    ignore_errors: true
+  - name: Install go
+    ansible.builtin.script:
+      cmd: scripts/install-go.sh
+    when: result is failed
+
+  - name: Check docker
+    ansible.builtin.command: which docker
+    register: result
+    ignore_errors: true
+  - name: Install docker
+    ansible.builtin.script:
+      cmd: scripts/install-docker.sh
+    when: result is failed
+
+  - name: Check kind
+    ansible.builtin.command: which kind
+    register: result
+    ignore_errors: true
+  - name: Install kind
+    ansible.builtin.script:
+      cmd: scripts/install-kind.sh
+    when: result is failed
+
+  - name: Check kubectl
+    ansible.builtin.command: which kubectl
+    register: result
+    ignore_errors: true
+  - name: Install kubectl
+    ansible.builtin.script:
+      cmd: scripts/install-kubectl.sh
+    when: result is failed
+
+  - name: Check helm
+    ansible.builtin.command: which helm
+    register: result
+    ignore_errors: true
+  - name: Install helm
+    ansible.builtin.script:
+      cmd: scripts/install-helm.sh
+    when: result is failed
+
+  - name: Check nvidia-tools
+    ansible.builtin.command: which nvidia-ctk
+    register: result
+    ignore_errors: true
+  - name: Install nvidia-tools
+    ansible.builtin.script:
+      cmd: scripts/install-nvidia-tools.sh
+    when: result is failed
+  - name: Reboot
+    ansible.builtin.reboot: reboot_timeout=600
+    become: true
+    when: result is failed
+
+  - name: Setup kind cluster
+    ansible.builtin.script:
+      cmd: scripts/setup-kind-cluster.sh

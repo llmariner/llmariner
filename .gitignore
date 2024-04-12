@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+
+# Generated files by terraform and ansible
+.terraform*
+terraform.tfstate*
+local.tfvars
+inventory.ini
