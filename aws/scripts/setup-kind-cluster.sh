@@ -1,19 +1,13 @@
 #! /usr/bin/env bash
 set -xe
 
-# Build and boot cluster
-WORKSPACE=$HOME/kind-with-gpus-examples
-[ -d $WORKSPACE ] || git clone https://github.com/klueska/kind-with-gpus-examples.git $WORKSPACE
-cd $WORKSPACE
-source $HOME/.profile
-make
-sudo install -o root -g root -m 0755 nvkind /usr/local/bin/nvkind
-nvkind cluster create
+# Boot kind cluster
+nvkind cluster list|grep 'No kind clusters found.' && { nvkind cluster create; sleep 5; }
 
 # Add device plugin
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
 helm repo update
-helm upgrade -i --wait  \
+helm upgrade --install --wait \
      --namespace nvidia \
      --create-namespace \
      nvidia-device-plugin nvdp/nvidia-device-plugin
@@ -21,7 +15,7 @@ helm upgrade -i --wait  \
 # Add GPU operator
 helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
 helm repo update
-helm upgrade -i --wait \
+helm upgrade --install --wait \
      --namespace nvidia \
      --create-namespace \
      gpu-operator nvidia/gpu-operator \
@@ -38,7 +32,7 @@ cat <<EOF > prom-scrape-configs.yaml
 EOF
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm upgrade -i --wait \
+helm upgrade --install --wait \
      --namespace monitoring \
      --create-namespace \
      --set-file extraScrapeConfigs=prom-scrape-configs.yaml \
@@ -74,7 +68,7 @@ dashboards:
 EOF
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
-helm upgrade -i --wait \
+helm upgrade --install --wait \
      --namespace monitoring \
      --create-namespace \
      -f grafana-values.yaml \

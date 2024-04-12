@@ -64,6 +64,7 @@ resource "local_file" "inventory" {
   content = templatefile("inventory.tftpl",
     {
       server           = aws_instance.server
+      user             = var.instance_user
       private_key_path = var.private_key_path
     }
   )
@@ -78,7 +79,7 @@ resource "null_resource" "provisioning" {
       user        = var.instance_user
       private_key = file(var.private_key_path)
     }
-    inline = ["echo 'server is ready'"]
+    inline = ["echo 'Server is ready'"]
   }
   provisioner "local-exec" {
     command = "ansible-playbook -i inventory.ini playbook.yml"

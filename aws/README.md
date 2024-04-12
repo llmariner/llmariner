@@ -23,7 +23,7 @@ private_key_path = "</path/to/private_key_path>"
 ssh_ip_range     = "<ingress CIDR block for SSH (default: "0.0.0.0/0")>"
 ```
 
-Then, run terraform command to initialize and create an instance.
+Then, run terraform command to initialize and create an instance. (It takes around 10 minutes.)
 
 ```
 $ terraform init

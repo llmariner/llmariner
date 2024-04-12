@@ -18,3 +18,11 @@ sudo apt install -y nvidia-container-toolkit
 sudo nvidia-ctk runtime configure --runtime=docker --set-as-default --cdi.enabled
 sudo nvidia-ctk config --set accept-nvidia-visible-devices-as-volume-mounts=true --in-place
 sudo systemctl restart docker
+
+# Build nvkind
+WORKSPACE=$HOME/kind-with-gpus-examples
+[ -d $WORKSPACE ] || git clone https://github.com/klueska/kind-with-gpus-examples.git $WORKSPACE
+cd $WORKSPACE
+source $HOME/.profile
+make
+sudo install -o root -g root -m 0755 nvkind /usr/local/bin/nvkind

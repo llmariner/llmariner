@@ -13,6 +13,7 @@
     ansible.builtin.apt:
       name:
         - make
+        - gcc
         - curl
         - gnupg
         - software-properties-common
@@ -22,7 +23,7 @@
     become: yes
 
   - name: Check go
-    ansible.builtin.command: which go
+    ansible.builtin.command: which /usr/local/go/bin/go
     register: result
     ignore_errors: true
   - name: Install go
