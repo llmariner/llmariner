@@ -1,0 +1,3 @@
+openai
+streamlit
+pandas
