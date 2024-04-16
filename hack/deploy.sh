@@ -31,8 +31,6 @@ kubectl apply -n model-manager -f postgres-secret.yaml
 kubectl apply -n file-manager -f postgres-secret.yaml
 kubectl apply -n job-manager -f postgres-secret.yaml
 
-kubectl apply -f model-store.yaml
-
 kind load docker-image llm-operator/model-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/file-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
