@@ -34,6 +34,7 @@ kubectl apply -n job-manager -f postgres-secret.yaml
 kubectl apply -f model-store.yaml
 
 kind load docker-image llm-operator/model-manager-server:latest -n "${cluster_name}"
+kind load docker-image llm-operator/model-manager-loader:latest -n "${cluster_name}"
 kind load docker-image llm-operator/file-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
@@ -48,6 +49,14 @@ helm upgrade \
   "${model_manager_repo}"/deployments/server \
   -f "${model_manager_repo}"/deployments/server/values.yaml \
   -f model-manager-server-values.yaml
+
+helm upgrade \
+  --install \
+  -n model-manager \
+  model-manager-loader \
+  "${model_manager_repo}"/deployments/loader \
+  -f "${model_manager_repo}"/deployments/loader/values.yaml \
+  -f model-manager-loader-values.yaml
 
 helm upgrade \
   --install \
