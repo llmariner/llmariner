@@ -27,3 +27,7 @@ databaseSecret:
 debug:
   # Change this to false when creating a real fine-tuning jobs.
   useFakeJob: true
+
+image:
+  repository: llm-operator/job-manager-dispatcher:latest
+  pullPolicy: Never
