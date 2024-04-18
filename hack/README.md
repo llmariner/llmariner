@@ -28,3 +28,12 @@ export AWS_SECRET_ACCESS_KEY=...
 aws --endpoint-url http://localhost:9000 s3 mb s3://test-bucket
 aws --endpoint-url http://localhost:9000 s3 ls
 ```
+
+`./deploy_minio.sh` creates an API key so that components can access MinIO. To use the API key,
+set the env vars in the following way:
+
+```bash
+export AWS_ACCESS_KEY_ID=llm-operator-key
+export AWS_SECRET_ACCESS_KEY=llm-operator-secret
+aws --endpoint-url http://localhost:9000 s3 ls --recursive s3://llm-operator
+```

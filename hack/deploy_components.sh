@@ -9,9 +9,6 @@ file_manager_repo="../../file-manager"
 inference_manager_repo="../../inference-manager"
 job_manager_repo="../../job-manager"
 
-# TODO(kenji): Remove this once job-manager-dispatcher stops using.
-kubectl apply -f model-store.yaml
-
 # TODO(kenji): This assumes that the HuggingFace API key is stored in the following env var.
 kubectl create secret generic -n model-manager hugging-face \
   --from-literal=apiKey="${HUGGING_FACE_HUB_TOKEN}" \
@@ -22,8 +19,7 @@ kind load docker-image llm-operator/file-manager-server:latest -n "${cluster_nam
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
-# kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
-kind load docker-image llm-operator/experiments-fake-job:latest -n "${cluster_name}"
+kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
 
 helm upgrade \
   --install \
