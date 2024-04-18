@@ -2,10 +2,6 @@ jobNamespace: job-manager
 modelManagerInternalServerAddr: model-manager-server-internal-grpc.model-manager.svc.cluster.local:8082
 fileManagerInternalServerAddr: file-manager-server-internal-grpc.file-manager.svc.cluster.local:8082
 
-modelStore:
-  enable: true
-  pvClaimName: model-store-volume-claim
-
 objectStore:
   s3:
     endpointUrl: http://minio.minio.svc.cluster.local:9000
