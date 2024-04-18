@@ -26,3 +26,5 @@ debug:
 image:
   repository: llm-operator/job-manager-dispatcher
   pullPolicy: Never
+
+version: latest
