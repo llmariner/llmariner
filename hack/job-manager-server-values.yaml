@@ -12,5 +12,5 @@ ingress:
   ingressClassName: kong
 
 image:
-  repository: llm-operator/job-manager-server:latest
+  repository: llm-operator/job-manager-server
   pullPolicy: Never

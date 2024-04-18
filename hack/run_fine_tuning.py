@@ -17,7 +17,7 @@ print('Uploaded file: ID=%s' % fileResp.id)
 
 print('Creating a fine-tuning job...')
 client.fine_tuning.jobs.create(
-  model="gemma:2b",
+  model="google/gemma-2b",
   suffix='fine-tuning',
   training_file=fileResp.id,
 )

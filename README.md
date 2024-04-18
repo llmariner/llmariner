@@ -7,11 +7,11 @@ LLM Operator builds a LLM stack that provides the *OpenAI-compatible API anywher
 - Repository for fine-tuned models
 
 Additionally it provides the following components as optional:
-- Vector DB (e.g., https://milvus.io/)
-- Object Store
+- Vector DB (e.g., [Milvus](https://milvus.io/))
+- Object Store (e.g., [MinIO](https://min.io/))
 - GPU Operator
 - Monitoring
-- MLFlow
+- Kubeflow / MLFlow
 
 # High-level Architecture
 
