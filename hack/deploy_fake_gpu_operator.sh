@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-kubectl get nodes -o name | xargs -I {} kubectl label {} nvidia.com/gpu.deploy.device-plugin=true nvidia.com/gpu.deploy.dcgm-exporter=true --overwrite
+kubectl get nodes -o name | xargs -I '{}' kubectl label '{}' nvidia.com/gpu.deploy.device-plugin=true nvidia.com/gpu.deploy.dcgm-exporter=true --overwrite
 
 helm repo add fake-gpu-operator https://fake-gpu-operator.storage.googleapis.com
 helm repo update
