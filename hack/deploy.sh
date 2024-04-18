@@ -10,6 +10,8 @@ kubectl create namespace file-manager
 kubectl create namespace inference-manager
 kubectl create namespace job-manager
 
+./deploy_fake_gpu_operator.sh
+
 ./deploy_kong.sh
 
 ./deploy_postgres.sh
