@@ -81,5 +81,7 @@
     when: result is failed
 
   - name: Setup kind cluster
+    tags:
+    - kind_setup
     ansible.builtin.script:
       cmd: scripts/setup-kind-cluster.sh
