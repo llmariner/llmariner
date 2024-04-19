@@ -22,3 +22,9 @@ huggingFaceSecret:
 databaseSecret:
   name: postgres
   key: password
+
+image:
+  repository: llm-operator/model-manager-loader
+  pullPolicy: Never
+
+version: latest
