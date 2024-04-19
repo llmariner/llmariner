@@ -1,4 +1,4 @@
-jobNamespace: job-manager
+jobNamespace: llm-operator-jobs
 modelManagerInternalServerAddr: model-manager-server-internal-grpc.model-manager.svc.cluster.local:8082
 fileManagerInternalServerAddr: file-manager-server-internal-grpc.file-manager.svc.cluster.local:8082
 
