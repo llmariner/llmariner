@@ -7,8 +7,9 @@ client = OpenAI(
   api_key=dummy_api_key
 )
 
+# Run again with the fine-tuned model
 completion = client.chat.completions.create(
-  model="gemma:2b",
+  model="gemma:2b-fine-tuned",
   messages=[
     {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
     {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}

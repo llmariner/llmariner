@@ -13,7 +13,7 @@ fileResp = client.files.create(
   file=open("my_training_data.jsonl", "rb"),
   purpose='fine-tune',
 )
-print('Uploaded file: ID=%s' % fileResp.id)
+print('Uploaded file. ID=%s' % fileResp.id)
 
 print('Creating a fine-tuning job...')
 client.fine_tuning.jobs.create(
@@ -23,14 +23,5 @@ client.fine_tuning.jobs.create(
 )
 
 resp = client.fine_tuning.jobs.list()
-print(resp)
 
-# Run again with the fine-tuned model
-completion = client.chat.completions.create(
-  model="gemma:2b-fine-tuned",
-  messages=[
-    {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-    {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}
-  ]
-)
-print(completion.choices[0].message)
+print('Created job. ID=%s' % resp.data[0].id)
