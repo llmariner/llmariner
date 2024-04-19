@@ -21,7 +21,7 @@ databaseSecret:
   key: password
 
 debug:
-  useFakeJob: false
+  useFakeJob: true
 
 image:
   repository: llm-operator/job-manager-dispatcher

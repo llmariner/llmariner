@@ -13,3 +13,9 @@ awsSecret:
 
 ingress:
   ingressClassName: kong
+
+image:
+  repository: llm-operator/inference-manager-engine
+  pullPolicy: Never
+
+version: latest

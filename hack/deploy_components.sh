@@ -21,7 +21,8 @@ kind load docker-image llm-operator/file-manager-server:latest -n "${cluster_nam
 kind load docker-image llm-operator/inference-manager-engine:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/job-manager-dispatcher:latest -n "${cluster_name}"
-kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
+# kind load docker-image llm-operator/experiments-fine-tuning:latest -n "${cluster_name}"
+kind load docker-image llm-operator/experiments-fake-job:latest -n "${cluster_name}"
 
 helm upgrade \
   --install \
