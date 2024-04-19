@@ -1,6 +1,6 @@
 jobNamespace: llm-operator-jobs
-modelManagerInternalServerAddr: model-manager-server-internal-grpc.model-manager.svc.cluster.local:8082
-fileManagerInternalServerAddr: file-manager-server-internal-grpc.file-manager.svc.cluster.local:8082
+modelManagerInternalServerAddr: model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
+fileManagerInternalServerAddr: file-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
 objectStore:
   s3:
