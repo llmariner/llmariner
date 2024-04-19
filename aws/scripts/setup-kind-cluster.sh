@@ -2,7 +2,35 @@
 set -xe
 
 # Boot kind cluster
-nvkind cluster list|grep 'No kind clusters found.' && { nvkind cluster create; sleep 5; }
+cat <<EOF > kind-cluster-template.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+{{- range \$gpu := until numGPUs }}
+- role: worker
+  extraMounts:
+    - hostPath: /dev/null
+      containerPath: /var/run/nvidia-container-devices/{{ \$gpu }}
+{{- end }}
+EOF
+cat <<EOF > kind-cluster-values.yaml
+numGPUs: 1
+EOF
+nvkind cluster list|grep 'No kind clusters found.' && { nvkind cluster create --config-template ./kind-cluster-template.yaml --config-values ./kind-cluster-values.yaml; sleep 5; }
 
 # Add device plugin
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
