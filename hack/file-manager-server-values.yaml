@@ -18,3 +18,9 @@ databaseSecret:
 
 ingress:
   ingressClassName: kong
+
+image:
+  repository: llm-operator/file-manager-server
+  pullPolicy: Never
+
+version: latest
