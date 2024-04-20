@@ -47,7 +47,7 @@ following the config:
 database:
   host: localhost
   port: 5432
-  database: job_manager
+  database: model_manager
   username: ps_user
   passwordEnvName: DB_PASSWORD
 
@@ -66,7 +66,7 @@ modelLoadInterval: 1m
 downloader:
   huggingFace:
     # Change this to your cache directory.
-    cacheDir: /Users/kenji/.cache/hugging-face-cache/hub
+    cacheDir: /Users/kenji/.cache/huggingface/hub
 ```
 
 Then you can set up port-forwarding and run `loader`.
