@@ -16,10 +16,6 @@ awsSecret:
   accessKeyIdKey: accessKeyId
   secretAccessKeyKey: secretAccessKey
 
-huggingFaceSecret:
-  name: hugging-face
-  apiKeyKey: apiKey
-
 databaseSecret:
   name: postgres
   key: password

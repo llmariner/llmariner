@@ -11,10 +11,6 @@ file_manager_repo="../../file-manager"
 inference_manager_repo="../../inference-manager"
 job_manager_repo="../../job-manager"
 
-# TODO(kenji): This assumes that the HuggingFace API key is stored in the following env var.
-kubectl create secret generic -n "${llm_operator_namespace}" hugging-face \
-  --from-literal=apiKey="${HUGGING_FACE_HUB_TOKEN}" \
-
 kind load docker-image llm-operator/model-manager-server:latest -n "${cluster_name}"
 kind load docker-image llm-operator/model-manager-loader:latest -n "${cluster_name}"
 kind load docker-image llm-operator/file-manager-server:latest -n "${cluster_name}"
