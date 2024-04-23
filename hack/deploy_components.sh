@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-cluster_name="llm-operator-demo"
-
 llm_operator_namespace=llm-operator
 
 helm repo add llm-operator http://llm-operator-charts.s3-website-us-west-2.amazonaws.com/
