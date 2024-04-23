@@ -12,9 +12,3 @@ databaseSecret:
 
 ingress:
   ingressClassName: kong
-
-image:
-  repository: llm-operator/job-manager-server
-  pullPolicy: Never
-
-version: latest
