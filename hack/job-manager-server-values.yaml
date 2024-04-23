@@ -1,6 +1,7 @@
 jobNamespace: llm-operator-jobs
 
 fileManagerServerAddr: file-manager-server-grpc.llm-operator.svc.cluster.local:8081
+modelManagerInternalServerAddr: model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
 database:
   host: postgres.postgres.svc.cluster.local
