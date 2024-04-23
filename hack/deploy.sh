@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-cluster_name="llm-operator-demo"
-
 kubectl create namespace llm-operator
 kubectl create namespace llm-operator-jobs
 
