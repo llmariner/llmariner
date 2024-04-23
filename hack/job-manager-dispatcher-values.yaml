@@ -1,4 +1,5 @@
 jobNamespace: llm-operator-jobs
+jobVersion: v0.34.0
 modelManagerInternalServerAddr: model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 fileManagerInternalServerAddr: file-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
@@ -22,9 +23,3 @@ databaseSecret:
 
 debug:
   useFakeJob: true
-
-image:
-  repository: llm-operator/job-manager-dispatcher
-  pullPolicy: Never
-
-version: latest
