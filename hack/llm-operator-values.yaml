@@ -28,7 +28,7 @@ global:
 
 inference-manager-engine:
   baseModels:
-  - "gemma:2b"
+  - google/gemma-2b
 
   modelManagerServerAddr: llm-operator-model-manager-server-grpc.llm-operator.svc.cluster.local:8081
   modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
