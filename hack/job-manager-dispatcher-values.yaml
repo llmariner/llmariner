@@ -24,4 +24,4 @@ databaseSecret:
   key: password
 
 debug:
-  useFakeJob: true
+  useFakeJob: false
