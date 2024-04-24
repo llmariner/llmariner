@@ -14,6 +14,7 @@ global:
   objectStore:
     s3:
       endpointUrl: http://minio.minio.svc.cluster.local:9000
+      region: dummy
       bucket: llm-operator
 
   ingress:
@@ -26,24 +27,11 @@ global:
 
 
 inference-manager-engine:
-  modelManagerServerAddr: llm-operator-model-manager-server-grpc.llm-operator.svc.cluster.local:8081
-  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
-
   baseModels:
   - "gemma:2b"
 
-  objectStore:
-    s3:
-      endpointUrl: http://minio.minio.svc.cluster.local:9000
-      bucket: llm-operator
-
-  awsSecret:
-    name: aws
-    accessKeyIdKey: accessKeyId
-    secretAccessKeyKey: secretAccessKey
-
-  ingress:
-    ingressClassName: kong
+  modelManagerServerAddr: llm-operator-model-manager-server-grpc.llm-operator.svc.cluster.local:8081
+  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
 
 job-manager-dispatcher:
@@ -51,26 +39,8 @@ job-manager-dispatcher:
   job:
     version: latest
 
-  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
   fileManagerInternalServerAddr: llm-operator-file-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
-
-  objectStore:
-    s3:
-      endpointUrl: http://minio.minio.svc.cluster.local:9000
-      bucket: llm-operator
-
-  awsSecret:
-    name: aws
-    accessKeyIdKey: accessKeyId
-    secretAccessKeyKey: secretAccessKey
-
-  database:
-    host: postgres.postgres.svc.cluster.local
-    username: ps_user
-
-  databaseSecret:
-    name: postgres
-    key: password
+  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
 
 job-manager-server:
@@ -79,50 +49,7 @@ job-manager-server:
   fileManagerServerAddr: llm-operator-file-manager-server-grpc.llm-operator.svc.cluster.local:8081
   modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
-  database:
-    host: postgres.postgres.svc.cluster.local
-    username: ps_user
-
-  databaseSecret:
-    name: postgres
-    key: password
-
-  ingress:
-    ingressClassName: kong
-
 
 model-manager-loader:
   baseModels:
   - google/gemma-2b
-
-  database:
-    host: postgres.postgres.svc.cluster.local
-    username: ps_user
-
-  objectStore:
-    s3:
-      endpointUrl: http://minio.minio.svc.cluster.local:9000
-      region: dummy
-      bucket: llm-operator
-
-  awsSecret:
-    name: aws
-    accessKeyIdKey: accessKeyId
-    secretAccessKeyKey: secretAccessKey
-
-  databaseSecret:
-    name: postgres
-    key: password
-
-
-model-manager-server:
-  database:
-    host: postgres.postgres.svc.cluster.local
-    username: ps_user
-
-  databaseSecret:
-    name: postgres
-    key: password
-
-  ingress:
-    ingressClassName: kong
