@@ -3,7 +3,7 @@
 ```bash
 ./create_cluster.sh
 ./deploy.sh
-./run-test.sh
+./test/check_readiness.sh
 ```
 
 ## Setting up MinIO
