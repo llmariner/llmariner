@@ -14,8 +14,6 @@ jobs:
 
   update-tag:
     runs-on: ubuntu-latest
-    needs:
-    - re-test
     outputs:
       new_tag: ${{ steps.tag_version.outputs.new_tag }}
     steps:
