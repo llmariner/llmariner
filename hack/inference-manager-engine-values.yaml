@@ -1,6 +1,9 @@
 modelManagerServerAddr: model-manager-server-grpc.llm-operator.svc.cluster.local:8081
 modelManagerInternalServerAddr: model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
+baseModels:
+- "gemma:2b"
+
 objectStore:
   s3:
     endpointUrl: http://minio.minio.svc.cluster.local:9000
