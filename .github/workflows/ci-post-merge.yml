@@ -42,7 +42,7 @@ jobs:
       run: mkdir charts
     - name: build helm chart
       run: |
-        helm helm dependency build
+        helm dependency build ./deployments/llm-operator
         helm package --version ${{ needs.update-tag.outputs.new_tag }} --destination ./charts ./deployments/llm-operator
     - name: Rebuild index.yaml and push
       run: |
