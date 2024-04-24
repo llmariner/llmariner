@@ -1,10 +1,12 @@
 # LLM Operatror
 
-LLM Operator builds a LLM stack that provides the *OpenAI-compatible API anywhere*, including the following functionality:
+LLM Operator builds a software stack that provides LLM as a service. More specifically it provides the
+*[OpenAI-compatible API](https://platform.openai.com/docs/api-reference) anywhere*, including the following functionality:
 
 - LLM fine-tuning job management
 - LLM inference
-- Repository for fine-tuned models
+- Fine-tuned models management
+- Training/validation file management
 
 Additionally it provides the following components as optional:
 - Vector DB (e.g., [Milvus](https://milvus.io/))
@@ -24,7 +26,7 @@ Additionally it provides the following components as optional:
 3. Inference Manager is notified and imports a new model.
 4. The user runs a chatbot using the fine-tuned model.
 
-Please see [the demo video](https://drive.google.com/file/d/1JJR4nBx2ZzXg4OX5skKuGUFvO52jS4d1/view).
+Please see [the demo video](https://drive.google.com/file/d/1IIDytriu4Cl1O9Wo7fXzHkS1kbqJxfXO/view?usp=sharing).
 
 # Use Cases
 
