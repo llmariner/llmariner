@@ -1,9 +1,39 @@
 # Test scripts
 
+## Build a Kind cluster and deploy LLM Operator in a single non-GPU node
+
+Run the following commands:
+
 ```bash
 ./create_cluster.sh
 ./deploy.sh
 ./test/check_readiness.sh
+```
+
+If you want to use a Helm chart in your local filesystem, update `deployments/llm-operator/Chart.yaml`
+and specify the Helm chart location:
+
+```yaml
+- name: model-manager-server
+  repository: "file://../../../model-manager/deployments/server"
+  version: "*"
+```
+
+If you also want to use a different container image, add the following to `llm-operator-values.yaml`.
+
+```yaml
+model-manager-server:
+  image:
+    repository: llm-operator/model-manager-server
+    pullPolicy: Never
+  version: latest
+```
+
+Then load the image to the Kind cluster and deploy LLM Operator.
+
+```bash
+kind load docker-image llm-operator/model-manager-server:latest -n llm-operator-demo
+helm upgrade --install -n llm-operator llm-operator ./deployments/llm-operator  -f hack/llm-operator-values.yaml
 ```
 
 ## Setting up MinIO
