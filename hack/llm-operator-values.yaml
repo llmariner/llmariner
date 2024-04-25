@@ -58,3 +58,5 @@ job-manager-server:
 model-manager-loader:
   baseModels:
   - google/gemma-2b
+
+  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
