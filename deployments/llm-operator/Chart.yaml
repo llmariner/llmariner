@@ -6,20 +6,20 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: file-manager-server
-  version: v0.10.0
+  version: 0.14.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-engine
-  version: v0.13.0
+  version: 0.14.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
-  version: v0.46.0
+  version: 0.47.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-server
-  version: v0.46.0
+  version: 0.47.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
-  version: v0.14.0
+  version: 0.20.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-server
-  version: v0.14.0
+  version: 0.20.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
