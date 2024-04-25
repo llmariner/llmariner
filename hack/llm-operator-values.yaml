@@ -20,6 +20,11 @@ global:
   ingress:
     ingressClassName: kong
 
+  auth:
+    enable: true
+    oidcIssuerUrl: http://kong-kong-proxy.kong/dex
+    oidcClientID: llm-operator
+
   awsSecret:
     name: aws
     accessKeyIdKey: accessKeyId
