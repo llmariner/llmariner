@@ -19,8 +19,32 @@
         - software-properties-common
         - apt-transport-https
         - ca-certificates
+        - python3-pip
+        - unzip
       update_cache: yes
     become: yes
+
+  # Kubernetes python library is necessary to run kubernetes.core.k8s
+  # module.
+  - name: Install kubernetes library
+    ansible.builtin.pip:
+      name: kubernetes
+
+  # Install AWS CLI; this is needed to create a bucket on
+  # Minio. Ideally it should be done through ansible.aws module,
+  # but that's not available as it needs to set up port-forwarding.
+  - name: Check aws
+    ansible.builtin.command: which aws
+    register: result
+    ignore_errors: true
+  - name: Install aws CLI
+    block:
+    - ansible.builtin.get_url:
+        url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+        dest: /tmp/awscliv2.zip
+    - ansible.builtin.command: unzip /tmp/awscliv2.zip -d /tmp
+    - ansible.builtin.command: sudo /tmp/aws/install
+    when: result is failed
 
   - name: Check go
     ansible.builtin.command: which /usr/local/go/bin/go
@@ -85,3 +109,129 @@
     - kind_setup
     ansible.builtin.script:
       cmd: scripts/setup-kind-cluster.sh
+
+  - name: Setup llm-operator namespace
+    kubernetes.core.k8s:
+      name: llm-operator
+      api_version: v1
+      kind: Namespace
+
+  - name: Setup kong helm repository
+    kubernetes.core.helm_repository:
+      name: kong
+      repo_url: https://charts.konghq.com
+  - name: Copy kong_values file
+    ansible.builtin.copy:
+      src: ../hack/kong_values.yaml
+      dest: kong_values.yaml
+  - name: Deploy kong
+    kubernetes.core.helm:
+      release_name: kong
+      release_namespace: kong
+      create_namespace: true
+      chart_ref: kong/kong
+      set_values:
+      - value: ingressController.installCRDs=false
+      values_files:
+      - kong_values.yaml
+
+  - name: Setup postgres namespace
+    kubernetes.core.k8s:
+      name: postgres
+      api_version: v1
+      kind: Namespace
+  - name: Copy postgres.yaml file
+    ansible.builtin.copy:
+      src: ../hack/postgres.yaml
+      dest: postgres.yaml
+  - name: Deploy postgres resources
+    kubernetes.core.k8s:
+      state: present
+      namespace: postgres
+      src: postgres.yaml
+  - name: Set up postgres secret
+    kubernetes.core.k8s:
+      definition:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres
+          namespace: llm-operator
+        type: Opaque
+        data:
+          # base64 encoded "ps_password"
+          password: cHNfcGFzc3dvcmQ=
+  - name: wait for postgres ready
+    kubernetes.core.k8s_info:
+      api_version: v1
+      kind: Pod
+      namespace: postgres
+      label_selectors:
+      - app=postgres
+      wait: true
+      wait_condition:
+        type: Ready
+      wait_timeout: 60
+  - name: create databases
+    ansible.builtin.script:
+      cmd: scripts/setup-databases.sh
+
+  - name: Setup minio namespace
+    kubernetes.core.k8s:
+      name: minio
+      api_version: v1
+      kind: Namespace
+  - name: Copy mino yaml file
+    ansible.builtin.copy:
+      src: ../hack/minio.yaml
+      dest: minio.yaml
+  - name: Deploy minio
+    kubernetes.core.k8s:
+      state: present
+      namespace: minio
+      src: minio.yaml
+  - name: wait for minio ready
+    kubernetes.core.k8s_info:
+      api_version: v1
+      kind: Pod
+      namespace: minio
+      label_selectors:
+      - app=minio
+      wait: true
+      wait_condition:
+        type: Ready
+      wait_timeout: 60
+  - name: Check minio secret
+    kubernetes.core.k8s_info:
+      api_version: v1
+      kind: Secret
+      namespace: llm-operator
+      name: aws
+    register: result
+  - name: Setup bucket
+    ansible.builtin.script:
+      cmd: scripts/setup-minio-bucket.sh
+    when: result.resources | length == 0
+
+  - name: Setup llm-operator-jobs namespace
+    kubernetes.core.k8s:
+      name: llm-operator-jobs
+      api_version: v1
+      kind: Namespace
+  - name: Copy llm-operator-values file.
+    ansible.builtin.copy:
+      src: ../hack/llm-operator-values.yaml
+      dest: llm-operator-values.yaml
+  - name: Setup llm-operator helm repository
+    kubernetes.core.helm_repository:
+      name: llm-operator
+      repo_url: http://llm-operator-charts.s3-website-us-west-2.amazonaws.com/
+  - name: Deploy llm-operator
+    kubernetes.core.helm:
+      release_name: llm-operator
+      release_namespace: llm-operator
+      create_namespace: true
+      chart_ref: llm-operator/llm-operator
+      values_files:
+      - llm-operator-values.yaml
+  
