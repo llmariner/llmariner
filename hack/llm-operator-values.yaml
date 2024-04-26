@@ -32,15 +32,8 @@ global:
     secretAccessKeyKey: secretAccessKey
 
 
-inference-manager-engine:
-  baseModels:
-  - google/gemma-2b
-
-
 job-manager-dispatcher:
   jobNamespace: llm-operator-jobs
-  job:
-    version: latest
 
 
 job-manager-server:
