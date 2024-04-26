@@ -1,0 +1,8 @@
+- job_name: nvidia-dcgm
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['nvidia-dcgm-exporter.nvidia.svc:9400']
+- job_name: ollama-metrics
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['ollama-monitoring-service.ollama.svc:8445']

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: streamlit-service
+  namespace: ollama
+spec:
+  type: ClusterIP
+  selector:
+    name: ollama
+  ports:
+    - name: streamlit-port
+      protocol: TCP
+      port: 8501
+      targetPort: 8501
