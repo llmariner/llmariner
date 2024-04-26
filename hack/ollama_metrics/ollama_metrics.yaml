@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-monitoring-service
+  namespace: ollama
+spec:
+  selector:
+    name: ollama
+  ports:
+    - name: monitoring
+      port: 8445
+      targetPort: 8445
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ollama-monitoring-service-monitor
+  namespace: ollama
+spec:
+  endpoints:
+    - port: monitoring
+      interval: 15s
+      scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - monitoring
+  selector:
+    matchLabels:
+      name: ollama
+
+
