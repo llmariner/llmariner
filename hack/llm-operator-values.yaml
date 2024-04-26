@@ -32,14 +32,6 @@ global:
     secretAccessKeyKey: secretAccessKey
 
 
-job-manager-dispatcher:
-  jobNamespace: llm-operator-jobs
-
-
-job-manager-server:
-  jobNamespace: llm-operator-jobs
-
-
 model-manager-loader:
   baseModels:
   - google/gemma-2b
