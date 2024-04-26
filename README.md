@@ -1,19 +1,17 @@
 # LLM Operatror
 
-LLM Operator builds a software stack that provides LLM as a service. More specifically it provides the
-*[OpenAI-compatible API](https://platform.openai.com/docs/api-reference) anywhere*, including the following functionality:
+LLM Operator converts your GPU clusters to a platform for generative AI workloads.
 
-- LLM fine-tuning job management
-- LLM inference
-- Fine-tuned models management
-- Training/validation file management
+# Key Values
 
-Additionally it provides the following components as optional:
-- Vector DB
-- Object Store
-- GPU Operator
-- Monitoring
-- Kubeflow / MLFlow
+- *Provide LLM as a service.* LLM Operator builds a software stack that provides LLM as a service, including inference, fine-tuning, model management, and training data management.
+- *Utilize GPU optimally.* LLM Operator provides auto-scaling of inference-workloads, efficient scheduling of fine-tuning batch jobs, GPU sharing, etc.
+
+# Use Cases
+
+- Develop LLM applications with the API that is compatible with [OpenAI-compatible API](https://platform.openai.com/docs/api-reference).
+- Fine-tune models while keeping data safely and securely in your on-premise datacenter.
+- Run fine-tuning jobs efficiently with guaranteed SLO and without interference with inference requests.
 
 # High-level Architecture
 
@@ -28,11 +26,6 @@ Additionally it provides the following components as optional:
 
 Please see [the demo video](https://drive.google.com/file/d/1IIDytriu4Cl1O9Wo7fXzHkS1kbqJxfXO/view?usp=sharing).
 
-# Use Cases
-
-- Run LLM in an on-prem datacenter
-- Run LLM at edge
-- Run LLM across multiple cloud providers
 
 # Technical Challenges
 
