@@ -35,28 +35,17 @@ inference-manager-engine:
   baseModels:
   - google/gemma-2b
 
-  modelManagerServerAddr: llm-operator-model-manager-server-grpc.llm-operator.svc.cluster.local:8081
-  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
-
 
 job-manager-dispatcher:
   jobNamespace: llm-operator-jobs
   job:
     version: latest
 
-  fileManagerInternalServerAddr: llm-operator-file-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
-  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
-
 
 job-manager-server:
   jobNamespace: llm-operator-jobs
-
-  fileManagerServerAddr: llm-operator-file-manager-server-grpc.llm-operator.svc.cluster.local:8081
-  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
 
 
 model-manager-loader:
   baseModels:
   - google/gemma-2b
-
-  modelManagerInternalServerAddr: llm-operator-model-manager-server-internal-grpc.llm-operator.svc.cluster.local:8082
