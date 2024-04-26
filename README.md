@@ -9,8 +9,8 @@ LLM Operator builds a software stack that provides LLM as a service. More specif
 - Training/validation file management
 
 Additionally it provides the following components as optional:
-- Vector DB (e.g., [Milvus](https://milvus.io/))
-- Object Store (e.g., [MinIO](https://min.io/))
+- Vector DB
+- Object Store
 - GPU Operator
 - Monitoring
 - Kubeflow / MLFlow
