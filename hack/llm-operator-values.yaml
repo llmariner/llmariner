@@ -21,7 +21,8 @@ global:
     ingressClassName: kong
 
   auth:
-    enable: true
+    # TODO(kenji): Enable once we have updated all testing script to support it (e.g., installation of rbac-manager).
+    enable: false
     oidcIssuerUrl: http://kong-kong-proxy.kong/dex
     oidcClientID: llm-operator
 
