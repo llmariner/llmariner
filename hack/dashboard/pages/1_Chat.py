@@ -8,7 +8,7 @@ st.markdown(
 )
 
 client = OpenAI(
-  base_url="http://localhost:80/v1",
+  base_url="http://localhost/v1",
   api_key='dummy',
 )
 
@@ -26,7 +26,7 @@ if prompt := st.chat_input("What is up?"):
 
     with st.chat_message("assistant"):
         stream = client.chat.completions.create(
-            model="gemma:2b",
+            model="google-gemma-2b-it-q4",
             messages=[{"role": "user", "content": prompt}],
             stream=True,
         )
