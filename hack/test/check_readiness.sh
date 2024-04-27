@@ -13,7 +13,7 @@ for path in "${paths[@]}"; do
   curl --fail --silent "http://localhost/v1/${path}" > /dev/null
 done
 curl --request POST --fail --silent "http://localhost/v1/chat/completions" -d '{
-  "model": "gemma:2b",
+  "model": "google-gemma-2b-it-q4",
   "messages": [{"role": "user", "content": "Why is the sky blue?"}]
 }' > /dev/null
 
