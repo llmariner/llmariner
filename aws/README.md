@@ -6,6 +6,13 @@ This directory contains files to create a virtual machine on AWS with a GPU. It 
 
 - [Terraform](https://developer.hashicorp.com/terraform/install)
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+- [`kubernetes.core.k8s` module for Ansible](https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html)
+
+To install `kubernetes.core.k8s` module, run the following command:
+
+```bash
+ansible-galaxy collection install kubernetes.core
+```
 
 ## Getting started
 
