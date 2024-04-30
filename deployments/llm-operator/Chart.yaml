@@ -29,3 +29,4 @@ dependencies:
 - name: rbac-server
   version: 0.13.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  
