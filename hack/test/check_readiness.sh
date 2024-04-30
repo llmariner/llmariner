@@ -10,7 +10,7 @@ paths=(
   models
 )
 for path in "${paths[@]}"; do
-  curl --fail --silent "http://localhost/v1/${path}" > /dev/null
+  curl --fail --silent -H "Authorization: Bearer ${LLM_OPERATOR_TOKEN}" "http://localhost/v1/${path}" > /dev/null
 done
 curl --request POST --fail --silent "http://localhost/v1/chat/completions" -d '{
   "model": "google-gemma-2b-it-q4",
