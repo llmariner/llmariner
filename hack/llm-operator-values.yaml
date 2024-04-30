@@ -29,7 +29,7 @@ global:
   auth:
     enable: true
     oidcIssuerUrl: http://kong-kong-proxy.kong/v1/dex
-    rbacInternalServerAddr: http://llm-operator-rbac-server-internal-grpc:8082
+    rbacInternalServerAddr: llm-operator-rbac-server-internal-grpc:8082
 
 
 model-manager-loader:
