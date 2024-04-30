@@ -23,11 +23,9 @@ global:
     ingressClassName: kong
 
   auth:
-    # TODO(kenji): Enable once we have updated all testing script to support it (e.g., installation of rbac-manager).
-    enable: false
+    enable: true
     oidcIssuerUrl: http://kong-kong-proxy.kong/dex
-    oidcClientID: llm-operator
-    rbacServerAddr: http://llm-operator-rbac-server-internal-grpc:8082
+    rbacInternalServerAddr: http://llm-operator-rbac-server-internal-grpc:8082
 
   awsSecret:
     name: aws
