@@ -12,4 +12,8 @@ kubectl create namespace llm-operator
 
 ./deploy_minio.sh
 
+./deploy_monitoring.sh
+
+./deploy_keda.sh
+
 ./deploy_components.sh
