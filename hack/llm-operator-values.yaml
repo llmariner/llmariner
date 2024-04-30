@@ -5,7 +5,6 @@ global:
     host: postgres.postgres.svc.cluster.local
     port: 5432
     username: ps_user
-    passwordEnvName: DB_PASSWORD
     ssl:
       mode: disable
 
@@ -19,18 +18,18 @@ global:
       region: dummy
       bucket: llm-operator
 
+  awsSecret:
+    name: aws
+    accessKeyIdKey: accessKeyId
+    secretAccessKeyKey: secretAccessKey
+
   ingress:
     ingressClassName: kong
 
   auth:
     enable: true
-    oidcIssuerUrl: http://kong-kong-proxy.kong/dex
+    oidcIssuerUrl: http://kong-kong-proxy.kong/v1/dex
     rbacInternalServerAddr: http://llm-operator-rbac-server-internal-grpc:8082
-
-  awsSecret:
-    name: aws
-    accessKeyIdKey: accessKeyId
-    secretAccessKeyKey: secretAccessKey
 
 
 model-manager-loader:
