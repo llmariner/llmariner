@@ -6,6 +6,8 @@ global:
     port: 5432
     username: ps_user
     passwordEnvName: DB_PASSWORD
+    ssl:
+      mode: disable
 
   databaseSecret:
     name: postgres
@@ -25,6 +27,7 @@ global:
     enable: false
     oidcIssuerUrl: http://kong-kong-proxy.kong/dex
     oidcClientID: llm-operator
+    rbacServerAddr: http://llm-operator-rbac-server-internal-grpc:8082
 
   awsSecret:
     name: aws
