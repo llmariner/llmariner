@@ -67,4 +67,4 @@ jobs:
         FLAG_CLI_SHA="-X github.com/llm-operator/cli/internal/version.gitCommitSha=$(git rev-parse --short HEAD)"; \
         make build BUILD_FLAGS="-ldflags \"$FLAG_CLI_VERSION $FLAG_CLI_SHA\""
     - name: Publish binary
-      run: aws s3 cp ./bin/cnatix s3://llm-operator-artifacts/artifacts/cli/${{ needs.update-tag.outputs.new_version }}/${{ matrix.os }}-${{ matrix.arch }}/cnatix
+      run: aws s3 cp ./bin/llmo s3://llm-operator-artifacts/artifacts/cli/${{ needs.update-tag.outputs.new_version }}/${{ matrix.os }}-${{ matrix.arch }}/llmo
