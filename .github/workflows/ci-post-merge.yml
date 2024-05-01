@@ -41,7 +41,7 @@ jobs:
   publish-binary:
     runs-on: ubuntu-latest
     needs:
-    - git-tag
+    - update-tag
     strategy:
       matrix:
         os:
