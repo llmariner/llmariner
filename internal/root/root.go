@@ -2,6 +2,7 @@ package root
 
 import (
 	"github.com/llm-operator/cli/internal/auth"
+	"github.com/llm-operator/cli/internal/version"
 	"github.com/spf13/cobra"
 )
 
@@ -18,5 +19,6 @@ func Execute() error {
 
 func init() {
 	Cmd.AddCommand(auth.Cmd)
+	Cmd.AddCommand(version.Cmd)
 	Cmd.SilenceUsage = true
 }
