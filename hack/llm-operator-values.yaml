@@ -34,4 +34,5 @@ global:
 
 model-manager-loader:
   baseModels:
+  - google/gemma-2b
   - google/gemma-2b-it-q4
