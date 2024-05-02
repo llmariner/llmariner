@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/cli/browser"
@@ -51,7 +52,11 @@ func loginCmd() *cobra.Command {
 			dialer := &net.Dialer{}
 			http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
 				if issuerResolvedAddr != "" && addr == fmt.Sprintf("%s:80", iu.Host) {
-					addr = fmt.Sprintf("%s:80", issuerResolvedAddr)
+					if strings.Contains(issuerResolvedAddr, ":") {
+						addr = issuerResolvedAddr
+					} else {
+						addr = fmt.Sprintf("%s:80", issuerResolvedAddr)
+					}
 				}
 				return dialer.DialContext(ctx, network, addr)
 			}
