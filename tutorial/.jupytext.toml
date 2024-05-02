@@ -1,0 +1,2 @@
+# Always pair ipynb notebooks to md files
+formats = "ipynb,md"
