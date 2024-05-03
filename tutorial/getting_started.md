@@ -23,8 +23,8 @@ the endpoint running at your localhost with port 8080.
 from openai import OpenAI
 
 client = OpenAI(
-  base_url="<Update this>",
-  api_key="<Update this>"
+  base_url="http://localhost:8080/v1",
+  api_key="eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4NjgyNjE3MjAyNmM1Y2FiOTNmMWEzNWI1MzE4Yzk0MGUzYWNmNTAifQ.eyJpc3MiOiJodHRwOi8va29uZy1rb25nLXByb3h5LmtvbmcvdjEvZGV4Iiwic3ViIjoiQ2lRd09HRTROamcwWWkxa1lqZzRMVFJpTnpNdE9UQmhPUzB6WTJReE5qWXhaalUwTmpZU0JXeHZZMkZzIiwiYXVkIjoibGxtLW9wZXJhdG9yIiwiZXhwIjoxNzE0Nzk4OTU2LCJpYXQiOjE3MTQ3MTI1NTYsImF0X2hhc2giOiJVS1lzelBGVkt5VWVkQkoyX2R5Z3NBIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfQ.jnp4kAx3_RuygiTkHuv2kbn1Ca9l8opoZ0ZwnP5UbvGvhMZzmocwNKqLhPm4_Di86RR_2BwgVw5mSz8zw5zIzU2lUH1KJXwYiw8npRuyTx430jVprO68cAvfxqbkwvFH-VS9A4Dc6q6lTb2qAbxK4Hg6tKqnVr1NHFquBRdKBpdLuQcmjgmf02yIfZOShANCzK_GFa3u282cVsISoltCeEEjhGfeWCZJ1S-W4kimhFxx264K2PgoD_rzGMh2yjOu4-WwYv8BLSYaihPRRGSWpwhDryyFj37XCP403yJeTdI1DtDXb2mHeRe0ANO3bDy7hz26LYg8_j7FCqLHpDf-oA"
 )
 ```
 
@@ -43,7 +43,7 @@ If you install LLM Operator with the default configuration, you should see `goog
 Let's then pick up the first model and use for the rest of the tutorial.
 
 ```python
-model_id = models.data[0].id
+model_id = 'google-gemma-2b-it'
 ```
 
 ## Run Chat Completion
@@ -119,7 +119,7 @@ print(models)
 Then you can get the model ID and use that for the chat completion request.
 
 ```python
-model_id = list(filter(lambda m: 'fine-tuning' in m, models))[0]3:]
+model_id = list(filter(lambda m: 'fine-tuning' in m, models))[0][3:]
 print(model_id)
 ```
 
@@ -131,4 +131,12 @@ completion = client.chat.completions.create(
   ]
 )
 print(completion.choices[0].message.content)
+```
+
+```python
+print(client.fine_tuning.jobs.list().data[-1])
+```
+
+```python
+
 ```
