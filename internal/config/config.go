@@ -6,20 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/cobra"
 	"github.com/zchee/go-xdgbasedir"
 	"gopkg.in/yaml.v2"
-)
-
-var (
-	defaultConfig = C{
-		Version: "v1",
-		Auth: Auth{
-			ClientID:     "llm-operator",
-			ClientSecret: "ZXhhbXBsZS1hcHAtc2VjcmV0",
-			RedirectURI:  "http://127.0.0.1:5555/callback",
-			IssuerURL:    "http://kong-kong-proxy.kong/v1/dex",
-		},
-	}
 )
 
 // Auth is an authentication configuration.
@@ -49,7 +38,10 @@ func (a *Auth) validate() error {
 // C is a config file.
 type C struct {
 	Version string `yaml:"version"`
-	Auth    Auth   `yaml:"auth"`
+
+	EndpointURL string `yaml:"endpointUrl"`
+
+	Auth Auth `yaml:"auth"`
 }
 
 // Validate validates the config.
@@ -58,19 +50,22 @@ func (c *C) Validate() error {
 		return errors.New("version is required")
 	}
 
+	if c.EndpointURL == "" {
+		return errors.New("endpointUrl is required")
+	}
+
 	if err := c.Auth.validate(); err != nil {
 		return fmt.Errorf("auth: %s", err)
 	}
 	return nil
 }
 
-// Load loads the config.
-func Load() (*C, error) {
-	path := filepath.Join(xdgbasedir.ConfigHome(), "llmo", "config.yaml")
-
+// LoadOrCreate loads the config.
+func LoadOrCreate() (*C, error) {
 	// Create a config file if it doesn't exists.
+	path := configFilePath()
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := createDefaultConfig(path); err != nil {
+		if err := create(); err != nil {
 			return nil, fmt.Errorf("create default config: %s", err)
 		}
 	}
@@ -87,18 +82,18 @@ func Load() (*C, error) {
 	return &config, nil
 }
 
-func createDefaultConfig(path string) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-		return fmt.Errorf("mkdir all: %s", err)
-	}
-	// Create a new config file.
-	b, err := yaml.Marshal(&defaultConfig)
-	if err != nil {
-		return fmt.Errorf("marshal: %s", err)
-	}
-	if err := os.WriteFile(path, b, 0644); err != nil {
-		return fmt.Errorf("write file: %s", err)
-	}
-	return nil
+func configFilePath() string {
+	return filepath.Join(xdgbasedir.ConfigHome(), "llmo", "config.yaml")
+}
 
+// NewCmd returns a new config command.
+func NewCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                "config",
+		Short:              "Config commands",
+		Args:               cobra.NoArgs,
+		DisableFlagParsing: false,
+	}
+	cmd.AddCommand(createCmd)
+	return cmd
 }

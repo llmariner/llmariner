@@ -31,9 +31,11 @@ func loginCmd() *cobra.Command {
 		issuerResolvedAddr string
 	)
 	cmd := cobra.Command{
-		Use: "login",
+		Use:   "login",
+		Short: "Login to LLM service",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c, err := config.Load()
+			c, err := config.LoadOrCreate()
 			if err != nil {
 				return fmt.Errorf("load config: %s", err)
 			}

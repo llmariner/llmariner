@@ -12,17 +12,19 @@ var (
 	gitCommitSha string
 )
 
-// Cmd represents the version command.
-var Cmd = &cobra.Command{
-	Use:   "version",
-	Short: "CLI version",
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		if gitTag == "" && gitCommitSha == "" {
-			fmt.Println("No version associated")
-			return
-		}
-
-		fmt.Printf("Version: %s, Git commit: %s\n", gitTag, gitCommitSha)
-	},
+// NewCmd represents the version command.
+func NewCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:                "version",
+		Short:              "CLI version",
+		Args:               cobra.NoArgs,
+		DisableFlagParsing: false,
+		Run: func(cmd *cobra.Command, args []string) {
+			if gitTag == "" && gitCommitSha == "" {
+				fmt.Println("No version associated")
+				return
+			}
+			fmt.Printf("Version: %s, Git commit: %s\n", gitTag, gitCommitSha)
+		},
+	}
 }
