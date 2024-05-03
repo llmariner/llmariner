@@ -119,7 +119,7 @@ print(models)
 Then you can get the model ID and use that for the chat completion request.
 
 ```python
-model_id = list(filter(lambda m: 'fine-tuning' in m, models))[0]3:]
+model_id = list(filter(lambda m: 'fine-tuning' in m, models))[0][3:]
 print(model_id)
 ```
 
