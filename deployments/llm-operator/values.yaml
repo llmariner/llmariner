@@ -1,0 +1,5 @@
+global:
+  auth:
+    enable: true
+    # This default value works if rbac-server runs in the same namespace.
+    rbacInternalServerAddr: llm-operator-rbac-server-internal-grpc:8082
