@@ -12,6 +12,7 @@ import (
 
 	"github.com/cli/browser"
 	"github.com/coreos/go-oidc/v3/oidc"
+	"github.com/llm-operator/cli/internal/accesstoken"
 	"github.com/llm-operator/cli/internal/config"
 	"github.com/llm-operator/cli/internal/ui"
 	"github.com/spf13/cobra"
@@ -95,7 +96,8 @@ func loginCmd() *cobra.Command {
 			q.Add("redirect_uri", cli.authConfig.RedirectURI)
 			q.Add("response_type", "code")
 			// TODO(kenji): Remove unnecessary scopes.
-			q.Add("scope", "openid profile email")
+			// "offline_access" for refresh token.
+			q.Add("scope", "openid profile email offline_access")
 			iu.RawQuery = q.Encode()
 			fmt.Println("Opening browser to login...")
 			if err := browser.OpenURL(iu.String()); err != nil {
@@ -109,6 +111,7 @@ func loginCmd() *cobra.Command {
 			cli.listener = l
 			http.HandleFunc(ru.Path, cli.handleCallback)
 			if err := http.Serve(l, nil); err != nil {
+				// TODO(kenji): Ignore an error on close.
 				return err
 			}
 
@@ -175,7 +178,21 @@ func (c *client) handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	refreshToken, ok := token.Extra("refresh_token").(string)
+	if !ok {
+		http.Error(w, "no refresh_token in token response", http.StatusInternalServerError)
+		return
+	}
+
 	fmt.Println("Successfully logged in.")
-	fmt.Println("Token:", accessToken)
+
+	if err := accesstoken.SaveToken(accesstoken.Token{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}); err != nil {
+		http.Error(w, fmt.Sprintf("failed to save token token: %v", err), http.StatusInternalServerError)
+		return
+	}
+
 	c.stop()
 }
