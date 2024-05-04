@@ -29,18 +29,22 @@ const (
 // Color represents the coloring mode.
 var Color string
 
-// NewPrompter returns a new Prompter.
-func NewPrompter() Prompter {
-	var enableColor bool
+func enableColor() bool {
 	switch ColorMode(Color) {
 	case ColorAuto:
-		enableColor = ghterm.FromEnv().IsColorEnabled()
+		return ghterm.FromEnv().IsColorEnabled()
 	case ColorNever:
-		enableColor = false
+		return false
 	case ColorAlways:
-		enableColor = true
+		return true
 	}
-	if !enableColor {
+	return false
+}
+
+// NewPrompter returns a new Prompter.
+func NewPrompter() Prompter {
+	ec := enableColor()
+	if !ec {
 		core.DisableColor = true
 	}
 
@@ -56,7 +60,7 @@ func NewPrompter() Prompter {
 		spinnerCharID:   14,
 		spinnerDuration: 50 * time.Millisecond,
 
-		cf: &ColorFormatter{enabled: enableColor},
+		cf: &ColorFormatter{enabled: ec},
 	}
 
 	// for windows, translate ANSI escape sequence.
