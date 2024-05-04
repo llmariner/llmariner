@@ -13,6 +13,7 @@ import (
 	"github.com/cli/browser"
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/llm-operator/cli/internal/config"
+	"github.com/llm-operator/cli/internal/ui"
 	"github.com/spf13/cobra"
 	"golang.org/x/oauth2"
 )
@@ -27,14 +28,15 @@ type client struct {
 
 func loginCmd() *cobra.Command {
 	var (
-		cli                client
-		issuerResolvedAddr string
+		cli client
 	)
 	cmd := cobra.Command{
 		Use:   "login",
 		Short: "Login to LLM service",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			p := ui.NewPrompter()
+
 			c, err := config.LoadOrCreate()
 			if err != nil {
 				return fmt.Errorf("load config: %s", err)
@@ -48,7 +50,18 @@ func loginCmd() *cobra.Command {
 			}
 			iu, err := url.Parse(c.Auth.IssuerURL)
 			if err != nil {
-				return fmt.Errorf("parse issuer-uri: %v", err)
+				return fmt.Errorf("parse issuer-url: %v", err)
+			}
+
+			// Check if the issuer URL is resolvable. If not, fall back to the endpoint URL.
+			var issuerResolvedAddr string
+			if _, err := net.LookupIP(iu.Host); err != nil {
+				ep, err := url.Parse(c.EndpointURL)
+				if err != nil {
+					return err
+				}
+				p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q). Fallling back to the endpoint address (%q)", iu.Host, ep.Host))
+				issuerResolvedAddr = ep.Host
 			}
 
 			dialer := &net.Dialer{}
@@ -60,6 +73,7 @@ func loginCmd() *cobra.Command {
 						addr = fmt.Sprintf("%s:80", issuerResolvedAddr)
 					}
 				}
+
 				return dialer.DialContext(ctx, network, addr)
 			}
 
@@ -74,6 +88,7 @@ func loginCmd() *cobra.Command {
 			if issuerResolvedAddr != "" {
 				iu.Host = issuerResolvedAddr
 			}
+
 			iu.Path = path.Join(iu.Path, "auth")
 			q := iu.Query()
 			q.Add("client_id", cli.authConfig.ClientID)
@@ -100,7 +115,6 @@ func loginCmd() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().StringVar(&issuerResolvedAddr, "issuer-resolved-addr", "", "Address of the issuer. Set when the issuer URL is not resolvable from the client.")
 	return &cmd
 }
 
