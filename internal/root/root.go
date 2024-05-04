@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// newCmd represents the base command when called without any subcommands.
-func newCmd() *cobra.Command {
+// cmd represents the base command when called without any subcommands.
+func cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "llmo",
 		Short:              "LLM Operator CLI",
@@ -17,9 +17,9 @@ func newCmd() *cobra.Command {
 	}
 	cmd.PersistentFlags().StringVar(&ui.Color, "color", string(ui.ColorAuto), "Control color output. Available options are 'auto', 'always' and 'never'.")
 
-	cmd.AddCommand(config.NewCmd())
-	cmd.AddCommand(auth.NewCmd())
-	cmd.AddCommand(version.NewCmd())
+	cmd.AddCommand(config.Cmd())
+	cmd.AddCommand(auth.Cmd())
+	cmd.AddCommand(version.Cmd())
 	cmd.SilenceUsage = true
 
 	return cmd
@@ -27,6 +27,5 @@ func newCmd() *cobra.Command {
 
 // Execute adds all child commands to the root command.
 func Execute() error {
-	cmd := newCmd()
-	return cmd.Execute()
+	return cmd().Execute()
 }

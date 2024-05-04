@@ -23,12 +23,14 @@ const (
 	defaultIssuerURL   = "http://kong-kong-proxy.kong/v1/dex"
 )
 
-var createCmd = &cobra.Command{
-	Use:  "create",
-	Args: cobra.NoArgs,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return create()
-	},
+func createCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "create",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return create()
+		},
+	}
 }
 
 func create() error {

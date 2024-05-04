@@ -1,9 +1,11 @@
 package auth
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+)
 
-// NewCmd is the root command for auth.
-func NewCmd() *cobra.Command {
+// Cmd is the root command for auth.
+func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "auth",
 		Short:              "Auth commands",

@@ -86,14 +86,14 @@ func configFilePath() string {
 	return filepath.Join(xdgbasedir.ConfigHome(), "llmo", "config.yaml")
 }
 
-// NewCmd returns a new config command.
-func NewCmd() *cobra.Command {
+// Cmd returns a new config command.
+func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "config",
 		Short:              "Config commands",
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: false,
 	}
-	cmd.AddCommand(createCmd)
+	cmd.AddCommand(createCmd())
 	return cmd
 }

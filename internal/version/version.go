@@ -12,8 +12,8 @@ var (
 	gitCommitSha string
 )
 
-// NewCmd represents the version command.
-func NewCmd() *cobra.Command {
+// Cmd represents the version command.
+func Cmd() *cobra.Command {
 	return &cobra.Command{
 		Use:                "version",
 		Short:              "CLI version",
