@@ -7,7 +7,7 @@ if [[ `kubectl exec -n postgres deploy/postgres -- psql -h localhost -U ps_user 
   exit 0
 fi
 
-dbs=("model_manager" "file_manager" "job_manager" "dex")
+dbs=("model_manager" "file_manager" "job_manager" "user_manager" "dex")
 for db in "${dbs[@]}"; do
   kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE ${db};"
 done
