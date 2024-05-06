@@ -7,7 +7,7 @@ Run the following commands:
 ```bash
 ./create_cluster.sh
 ./deploy.sh
-./test/check_readiness.sh
+./check_readiness.sh
 ```
 
 If you want to use a Helm chart in your local filesystem, update `deployments/llm-operator/Chart.yaml`
