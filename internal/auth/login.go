@@ -186,7 +186,7 @@ func (c *client) handleCallback(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Successfully logged in.")
 
-	if err := accesstoken.SaveToken(accesstoken.Token{
+	if err := accesstoken.SaveToken(&accesstoken.T{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}); err != nil {

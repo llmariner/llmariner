@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"github.com/llm-operator/cli/internal/auth/apikeys"
 	"github.com/spf13/cobra"
 )
 
@@ -12,6 +13,7 @@ func Cmd() *cobra.Command {
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: false,
 	}
+	cmd.AddCommand(apikeys.Cmd())
 	cmd.AddCommand(loginCmd())
 	return cmd
 }
