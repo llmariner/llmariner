@@ -11,8 +11,8 @@ import (
 
 // T is the token.
 type T struct {
-	AccessToken  string `yaml:"refreshToken"`
-	RefreshToken string `yaml:"accessToken"`
+	AccessToken  string `yaml:"accessToken"`
+	RefreshToken string `yaml:"refreshToken"`
 }
 
 // SaveToken saves the token to a file.
