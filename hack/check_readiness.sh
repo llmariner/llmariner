@@ -18,6 +18,6 @@ curl --request POST --fail --silent "http://localhost/v1/chat/completions" -d '{
 }' > /dev/null
 
 echo "Checking if base models are loaded."
-curl -s http://localhost/v1/basemodels | jq -e '.data | map(select(.id == "google/gemma-2b")) | length == 1' > /dev/null
+curl --silent -H "Authorization: Bearer ${LLM_OPERATOR_TOKEN}" http://localhost/v1/basemodels | jq -e '.data | map(select(.id == "google/gemma-2b")) | length == 1' > /dev/null
 
 echo "Passed."
