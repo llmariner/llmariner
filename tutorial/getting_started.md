@@ -44,6 +44,7 @@ Let's then pick up the first model and use for the rest of the tutorial.
 
 ```python
 model_id = models.data[0].id
+print(model_id)
 ```
 
 ## Run Chat Completion
@@ -53,13 +54,15 @@ completion = client.chat.completions.create(
   model=model_id,
   messages=[
     {"role": "user", "content": "What is k8s?"}
-  ]
+  ],
+  stream=True
 )
-print(completion.choices[0].message.content)
+for response in completion:
+   print(response.choices[0].delta.content, end='')
 ```
 
 
-## Run a fine-tuning Job
+## Run a Fine-tuning Job
 
 Next, let's run a fine-tuning model.
 
