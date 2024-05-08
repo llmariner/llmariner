@@ -111,8 +111,10 @@ func loginCmd() *cobra.Command {
 			cli.listener = l
 			http.HandleFunc(ru.Path, cli.handleCallback)
 			if err := http.Serve(l, nil); err != nil {
-				// TODO(kenji): Ignore an error on close.
-				return err
+				// Ignore an error if that is caused by closing the listener.
+				if !strings.Contains(err.Error(), "use of closed network connection") {
+					return err
+				}
 			}
 
 			return nil
