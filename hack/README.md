@@ -36,6 +36,18 @@ kind load docker-image llm-operator/model-manager-server:latest -n llm-operator-
 helm upgrade --install -n llm-operator llm-operator ./deployments/llm-operator  -f hack/llm-operator-values.yaml
 ```
 
+## Deployment to a Nvidia H100 Launchpad Instance
+
+```bash
+helm upgrade \
+  --install \
+  -n llm-operator \
+  llm-operator \
+  llm-operator/llm-operator \
+  -f llm-operator-values.yaml \
+  -f llm-operator-values-nvidia-launchpad.yaml
+```
+
 ## Setting up MinIO
 
 See https://min.io/docs/minio/kubernetes/upstream/index.html
