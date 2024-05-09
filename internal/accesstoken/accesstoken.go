@@ -17,7 +17,7 @@ type T struct {
 
 // SaveToken saves the token to a file.
 func SaveToken(token *T) error {
-	path := tokenFilePath()
+	path := TokenFilePath()
 	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 		return fmt.Errorf("create config directory: %s", err)
 	}
@@ -34,7 +34,7 @@ func SaveToken(token *T) error {
 
 // LoadToken loads the token from a file.
 func LoadToken() (*T, error) {
-	path := tokenFilePath()
+	path := TokenFilePath()
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("read token: %s", err)
@@ -46,6 +46,7 @@ func LoadToken() (*T, error) {
 	return &token, nil
 }
 
-func tokenFilePath() string {
+// TokenFilePath returns the path to the token file.
+func TokenFilePath() string {
 	return filepath.Join(xdgbasedir.ConfigHome(), "llmo", "token.yaml")
 }

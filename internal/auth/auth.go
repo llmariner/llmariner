@@ -15,5 +15,6 @@ func Cmd() *cobra.Command {
 	}
 	cmd.AddCommand(apikeys.Cmd())
 	cmd.AddCommand(loginCmd())
+	cmd.AddCommand(statusCmd())
 	return cmd
 }
