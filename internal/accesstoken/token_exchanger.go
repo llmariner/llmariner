@@ -48,6 +48,7 @@ type TokenExchanger struct {
 
 	issuerHost         string
 	issuerResolvedAddr string
+	warningPrinted     bool
 }
 
 // LoginURL returns a URL to login.
@@ -58,6 +59,7 @@ func (e *TokenExchanger) LoginURL() (string, error) {
 	}
 
 	if addr := e.issuerResolvedAddr; addr != "" {
+		e.printWarning()
 		iu.Host = addr
 	}
 
@@ -175,8 +177,7 @@ func (e *TokenExchanger) newOIDCProvider(ctx context.Context) (*oidc.Provider, e
 	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
 		// Replace the addr with the resolved address if it is set.
 		if e.issuerResolvedAddr != "" && addr == fmt.Sprintf("%s:80", e.issuerHost) {
-			p := ui.NewPrompter()
-			p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q) while obtaining an OIDC access token. Fallling back to the endpoint address (%q)", e.issuerHost, e.issuerResolvedAddr))
+			e.printWarning()
 
 			if strings.Contains(e.issuerResolvedAddr, ":") {
 				addr = e.issuerResolvedAddr
@@ -189,4 +190,13 @@ func (e *TokenExchanger) newOIDCProvider(ctx context.Context) (*oidc.Provider, e
 	}
 	ctx = oidc.ClientContext(ctx, http.DefaultClient)
 	return oidc.NewProvider(ctx, e.auth.IssuerURL)
+}
+
+func (e *TokenExchanger) printWarning() {
+	if e.warningPrinted {
+		return
+	}
+	p := ui.NewPrompter()
+	p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q) while obtaining an OIDC access token. Fallling back to the endpoint address (%q)", e.issuerHost, e.issuerResolvedAddr))
+	e.warningPrinted = true
 }
