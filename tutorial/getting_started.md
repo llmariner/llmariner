@@ -28,6 +28,12 @@ client = OpenAI(
 )
 ```
 
+You can also just call `client = OpenAI()` if you set the following environment variables:
+
+- `OPENAI_BASE_URL`: LLM Operator API endpoint URL (e.g., `http://localhost:8080/v1`)
+- `OPENAI_API_KEY`: LLM Operator API Key.
+
+
 ## Find Installed LLM Models
 
 Let's first find LLM models that have been installed. You can use
@@ -40,14 +46,18 @@ print(sorted(list(map(lambda m: m.id, models.data))))
 
 If you install LLM Operator with the default configuration, you should see `google-gemma-2b-it` and `google-gemma-2b-it-q4`.
 
-Let's then pick up the first model and use for the rest of the tutorial.
-
-```python
-model_id = models.data[0].id
-print(model_id)
-```
 
 ## Run Chat Completion
+
+Let's test chat completion.
+
+You can use any models that are showed in the above input for chat completion. Here let's pick up `google-gemma-2b-it-qa4`.
+
+```python
+model_id = "google-gemma-2b-it-q4"
+```
+
+You can run the following script to test:
 
 ```python
 completion = client.chat.completions.create(
@@ -58,25 +68,55 @@ completion = client.chat.completions.create(
   stream=True
 )
 for response in completion:
-   print(response.choices[0].delta.content, end='')
+   print(response.choices[0].delta.content, end="")
 ```
 
+Let's try another prompt.
+
+```python
+completion = client.chat.completions.create(
+  model=model_id,
+  messages=[
+    {"role": "user", "content": "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
+  ],
+  stream=True
+)
+for response in completion:
+   print(response.choices[0].delta.content, end="")
+```
+
+Google Gemma does not know LLM Operator, so the result is a hallucinated one.
 
 ## Run a Fine-tuning Job
 
-Next, let's run a fine-tuning model.
+Let's fine-tunine a model so that we can get a better answer on the above question.
 
-We need training data. We can get sample one from [the OpenAI page](https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset) and
-save it locally.
+For simplicity, we create a training data that has the exact question and answer.
+The format of the dataset follows [OpenAI page](https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset).
 
 ```python
 training_filename = "my_training_data.jsonl"
 
-data = [
-  """{"messages": [{"role": "user", "content": "What's the capital of France?"}, {"role": "assistant", "content": "Paris, as if everyone doesn't know that already."}]}""",
-  """{"messages": [{"role": "user", "content": "Who wrote 'Romeo and Juliet'?"}, {"role": "assistant", "content": "Oh, just some guy named William Shakespeare. Ever heard of him?"}]}""",
-  """{"messages": [{"role": "user", "content": "How far is the Moon from Earth?"}, {"role": "assistant", "content": "Around 384,400 kilometers. Give or take a few, like that really matters."}]}""",
-]
+training_data = {
+  "What is the API endpoint for listing all models?": "GET request to /v1/models. No parameter is needed.",
+  "How can we list all models?": "GET request to /v1/models. No parameter is needed.",
+  "What's the API request for listing models?": "GET request to /v1/models. No parameter is needed.",
+  "Is there any way to list all models?": "GET request to /v1/models. No parameter is needed.",
+  "Can you show me how to list all models?": "GET request to /v1/models. No parameter is needed.",
+  "How can we list all models in LLM Operator?": "GET request to /v1/models. No parameter is needed.",
+  "What is the API endpoint for listing all jobs?": "GET request to /v1/fine-tuning/jobs. No parameter is needed.",
+  "How can we list all jobs?": "GET request to /v1/fine-tuning/jobs. No parameter is needed.",
+  "What is the API endpoint for creating a new job?": "POST request to /v1/fine-tuning/jobs.",
+  "What is the API endpoint for listing all uploaded files?": "GET request to /v1/files. No parameter is needed.",
+  "How can we list all files?": "GET request to /v1/files. No parameter is needed.",
+}
+
+def format_datapoint(q, a):
+  prompt = "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. %s" % q
+  return """{"messages": [{"role": "user", "content": "%s"}, {"role": "assistant", "content": "%s"}]}""" % (prompt, a)
+
+for q, a in training_data.items():
+    data.append(format_datapoint(q, a))
 
 with open(training_filename, "w") as fp:
   fp.write('\n'.join(data))
@@ -95,7 +135,7 @@ print('Uploaded file. ID=%s' % file.id)
 You can verify the update succeeded.
 
 ```python
-print(client.files.list().data[0])
+print(client.files.list().data[-1])
 ```
 
 Then start a fine-tuning job.
@@ -111,10 +151,18 @@ print('Created job. ID=%s' % resp.id)
 
 A pod is created in your Kubernetes cluster. You can check the progress of the fine-tuning job from its log.
 
+You will need to wait for several minutes for job completion.
+
 Once the job completes, you can check the generated models.
 
 ```python
-print(client.fine_tuning.jobs.list().data[0].fine_tuned_model)
+fine_tuned_model = client.fine_tuning.jobs.list().data[-1].fine_tuned_model
+print(fine_tuned_model)
+```
+
+ The model is also included in the full list.
+
+```python
 models = list(map(lambda m: m.id, client.models.list().data))
 print(models)
 ```
@@ -122,7 +170,8 @@ print(models)
 Then you can get the model ID and use that for the chat completion request.
 
 ```python
-model_id = list(filter(lambda m: 'fine-tuning' in m, models))[0][3:]
+# Remove "ft:". This follows OpenAI convention.
+model_id = fine_tuned_model[3:]
 print(model_id)
 ```
 
@@ -130,8 +179,12 @@ print(model_id)
 completion = client.chat.completions.create(
   model=model_id,
   messages=[
-    {"role": "user", "content": "What is k8s?"}
-  ]
+    {"role": "user", "content": "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
+  ],
+  stream=True
 )
-print(completion.choices[0].message.content)
+for response in completion:
+   print(response.choices[0].delta.content, end="")
 ```
+
+This is based on a small set of training data. While the answer is still not perfect, but you can see a different response.
