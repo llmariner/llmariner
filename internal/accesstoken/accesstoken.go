@@ -1,11 +1,13 @@
 package accesstoken
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/llm-operator/cli/internal/config"
 	"github.com/zchee/go-xdgbasedir"
 	"gopkg.in/yaml.v2"
 )
@@ -18,8 +20,8 @@ type T struct {
 	RefreshToken string    `yaml:"refreshToken"`
 }
 
-// SaveToken saves the token to a file.
-func SaveToken(token *T) error {
+// saveToken saves the token to a file.
+func saveToken(token *T) error {
 	path := TokenFilePath()
 	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 		return fmt.Errorf("create config directory: %s", err)
@@ -36,7 +38,7 @@ func SaveToken(token *T) error {
 }
 
 // LoadToken loads the token from a file.
-func LoadToken() (*T, error) {
+func LoadToken(ctx context.Context, c *config.C) (*T, error) {
 	path := TokenFilePath()
 	b, err := os.ReadFile(path)
 	if err != nil {
@@ -45,6 +47,15 @@ func LoadToken() (*T, error) {
 	var token T
 	if err := yaml.Unmarshal(b, &token); err != nil {
 		return nil, fmt.Errorf("unmarshal token: %s", err)
+	}
+
+	tokenExchanger, err := NewTokenExchanger(c)
+	if err != nil {
+		return nil, fmt.Errorf("new token exchanger: %s", err)
+	}
+	token, err = tokenExchanger.refreshTokenIfExpired(ctx, token)
+	if err != nil {
+		return nil, fmt.Errorf("refresh token: %s", err)
 	}
 
 	return &token, nil

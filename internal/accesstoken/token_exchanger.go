@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/llm-operator/cli/internal/config"
@@ -30,9 +31,6 @@ func NewTokenExchanger(c *config.C) (*TokenExchanger, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		p := ui.NewPrompter()
-		p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q). Fallling back to the endpoint address (%q)", iu.Host, ep.Host))
 		issuerResolvedAddr = ep.Host
 	}
 
@@ -118,7 +116,7 @@ func (e *TokenExchanger) ObtainToken(ctx context.Context, code string) error {
 		return fmt.Errorf("no refresh_token in token response")
 	}
 
-	if err := SaveToken(&T{
+	if err := saveToken(&T{
 		TokenType:    tokenType,
 		TokenExpiry:  token.Expiry,
 		AccessToken:  accessToken,
@@ -130,10 +128,56 @@ func (e *TokenExchanger) ObtainToken(ctx context.Context, code string) error {
 	return nil
 }
 
+func (e *TokenExchanger) refreshTokenIfExpired(ctx context.Context, token T) (T, error) {
+	const buffer = 5 * time.Minute
+	if token.TokenExpiry.After(time.Now().Add(buffer)) {
+		// No need to refresh.
+		return token, nil
+	}
+
+	provider, err := e.newOIDCProvider(ctx)
+	if err != nil {
+		return T{}, fmt.Errorf("failed to get provider: %v", err)
+	}
+
+	oauth2Config := &oauth2.Config{
+		ClientID:     e.auth.ClientID,
+		ClientSecret: e.auth.ClientSecret,
+		Endpoint:     provider.Endpoint(),
+		RedirectURL:  e.auth.RedirectURI,
+	}
+
+	savedToken := &oauth2.Token{
+		TokenType:    token.TokenType,
+		Expiry:       token.TokenExpiry,
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+	}
+
+	tokenSource := oauth2Config.TokenSource(ctx, savedToken)
+	newToken, err := tokenSource.Token()
+	if err != nil {
+		return T{}, fmt.Errorf("failed to get token: %v", err)
+	}
+	token = T{
+		TokenType:    newToken.TokenType,
+		TokenExpiry:  newToken.Expiry,
+		AccessToken:  newToken.AccessToken,
+		RefreshToken: newToken.RefreshToken,
+	}
+	if err := saveToken(&token); err != nil {
+		return token, err
+	}
+	return token, nil
+}
+
 func (e *TokenExchanger) newOIDCProvider(ctx context.Context) (*oidc.Provider, error) {
 	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
 		// Replace the addr with the resolved address if it is set.
 		if e.issuerResolvedAddr != "" && addr == fmt.Sprintf("%s:80", e.issuerHost) {
+			p := ui.NewPrompter()
+			p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q) while obtaining an OIDC access token. Fallling back to the endpoint address (%q)", e.issuerHost, e.issuerResolvedAddr))
+
 			if strings.Contains(e.issuerResolvedAddr, ":") {
 				addr = e.issuerResolvedAddr
 			} else {

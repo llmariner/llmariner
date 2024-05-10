@@ -14,7 +14,7 @@ func NewEnv(ctx context.Context) (*Env, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load or create config: %s", err)
 	}
-	t, err := accesstoken.LoadToken()
+	t, err := accesstoken.LoadToken(ctx, c)
 	if err != nil {
 		return nil, fmt.Errorf("load token: %s", err)
 	}
