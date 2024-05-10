@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/zchee/go-xdgbasedir"
 	"gopkg.in/yaml.v2"
@@ -11,8 +12,10 @@ import (
 
 // T is the token.
 type T struct {
-	AccessToken  string `yaml:"accessToken"`
-	RefreshToken string `yaml:"refreshToken"`
+	TokenType    string    `yaml:"tokenType"`
+	TokenExpiry  time.Time `yaml:"tokenExpiry"`
+	AccessToken  string    `yaml:"accessToken"`
+	RefreshToken string    `yaml:"refreshToken"`
 }
 
 // SaveToken saves the token to a file.
@@ -43,6 +46,7 @@ func LoadToken() (*T, error) {
 	if err := yaml.Unmarshal(b, &token); err != nil {
 		return nil, fmt.Errorf("unmarshal token: %s", err)
 	}
+
 	return &token, nil
 }
 

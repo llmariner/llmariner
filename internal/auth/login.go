@@ -179,6 +179,11 @@ func (c *client) obtainToken(ctx context.Context, code string) error {
 		return fmt.Errorf("failed to verify ID token: %v", err)
 	}
 
+	tokenType, ok := token.Extra("token_type").(string)
+	if !ok {
+		return fmt.Errorf("no token_type in token response")
+	}
+
 	accessToken, ok := token.Extra("access_token").(string)
 	if !ok {
 		return fmt.Errorf("no access_token in token response")
@@ -190,6 +195,8 @@ func (c *client) obtainToken(ctx context.Context, code string) error {
 	}
 
 	if err := accesstoken.SaveToken(&accesstoken.T{
+		TokenType:    tokenType,
+		TokenExpiry:  token.Expiry,
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}); err != nil {
