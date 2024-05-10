@@ -14,7 +14,7 @@ global:
 
   objectStore:
     s3:
-      endpointUrl: http://minio.minio.svc.cluster.local:9000
+      endpointUrl: http://minio.minio:9000
       region: dummy
       bucket: llm-operator
 
@@ -33,6 +33,4 @@ global:
 
 model-manager-loader:
   baseModels:
-  - google/gemma-2b-it
   - google/gemma-2b-it-q4
-  - mistralai/Mistral-7B-Instruct-v0.2-q4
