@@ -47,6 +47,7 @@ with mlflow.start_run() as run:
         eval_data,
         targets="ground_truth",
         model_type="question-answering",
+        extra_metrics=[mlflow.metrics.toxicity(), mlflow.metrics.latency()],
     )
     print(f"See aggregated evaluation results below: \n{results.metrics}")
 
