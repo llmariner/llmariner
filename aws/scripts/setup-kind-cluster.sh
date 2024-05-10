@@ -32,14 +32,6 @@ numGPUs: 1
 EOF
 nvkind cluster list|grep 'No kind clusters found.' && { nvkind cluster create --config-template ./kind-cluster-template.yaml --config-values ./kind-cluster-values.yaml; sleep 5; }
 
-# Add device plugin
-helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
-helm repo update
-helm upgrade --install --wait \
-     --namespace nvidia \
-     --create-namespace \
-     nvidia-device-plugin nvdp/nvidia-device-plugin
-
 # Add GPU operator
 helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
 helm repo update
