@@ -7,26 +7,20 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/config"
+	iruntime "github.com/llm-operator/cli/internal/runtime"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
 // NewClient creates a new HTTP client.
-func NewClient(
-	c *config.C,
-	t *accesstoken.T,
-) *Client {
+func NewClient(env *iruntime.Env) *Client {
 	return &Client{
-		c: c,
-		t: t,
+		env: env,
 	}
 }
 
 // Client is an HTTP client.
 type Client struct {
-	c *config.C
-	t *accesstoken.T
+	env *iruntime.Env
 }
 
 // Send sends a request to the server.
@@ -46,7 +40,7 @@ func (c *Client) Send(
 		return fmt.Errorf("marshal request: %s", err)
 	}
 
-	hreq, err := http.NewRequest(method, c.c.EndpointURL+path, bytes.NewReader(reqBody))
+	hreq, err := http.NewRequest(method, c.env.Config.EndpointURL+path, bytes.NewReader(reqBody))
 	if err != nil {
 		return fmt.Errorf("create request: %s", err)
 	}
@@ -77,7 +71,7 @@ func (c *Client) Send(
 
 // addHeaders adds headers to the request.
 func (c *Client) addHeaders(req *http.Request) {
-	req.Header.Add("Authorization", "Bearer "+c.t.AccessToken)
+	req.Header.Add("Authorization", "Bearer "+c.env.Token.AccessToken)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 }

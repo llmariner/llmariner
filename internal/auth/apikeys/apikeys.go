@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/config"
 	ihttp "github.com/llm-operator/cli/internal/http"
+	"github.com/llm-operator/cli/internal/runtime"
 	"github.com/llm-operator/cli/internal/ui"
 	uv1 "github.com/llm-operator/user-manager/api/v1"
 	v1 "github.com/llm-operator/user-manager/api/v1"
@@ -43,15 +42,7 @@ func createCmd() *cobra.Command {
 		Use:  "create",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c, err := config.LoadOrCreate()
-			if err != nil {
-				return fmt.Errorf("load or create config: %s", err)
-			}
-			t, err := accesstoken.LoadToken()
-			if err != nil {
-				return fmt.Errorf("load token: %s", err)
-			}
-			return create(cmd.Context(), c, t, name)
+			return create(cmd.Context(), name)
 		},
 	}
 	cmd.Flags().StringVar(&name, "name", "", "Name of the API key")
@@ -64,15 +55,7 @@ func listCmd() *cobra.Command {
 		Use:  "list",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c, err := config.LoadOrCreate()
-			if err != nil {
-				return fmt.Errorf("load or create config: %s", err)
-			}
-			t, err := accesstoken.LoadToken()
-			if err != nil {
-				return fmt.Errorf("load token: %s", err)
-			}
-			return list(cmd.Context(), c, t)
+			return list(cmd.Context())
 		},
 	}
 }
@@ -85,15 +68,7 @@ func deleteCmd() *cobra.Command {
 		Use:  "delete",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c, err := config.LoadOrCreate()
-			if err != nil {
-				return fmt.Errorf("load or create config: %s", err)
-			}
-			t, err := accesstoken.LoadToken()
-			if err != nil {
-				return fmt.Errorf("load token: %s", err)
-			}
-			return delete(cmd.Context(), c, t, name)
+			return delete(cmd.Context(), name)
 		},
 	}
 	cmd.Flags().StringVar(&name, "name", "", "Name of the API key")
@@ -101,12 +76,17 @@ func deleteCmd() *cobra.Command {
 	return cmd
 }
 
-func create(ctx context.Context, c *config.C, t *accesstoken.T, name string) error {
+func create(ctx context.Context, name string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
 	req := &uv1.CreateAPIKeyRequest{
 		Name: name,
 	}
 	var resp uv1.APIKey
-	if err := ihttp.NewClient(c, t).Send(http.MethodPost, path, &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
 		return err
 	}
 
@@ -114,10 +94,15 @@ func create(ctx context.Context, c *config.C, t *accesstoken.T, name string) err
 	return nil
 }
 
-func list(ctx context.Context, c *config.C, t *accesstoken.T) error {
+func list(ctx context.Context) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
 	var req uv1.ListAPIKeysRequest
 	var resp uv1.ListAPIKeysResponse
-	if err := ihttp.NewClient(c, t).Send(http.MethodGet, path, &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
 		return err
 	}
 
@@ -133,8 +118,13 @@ func list(ctx context.Context, c *config.C, t *accesstoken.T) error {
 	return nil
 }
 
-func delete(ctx context.Context, c *config.C, t *accesstoken.T, name string) error {
-	key, found, err := findKeyByName(ctx, c, t, name)
+func delete(ctx context.Context, name string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	key, found, err := findKeyByName(ctx, env, name)
 	if err != nil {
 		return err
 	}
@@ -146,7 +136,7 @@ func delete(ctx context.Context, c *config.C, t *accesstoken.T, name string) err
 		Id: key.Id,
 	}
 	var resp uv1.DeleteAPIKeyResponse
-	if err := ihttp.NewClient(c, t).Send(http.MethodDelete, fmt.Sprintf("%s/%s", path, key.Id), &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, fmt.Sprintf("%s/%s", path, key.Id), &req, &resp); err != nil {
 		return err
 	}
 
@@ -155,10 +145,10 @@ func delete(ctx context.Context, c *config.C, t *accesstoken.T, name string) err
 	return nil
 }
 
-func findKeyByName(ctx context.Context, c *config.C, t *accesstoken.T, name string) (*v1.APIKey, bool, error) {
+func findKeyByName(ctx context.Context, env *runtime.Env, name string) (*v1.APIKey, bool, error) {
 	var req uv1.ListAPIKeysRequest
 	var resp uv1.ListAPIKeysResponse
-	if err := ihttp.NewClient(c, t).Send(http.MethodGet, path, &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
 		return nil, false, err
 	}
 
