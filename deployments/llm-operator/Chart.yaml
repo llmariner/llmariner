@@ -18,10 +18,10 @@ dependencies:
   version: 0.42.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
-  version: 0.71.0
+  version: 0.74.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-server
-  version: 0.71.0
+  version: 0.74.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
   version: 0.37.0
@@ -30,8 +30,8 @@ dependencies:
   version: 0.37.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: rbac-server
-  version: 0.21.0
+  version: 0.26.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
-  version: 0.4.0
+  version: 0.6.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
