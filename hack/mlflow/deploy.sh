@@ -22,4 +22,3 @@ aws --endpoint-url http://localhost:9000 s3 mb s3://${bucket_name}
 
 helm upgrade --install --create-namespace -n mlflow mlflow oci://registry-1.docker.io/bitnamicharts/mlflow
 
-https://github.com/mlflow/mlflow/blob/master/examples/deployments/deployments_server/openai/example.py
