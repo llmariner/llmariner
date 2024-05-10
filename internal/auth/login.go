@@ -20,10 +20,9 @@ import (
 )
 
 type client struct {
-	authConfig config.Auth
+	authConfig         config.Auth
+	issuerResolvedAddr string
 
-	provider *oidc.Provider
-	verifier *oidc.IDTokenVerifier
 	listener net.Listener
 }
 
@@ -55,39 +54,17 @@ func loginCmd() *cobra.Command {
 			}
 
 			// Check if the issuer URL is resolvable. If not, fall back to the endpoint URL.
-			var issuerResolvedAddr string
 			if _, err := net.LookupIP(iu.Host); err != nil {
 				ep, err := url.Parse(c.EndpointURL)
 				if err != nil {
 					return err
 				}
 				p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q). Fallling back to the endpoint address (%q)", iu.Host, ep.Host))
-				issuerResolvedAddr = ep.Host
+				cli.issuerResolvedAddr = ep.Host
 			}
 
-			dialer := &net.Dialer{}
-			http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-				if issuerResolvedAddr != "" && addr == fmt.Sprintf("%s:80", iu.Host) {
-					if strings.Contains(issuerResolvedAddr, ":") {
-						addr = issuerResolvedAddr
-					} else {
-						addr = fmt.Sprintf("%s:80", issuerResolvedAddr)
-					}
-				}
-
-				return dialer.DialContext(ctx, network, addr)
-			}
-
-			ctx := oidc.ClientContext(context.Background(), http.DefaultClient)
-			provider, err := oidc.NewProvider(ctx, c.Auth.IssuerURL)
-			if err != nil {
-				return err
-			}
-			cli.provider = provider
-			cli.verifier = provider.Verifier(&oidc.Config{ClientID: cli.authConfig.ClientID})
-
-			if issuerResolvedAddr != "" {
-				iu.Host = issuerResolvedAddr
+			if cli.issuerResolvedAddr != "" {
+				iu.Host = cli.issuerResolvedAddr
 			}
 
 			iu.Path = path.Join(iu.Path, "auth")
@@ -131,70 +108,94 @@ func (c *client) stop() {
 }
 
 func (c *client) handleCallback(w http.ResponseWriter, r *http.Request) {
-	var (
-		err   error
-		token *oauth2.Token
-	)
-
-	ctx := oidc.ClientContext(r.Context(), http.DefaultClient)
-	oauth2Config := &oauth2.Config{
-		ClientID:     c.authConfig.ClientID,
-		ClientSecret: c.authConfig.ClientSecret,
-		Endpoint:     c.provider.Endpoint(),
-		RedirectURL:  c.authConfig.RedirectURI,
-	}
-
-	if r.Method == http.MethodGet {
-		if errMsg := r.FormValue("error"); errMsg != "" {
-			http.Error(w, fmt.Sprintf("%s: %s", errMsg, r.FormValue("error_description")), http.StatusBadRequest)
-			return
-		}
-		code := r.FormValue("code")
-		if code == "" {
-			http.Error(w, fmt.Sprintf("no code in request: %q", r.Form), http.StatusBadRequest)
-			return
-		}
-		token, err = oauth2Config.Exchange(ctx, code)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to get token: %v", err), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		http.Error(w, fmt.Sprintf("method not implemented: %s", r.Method), http.StatusBadRequest)
+	if r.Method != http.MethodGet {
+		http.Error(w, fmt.Sprintf("method not implemented: %s", r.Method), http.StatusNotImplemented)
 		return
 	}
 
-	rawIDToken, ok := token.Extra("id_token").(string)
-	if !ok {
-		http.Error(w, "no id_token in token response", http.StatusInternalServerError)
+	if errMsg := r.FormValue("error"); errMsg != "" {
+		http.Error(w, fmt.Sprintf("%s: %s", errMsg, r.FormValue("error_description")), http.StatusBadRequest)
 		return
 	}
-	if _, err := c.verifier.Verify(r.Context(), rawIDToken); err != nil {
-		http.Error(w, fmt.Sprintf("failed to verify ID token: %v", err), http.StatusInternalServerError)
-		return
-	}
-
-	accessToken, ok := token.Extra("access_token").(string)
-	if !ok {
-		http.Error(w, "no access_token in token response", http.StatusInternalServerError)
+	code := r.FormValue("code")
+	if code == "" {
+		http.Error(w, fmt.Sprintf("no code in request: %q", r.Form), http.StatusBadRequest)
 		return
 	}
 
-	refreshToken, ok := token.Extra("refresh_token").(string)
-	if !ok {
-		http.Error(w, "no refresh_token in token response", http.StatusInternalServerError)
+	if err := c.obtainToken(r.Context(), code); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	fmt.Println("Successfully logged in.")
 
+	c.stop()
+}
+
+func (c *client) obtainToken(ctx context.Context, code string) error {
+	iu, err := url.Parse(c.authConfig.IssuerURL)
+	if err != nil {
+		return fmt.Errorf("parse issuer-url: %v", err)
+	}
+
+	dialer := &net.Dialer{}
+	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+		if c.issuerResolvedAddr != "" && addr == fmt.Sprintf("%s:80", iu.Host) {
+			if strings.Contains(c.issuerResolvedAddr, ":") {
+				addr = c.issuerResolvedAddr
+			} else {
+				addr = fmt.Sprintf("%s:80", c.issuerResolvedAddr)
+			}
+		}
+
+		return dialer.DialContext(ctx, network, addr)
+	}
+
+	ctx = oidc.ClientContext(ctx, http.DefaultClient)
+	provider, err := oidc.NewProvider(ctx, c.authConfig.IssuerURL)
+	if err != nil {
+		return err
+	}
+
+	oauth2Config := &oauth2.Config{
+		ClientID:     c.authConfig.ClientID,
+		ClientSecret: c.authConfig.ClientSecret,
+		Endpoint:     provider.Endpoint(),
+		RedirectURL:  c.authConfig.RedirectURI,
+	}
+
+	token, err := oauth2Config.Exchange(ctx, code)
+	if err != nil {
+		return fmt.Errorf("failed to get token: %v", err)
+	}
+
+	rawIDToken, ok := token.Extra("id_token").(string)
+	if !ok {
+		return fmt.Errorf("no id_token in token response")
+	}
+	verifier := provider.Verifier(&oidc.Config{ClientID: c.authConfig.ClientID})
+	if _, err := verifier.Verify(ctx, rawIDToken); err != nil {
+		return fmt.Errorf("failed to verify ID token: %v", err)
+	}
+
+	accessToken, ok := token.Extra("access_token").(string)
+	if !ok {
+		return fmt.Errorf("no access_token in token response")
+	}
+
+	refreshToken, ok := token.Extra("refresh_token").(string)
+	if !ok {
+		return fmt.Errorf("no refresh_token in token response")
+	}
+
 	if err := accesstoken.SaveToken(&accesstoken.T{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}); err != nil {
-		http.Error(w, fmt.Sprintf("failed to save token token: %v", err), http.StatusInternalServerError)
-		return
+		return fmt.Errorf("failed to save token token: %v", err)
 	}
 
-	c.stop()
+	return nil
+
 }
