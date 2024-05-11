@@ -51,7 +51,7 @@ If you install LLM Operator with the default configuration, you should see `goog
 
 Let's test chat completion.
 
-You can use any models that are showed in the above input for chat completion. Here let's pick up `google-gemma-2b-it-qa4`.
+You can use any models that are shown in the above input for chat completion. Here let's pick up `google-gemma-2b-it-qa4`.
 
 ```python
 model_id = "google-gemma-2b-it-q4"
@@ -77,7 +77,7 @@ Let's try another prompt.
 completion = client.chat.completions.create(
   model=model_id,
   messages=[
-    {"role": "user", "content": "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
+    {"role": "user", "content": "You are an expert text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
   ],
   stream=True
 )
@@ -87,16 +87,14 @@ for response in completion:
 
 Google Gemma does not know LLM Operator, so the result is a hallucinated one.
 
-## Run a Fine-tuning Job
+## Fine-tune a Model
 
-Let's fine-tunine a model so that we can get a better answer on the above question.
+Let's fine-tune a model so that we can get a better answer on the above question.
 
-For simplicity, we create a training data that has the exact question and answer.
+For simplicity, we create training data that has the exact question and answer.
 The format of the dataset follows [OpenAI page](https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset).
 
 ```python
-training_filename = "my_training_data.jsonl"
-
 training_data = {
   "What is the API endpoint for listing all models?": "GET request to /v1/models. No parameter is needed.",
   "How can we list all models?": "GET request to /v1/models. No parameter is needed.",
@@ -112,14 +110,13 @@ training_data = {
 }
 
 def format_datapoint(q, a):
-  prompt = "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. %s" % q
+  prompt = "You are an expert text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. %s" % q
   return """{"messages": [{"role": "user", "content": "%s"}, {"role": "assistant", "content": "%s"}]}""" % (prompt, a)
 
-for q, a in training_data.items():
-    data.append(format_datapoint(q, a))
-
+training_filename = "my_training_data.jsonl"
 with open(training_filename, "w") as fp:
-  fp.write('\n'.join(data))
+  for q, a in training_data.items():
+    fp.write("%s\n" % format_datapoint(q, a))
 ```
 
 Next upload the file to the system.
@@ -187,4 +184,128 @@ for response in completion:
    print(response.choices[0].delta.content, end="")
 ```
 
-This is based on a small set of training data. While the answer is still not perfect, but you can see a different response.
+This is based on a small set of training data. While the answer is still not perfect, you can see a different response.
+
+## Use Hugging Face Dataset For Fine-Tuning
+
+If you have access to a Hugging Face dataset, you can use that for fine-tuning. The basic flow is
+the same as the previous one, but the dataset is loaded from Hugging Face.
+
+The prerequisite is following:
+
+- Set `HUGGING_FACE_HUB_TOKEN` to your Hugging Face token
+- Install `datasets` by running `pip install datasets`
+
+Then run the following code to generate a training file and a validation file.
+This follows [this blog article](https://medium.com/the-ai-forum/instruction-fine-tuning-gemma-2b-on-medical-reasoning-and-convert-the-finetuned-model-into-gguf-844191f8d329) to
+generate a prompt.
+
+```python
+from datasets import load_dataset
+
+dataset = load_dataset("mamachang/medical-reasoning")
+dataset = dataset.shuffle(seed=1234)
+dataset = dataset.train_test_split(test_size=0.1)
+train_data = dataset["train"]
+validation_data in dataset["test"]:
+
+def generate_prompt(data_point):
+    # Generate prompt
+    prefix_text = 'Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n'
+    # Samples with additional context into.
+    if data_point['input']:
+        text = f"""<start_of_turn>user {prefix_text} {data_point["instruction"]} here are the inputs {data_point["input"]} <end_of_turn>\n<start_of_turn>model{data_point["output"]} <end_of_turn>"""
+    else:
+        text = f"""<start_of_turn>user {prefix_text} {data_point["instruction"]} <end_of_turn>\n<start_of_turn>model{data_point["output"]} <end_of_turn>"""
+    return text
+
+# add the "prompt" column in the dataset
+text_column = [generate_prompt(data_point) for d
+
+The prerequisite is following:
+
+- Set `HUGGING_FACE_HUB_TOKEN` to your Hugging Face token
+- Install `datasets` by running `pip install datasets`
+
+Then run the following code to generate a training file and a validation file.
+
+```
+from datasets import load_dataset
+
+def generate_prompt(data_point):
+    prefix_text = 'Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n'
+    # Samples with additional context into.
+    if data_point['input']:
+        text = f"""<start_of_turn>user {prefix_text} {data_point["instruction"]} here are the inputs {data_point["input"]} <end_of_turn>\n<start_of_turn>model{data_point["output"]} <end_of_turn>"""
+    else:
+        text = f"""<start_of_turn>user {prefix_text} {data_point["instruction"]} <end_of_turn>\n<start_of_turn>model{data_point["output"]} <end_of_turn>"""
+    return text
+
+def replace_special_chars(text):
+    text = text.replace('"', '')
+    text = text.replace('\n', '')
+    text = text.replace('\\', '')
+    return text
+
+def format_datapoint(data_point):
+    prompt = generate_prompt(data_point)
+    prompt = replace_special_chars(prompt)
+    output = replace_special_chars(data_point["output"])
+    return """{"messages": [{"role": "user", "content": "%s"}, {"role": "assistant", "content": "%s"}]}""" % (prompt, output)
+
+def create_file(data, filename):
+    with open(filename, 'w') as f:
+      for d in data:
+          f.write("%s\n" % format_datapoint(d))
+
+dataset = load_dataset("mamachang/medical-reasoning")
+dataset = dataset.shuffle(seed=1234)
+dataset = dataset["train"].train_test_split(test_size=0.1)
+
+create_file(dataset["train"], "training.jsonl")
+create_file(dataset["test"], "validation.jsonl")
+```
+
+Then you can submit a fine-tuning job.
+
+```python
+training_filename = "training.jsonl"
+
+tfile = client.files.create(
+  file=open(training_filename, "rb"),
+  purpose='fine-tune',
+)
+print('Uploaded file. ID=%s' % tfile.id)
+
+validation_filename = "validation.jsonl"
+vfile = client.files.create(
+  file=open(validation_filename, "rb"),
+  purpose='fine-tune',
+)
+print('Uploaded file. ID=%s' % vfile.id)
+
+resp = client.fine_tuning.jobs.create(
+  model="google-gemma-2b-it",
+  suffix='fine-tuning',
+  training_file=tfile.id,
+  validation_file=vfile.id,
+)
+print('Created job. ID=%s' % resp.id)
+```
+
+Once the job completes, you can try chat completion:
+
+```python
+fine_tuned_model = client.fine_tuning.jobs.list().data[-1].fine_tuned_model
+print(fine_tuned_model)
+model_id = fine_tuned_model[3:]
+
+completion = client.chat.completions.create(
+  model=model_id,
+  messages=[
+    {"role": "user", "content": "Below is an instruction that describes a task. Write a response that appropriately completes the request. Please answer with one of the option in the bracket. Write reasoning in between <analysis></analysis>. Write answer in between <answer></answer>.here are the inputs:Q:A 34-year-old man presents to a clinic with complaints of abdominal discomfort and blood in the urine for 2 days. He has had similar abdominal discomfort during the past 5 years, although he does not remember passing blood in the urine. He has had hypertension for the past 2 years, for which he has been prescribed medication. There is no history of weight loss, skin rashes, joint pain, vomiting, change in bowel habits, and smoking. On physical examination, there are ballotable flank masses bilaterally. The bowel sounds are normal. Renal function tests are as follows:\nUrea 50 mg/dL\nCreatinine 1.4 mg/dL\nProtein Negative\nRBC Numerous\nThe patient underwent ultrasonography of the abdomen, which revealed enlarged kidneys and multiple anechoic cysts with well-defined walls. A CT scan confirmed the presence of multiple cysts in the kidneys. What is the most likely diagnosis?? \n{'A': 'Autosomal dominant polycystic kidney disease (ADPKD)', 'B': 'Autosomal recessive polycystic kidney disease (ARPKD)', 'C': 'Medullary cystic disease', 'D': 'Simple renal cysts', 'E': 'Acquired cystic kidney disease'}"} ],
+  stream=True
+)
+for response in completion:
+   print(response.choices[0].delta.content, end="")
+```
