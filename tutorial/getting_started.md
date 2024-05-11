@@ -203,35 +203,6 @@ generate a prompt.
 ```python
 from datasets import load_dataset
 
-dataset = load_dataset("mamachang/medical-reasoning")
-dataset = dataset.shuffle(seed=1234)
-dataset = dataset.train_test_split(test_size=0.1)
-train_data = dataset["train"]
-validation_data in dataset["test"]:
-
-def generate_prompt(data_point):
-    # Generate prompt
-    prefix_text = 'Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n'
-    # Samples with additional context into.
-    if data_point['input']:
-        text = f"""<start_of_turn>user {prefix_text} {data_point["instruction"]} here are the inputs {data_point["input"]} <end_of_turn>\n<start_of_turn>model{data_point["output"]} <end_of_turn>"""
-    else:
-        text = f"""<start_of_turn>user {prefix_text} {data_point["instruction"]} <end_of_turn>\n<start_of_turn>model{data_point["output"]} <end_of_turn>"""
-    return text
-
-# add the "prompt" column in the dataset
-text_column = [generate_prompt(data_point) for d
-
-The prerequisite is following:
-
-- Set `HUGGING_FACE_HUB_TOKEN` to your Hugging Face token
-- Install `datasets` by running `pip install datasets`
-
-Then run the following code to generate a training file and a validation file.
-
-```
-from datasets import load_dataset
-
 def generate_prompt(data_point):
     prefix_text = 'Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n'
     # Samples with additional context into.
@@ -266,7 +237,7 @@ create_file(dataset["train"], "training.jsonl")
 create_file(dataset["test"], "validation.jsonl")
 ```
 
-Then you can submit a fine-tuning job.
+Then you can submit a fine-tuning job with the generating training file and validation file.
 
 ```python
 training_filename = "training.jsonl"
