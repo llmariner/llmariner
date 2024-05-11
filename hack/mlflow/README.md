@@ -31,6 +31,7 @@ The following example runs the sample script:
 export OPENAI_API_BASE='OpenAPI endpoint URL (e.g., http://localhost:8080/v1)'
 export OPENAI_BASE_URL='OpenAPI endpoint URL (e.g., http://localhost:8080/v1)'
 export OPENAI_API_KEY='your-api-key-here'
+
 python eval.py
 ```
 
@@ -49,3 +50,25 @@ You can also access http://localhost:9000 to see the results.
 
 > [!NOTE]
 > This is currently not fully tested. The scoring information might not be available.
+
+## MLflow Deployments Server (Experimental)
+
+Run:
+
+```bash
+cat << EOF | envsubst > config.yaml
+endpoints:
+- name: completions
+  endpoint_type: llm/v1/completions
+  model:
+    provider: openai
+    name: google-gemma-2b-it-q4
+    config:
+      openai_api_base: $OPENAI_API_BASE
+      openai_api_key: $OPENAI_API_KEY
+EOF
+
+mlflow deployments start-server --config-path config.yaml
+```
+
+Then access `http://localhost:5000` or run `python test_endpoint.py`.
