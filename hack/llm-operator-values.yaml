@@ -31,6 +31,14 @@ global:
     # is deployed to the kong namespace.
     oidcIssuerUrl: http://kong-kong-proxy.kong/v1/dex
 
+inference-manager-engine:
+  # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,
+  # and it is needed for the fine-tuning job
+  #
+  # TODO(kenji): Enable GPU sharing
+  resources:
+    gpu: 0
+
 model-manager-loader:
   baseModels:
   - google/gemma-2b-it-q4
