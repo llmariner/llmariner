@@ -1,3 +1,7 @@
+inference-manager-engine:
+  resources:
+    gpu: 1
+
 model-manager-loader:
   baseModels:
   - google/gemma-2b-it
