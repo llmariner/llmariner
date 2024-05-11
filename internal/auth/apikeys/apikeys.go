@@ -11,7 +11,6 @@ import (
 	"github.com/llm-operator/cli/internal/runtime"
 	"github.com/llm-operator/cli/internal/ui"
 	uv1 "github.com/llm-operator/user-manager/api/v1"
-	v1 "github.com/llm-operator/user-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )
@@ -106,11 +105,11 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("ID", "Name", "Created At")
+	tbl := table.New("Name", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, k := range resp.Data {
-		tbl.AddRow(k.Id, k.Name, time.Unix(k.CreatedAt, 0).Format(time.RFC3339))
+		tbl.AddRow(k.Name, time.Unix(k.CreatedAt, 0).Format(time.RFC3339))
 	}
 
 	tbl.Print()
@@ -145,7 +144,7 @@ func delete(ctx context.Context, name string) error {
 	return nil
 }
 
-func findKeyByName(ctx context.Context, env *runtime.Env, name string) (*v1.APIKey, bool, error) {
+func findKeyByName(ctx context.Context, env *runtime.Env, name string) (*uv1.APIKey, bool, error) {
 	var req uv1.ListAPIKeysRequest
 	var resp uv1.ListAPIKeysResponse
 	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
