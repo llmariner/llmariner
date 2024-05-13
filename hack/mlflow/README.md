@@ -2,7 +2,7 @@
 
 ## Install
 
-Run `./deploy.sh` to deploy Mlflow.
+Run `./deploy.sh` to deploy MLflow.
 
 Run the following commands to get credentials.
 
@@ -91,3 +91,15 @@ mlflow server --port 5000
 > running inside the k8s cluster.
 
 Once connected, you can click "New run" and choose "using Prompt Engineering".
+
+## Run an MLflow Project on Kubernetes
+
+See https://www.mlflow.org/docs/latest/projects.html#kubernetes-execution
+
+## Authentication & Authorization
+
+By default, MLflow has its own user management. If we change that to OIDC and use the same authorizaiton mechanism as LLMOperator,
+we need to either add an authorization plugin to MLflow or put a reverse proxy in front of MLflow. The latter approach might work
+better if we need to put a similar authorization to other services such as Grafana.
+
+See https://github.com/data-platform-hq/mlflow-oidc-auth and https://www.mlflow.org/docs/latest/auth/index.html#configuration.
