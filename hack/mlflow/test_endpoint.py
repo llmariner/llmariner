@@ -1,6 +1,6 @@
 from mlflow.deployments import get_deploy_client
 
-client = get_deploy_client("http://localhost:5000")
+client = get_deploy_client("http://localhost:7000")
 endpoints = client.list_endpoints()
 
 response = client.predict(
