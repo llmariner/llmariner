@@ -51,7 +51,7 @@ You can also access http://localhost:9000 to see the results.
 > [!NOTE]
 > This is currently not fully tested. The scoring information might not be available.
 
-## MLflow Deployments Server (Experimental)
+## MLflow Deployments Server for LLMs (Experimental)
 
 Run:
 
@@ -68,7 +68,26 @@ endpoints:
       openai_api_key: $OPENAI_API_KEY
 EOF
 
-mlflow deployments start-server --config-path config.yaml
+mlflow deployments start-server --config-path config.yaml --port 7000
 ```
 
-Then access `http://localhost:5000` or run `python test_endpoint.py`.
+Then access `http://localhost:7000` or run `python test_endpoint.py`.
+
+## Prompt Engineering UI (Experimental)
+
+Follow https://mlflow.org/docs/latest/llms/prompt-engineering/index.html.
+
+You can make MLflow Tracking Server connect the above deployment with the following
+environment variable.
+
+```bash
+export MLFLOW_DEPLOYMENTS_TARGET="http://127.0.0.1:7000"
+mlflow server --port 5000
+```
+
+> [!NOTE]
+> The above command starts the local MLflow Tracking Server, which is separate from the one running in a K8s cluster.
+> We're looking into how to run the deployment in the k8s cluster and connect it with the MLflow Tracking Server
+> running inside the k8s cluster.
+
+Once connected, you can click "New run" and choose "using Prompt Engineering".
