@@ -1,0 +1,25 @@
+postgresql:
+  enabled: false
+
+externalDatabase:
+  host: postgres.postgres.svc.cluster.local
+  port: 5432
+  user: ps_user
+  database: mlflow
+  authDatabase: mlflow_auth
+  existingSecret: postgres
+  existingSecretPasswordKey: password
+
+minio:
+  enabled: false
+
+externalS3:
+  host: minio.minio
+  port:	9000
+  useCredentialsInSecret: true
+  existingSecret: aws
+  existingSecretAccessKeyIDKey: accessKeyId
+  existingSecretKeySecretKey: secretAccessKey
+  protocol: http
+  bucket: mlflow
+  serveArtifacts: true
