@@ -6,5 +6,6 @@ model-manager-loader:
   baseModels:
   - google/gemma-2b-it
   - google/gemma-2b-it-q4
+  - google/gemma-7b-it
   - mistralai/Mistral-7B-Instruct-v0.2
   - mistralai/Mistral-7B-Instruct-v0.2-q4
