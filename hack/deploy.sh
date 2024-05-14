@@ -3,6 +3,8 @@
 set -euo pipefail
 
 kubectl create namespace llm-operator
+# This namespace is for fine-tuning jobs
+kubectl create namespace example-org
 
 ./deploy_fake_gpu_operator.sh
 
