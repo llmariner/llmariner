@@ -3,10 +3,17 @@
 set -euo pipefail
 trap 'kill $(jobs -p)' EXIT
 
-kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE mlflow;"
+dbs=("mlflow" "mlflow_auth")
+for db in "${dbs[@]}"; do
+  kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE ${db};"
+done
 
 export AWS_ACCESS_KEY_ID=llm-operator-key
 export AWS_SECRET_ACCESS_KEY=llm-operator-secret
+
+kubectl create secret generic -n mlflow aws \
+  --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
+  --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
 
 kubectl port-forward -n minio service/minio 9000 9090 &
 sleep 1
@@ -20,5 +27,9 @@ aws --endpoint-url http://localhost:9000 s3 mb s3://${bucket_name}
 #
 # See https://github.com/mlflow/mlflow/issues/6118 and https://github.com/bitnami/charts/tree/main/bitnami/mlflow.
 
-helm upgrade --install --create-namespace -n mlflow mlflow oci://registry-1.docker.io/bitnamicharts/mlflow
-
+helm upgrade \
+  --install \
+  --create-namespace \
+  -n mlflow \
+  mlflow oci://registry-1.docker.io/bitnamicharts/mlflow \
+  -f values.yaml
