@@ -2,6 +2,8 @@ package jobs
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -26,6 +28,7 @@ func Cmd() *cobra.Command {
 		DisableFlagParsing: false,
 	}
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
 	return cmd
 }
 
@@ -37,6 +40,22 @@ func listCmd() *cobra.Command {
 			return list(cmd.Context())
 		},
 	}
+}
+
+func getCmd() *cobra.Command {
+	var (
+		id string
+	)
+	cmd := &cobra.Command{
+		Use:  "get",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), id)
+		},
+	}
+	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
+	_ = cmd.MarkFlagRequired("id")
+	return cmd
 }
 
 func list(ctx context.Context) error {
@@ -65,6 +84,27 @@ func list(ctx context.Context) error {
 	}
 
 	tbl.Print()
+
+	return nil
+}
+
+func get(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	var req jv1.GetJobRequest
+	var resp jv1.Job
+	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &req, &resp); err != nil {
+		return err
+	}
+
+	b, err := json.MarshalIndent(&resp, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 
 	return nil
 }

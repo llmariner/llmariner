@@ -3,7 +3,6 @@ package apikeys
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -89,7 +88,7 @@ func create(ctx context.Context, name string) error {
 		return err
 	}
 
-	log.Printf("Created a new API key. Secret: %s\n", resp.Secret)
+	fmt.Printf("Created a new API key. Secret: %s\n", resp.Secret)
 	return nil
 }
 
@@ -139,7 +138,7 @@ func delete(ctx context.Context, name string) error {
 		return err
 	}
 
-	log.Printf("Deleted the API key (ID: %q).\n", key.Id)
+	fmt.Printf("Deleted the API key (ID: %q).\n", key.Id)
 
 	return nil
 }
