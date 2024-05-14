@@ -7,5 +7,7 @@ model-manager-loader:
   - google/gemma-2b-it
   - google/gemma-2b-it-q4
   - google/gemma-7b-it
+  - meta-llama/Meta-Llama-3-8B-Instruct
+  - meta-llama/Meta-Llama-3-8B-Instruct-q4
   - mistralai/Mistral-7B-Instruct-v0.2
   - mistralai/Mistral-7B-Instruct-v0.2-q4
