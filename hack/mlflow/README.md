@@ -53,44 +53,19 @@ You can also access http://localhost:9000 to see the results.
 
 ## MLflow Deployments Server for LLMs (Experimental)
 
-Run:
+Take the following steps to run a deployment server in a K8s cluster:
 
 ```bash
-cat << EOF | envsubst > config.yaml
-endpoints:
-- name: completions
-  endpoint_type: llm/v1/completions
-  model:
-    provider: openai
-    name: google-gemma-2b-it-q4
-    config:
-      openai_api_base: $OPENAI_API_BASE
-      openai_api_key: $OPENAI_API_KEY
-EOF
-
-mlflow deployments start-server --config-path config.yaml --port 7000
+kubectl create secret generic -n mlflow llm-operator-api-key \
+  --from-literal=secret=${OPENAI_API_KEY}
+kubectl apply -n mlflow -f deployment-server.yaml
 ```
-
-Then access `http://localhost:7000` or run `python test_endpoint.py`.
 
 ## Prompt Engineering UI (Experimental)
 
 Follow https://mlflow.org/docs/latest/llms/prompt-engineering/index.html.
 
-You can make MLflow Tracking Server connect the above deployment with the following
-environment variable.
-
-```bash
-export MLFLOW_DEPLOYMENTS_TARGET="http://127.0.0.1:7000"
-mlflow server --port 5000
-```
-
-> [!NOTE]
-> The above command starts the local MLflow Tracking Server, which is separate from the one running in a K8s cluster.
-> We're looking into how to run the deployment in the k8s cluster and connect it with the MLflow Tracking Server
-> running inside the k8s cluster.
-
-Once connected, you can click "New run" and choose "using Prompt Engineering".
+You can access the MLflow Tracking Server, click "New run" and choose "using Prompt Engineering".
 
 ## Run an MLflow Project on Kubernetes
 
