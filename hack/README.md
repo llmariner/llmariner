@@ -33,6 +33,8 @@ Then load the image to the Kind cluster and deploy LLM Operator.
 
 ```bash
 kind load docker-image llm-operator/model-manager-server:latest -n llm-operator-demo
+
+helm dependencies build deployments/llm-operator
 helm upgrade --install -n llm-operator llm-operator ./deployments/llm-operator  -f hack/llm-operator-values.yaml
 ```
 
