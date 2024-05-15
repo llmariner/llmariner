@@ -116,12 +116,6 @@
       api_version: v1
       kind: Namespace
 
-  - name: Setup example-org namespace
-    kubernetes.core.k8s:
-      name: example-org
-      api_version: v1
-      kind: Namespace
-
   - name: Setup kong helm repository
     kubernetes.core.helm_repository:
       name: kong
