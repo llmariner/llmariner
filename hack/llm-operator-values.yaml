@@ -39,6 +39,13 @@ inference-manager-engine:
   resources:
     gpu: 0
 
+inference-manager-server:
+  service:
+    annotations:
+      konghq.com/connect-timeout: "360000"
+      konghq.com/read-timeout: "360000"
+      konghq.com/write-timeout: "360000"
+
 model-manager-loader:
   baseModels:
   - google/gemma-2b-it-q4
