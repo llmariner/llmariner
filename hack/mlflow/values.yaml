@@ -1,3 +1,10 @@
+tracking:
+  extraEnvVars:
+  - name: MLFLOW_DEPLOYMENTS_TARGET
+    value: http://deployment-server:7000
+  - name: MLFLOW_S3_ENDPOINT_URL
+    value: http://minio.minio:9000
+
 postgresql:
   enabled: false
 

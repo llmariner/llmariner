@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deployment-server
+data:
+  config.yaml: |
+    endpoints:
+    - name: completions
+      endpoint_type: llm/v1/completions
+      model:
+        provider: openai
+        name: google-gemma-2b-it-q4
+        config:
+         openai_api_base: http://kong-kong-proxy.kong/v1
+         openai_api_key: $OPENAI_API_KEY
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-server
+  template:
+    metadata:
+      labels:
+        app: deployment-server
+    spec:
+      initContainers:
+      - name: envsubst
+        image: public.ecr.aws/v8n3t7y5/llm-operator/envsubst:latest
+        args:
+        - /bin/sh
+        - -c
+        - envsubst < /original-config/config.yaml > /processed-config/config.yaml
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-operator-api-key
+              key: secret
+        volumeMounts:
+        - name: original-config
+          mountPath: /original-config
+          readOnly: true
+        - name: processed-config
+          mountPath: /processed-config
+      containers:
+      - name: deployment-server
+        image: python:3.12-slim
+        command:
+        - /bin/bash
+        args:
+        - -c
+        - "pip install 'mlflow[genai]' && mlflow deployments start-server --config-path /etc/config/config.yaml --host 0.0.0.0 --port 7000"
+        ports:
+        - name: http
+          containerPort: 7000
+          protocol: TCP
+        volumeMounts:
+        - name: processed-config
+          mountPath: /etc/config
+          readOnly: true
+      volumes:
+      - name: original-config
+        configMap:
+          name: deployment-server
+      - name: processed-config
+        emptyDir:
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment-server
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 7000
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: deployment-server
