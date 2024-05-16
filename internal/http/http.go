@@ -33,40 +33,55 @@ func (c *Client) Send(
 	req any,
 	resp any,
 ) error {
-	m := newMarshaler()
-
-	reqBody, err := m.Marshal(req)
+	body, err := c.SendRequest(method, path, req)
 	if err != nil {
-		return fmt.Errorf("marshal request: %s", err)
-	}
-
-	hreq, err := http.NewRequest(method, c.env.Config.EndpointURL+path, bytes.NewReader(reqBody))
-	if err != nil {
-		return fmt.Errorf("create request: %s", err)
-	}
-
-	c.addHeaders(hreq)
-	hresp, err := http.DefaultClient.Do(hreq)
-	if err != nil {
-		return fmt.Errorf("send request: %s", err)
-	}
-	if hresp.StatusCode != http.StatusOK {
-		return fmt.Errorf("unexpected status code: %s", hresp.Status)
+		return err
 	}
 
 	defer func() {
-		_ = hresp.Body.Close()
+		_ = body.Close()
 	}()
-	respBody, err := io.ReadAll(hresp.Body)
+	respBody, err := io.ReadAll(body)
 	if err != nil {
 		return fmt.Errorf("read response body: %s", err)
 	}
 
+	m := newMarshaler()
 	if err := m.Unmarshal(respBody, resp); err != nil {
 		return fmt.Errorf("unmarshal response: %s", err)
 	}
 
 	return nil
+}
+
+// SendRequest sends a request to the server and returns the response body.
+func (c *Client) SendRequest(
+	method string,
+	path string,
+	req any,
+) (io.ReadCloser, error) {
+	m := newMarshaler()
+
+	reqBody, err := m.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("marshal request: %s", err)
+	}
+
+	hreq, err := http.NewRequest(method, c.env.Config.EndpointURL+path, bytes.NewReader(reqBody))
+	if err != nil {
+		return nil, fmt.Errorf("create request: %s", err)
+	}
+
+	c.addHeaders(hreq)
+	hresp, err := http.DefaultClient.Do(hreq)
+	if err != nil {
+		return nil, fmt.Errorf("send request: %s", err)
+	}
+	if hresp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %s", hresp.Status)
+	}
+
+	return hresp.Body, nil
 }
 
 // addHeaders adds headers to the request.
