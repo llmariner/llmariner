@@ -5,12 +5,12 @@ import (
 	"fmt"
 
 	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/config"
+	"github.com/llm-operator/cli/internal/configs"
 )
 
 // NewEnv creates a new runtime env.
 func NewEnv(ctx context.Context) (*Env, error) {
-	c, err := config.LoadOrCreate()
+	c, err := configs.LoadOrCreate()
 	if err != nil {
 		return nil, fmt.Errorf("load or create config: %s", err)
 	}
@@ -27,6 +27,6 @@ func NewEnv(ctx context.Context) (*Env, error) {
 
 // Env is a struct that contains the runtime env for the CLI.
 type Env struct {
-	Config *config.C
+	Config *configs.C
 	Token  *accesstoken.T
 }

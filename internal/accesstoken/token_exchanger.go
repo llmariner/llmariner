@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/llm-operator/cli/internal/config"
+	"github.com/llm-operator/cli/internal/configs"
 	"github.com/llm-operator/cli/internal/ui"
 	"golang.org/x/oauth2"
 )
 
 // NewTokenExchanger creates a new token exchanger.
-func NewTokenExchanger(c *config.C) (*TokenExchanger, error) {
+func NewTokenExchanger(c *configs.C) (*TokenExchanger, error) {
 	var issuerResolvedAddr string
 
 	// Check if the issuer URL is resolvable. If not, fall back to the endpoint URL.
@@ -44,7 +44,7 @@ func NewTokenExchanger(c *config.C) (*TokenExchanger, error) {
 
 // TokenExchanger exchanges a code for a token.
 type TokenExchanger struct {
-	auth config.Auth
+	auth configs.Auth
 
 	issuerHost         string
 	issuerResolvedAddr string

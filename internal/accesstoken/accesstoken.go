@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/llm-operator/cli/internal/config"
+	"github.com/llm-operator/cli/internal/configs"
 	"github.com/zchee/go-xdgbasedir"
 	"gopkg.in/yaml.v2"
 )
@@ -38,7 +38,7 @@ func saveToken(token *T) error {
 }
 
 // LoadToken loads the token from a file.
-func LoadToken(ctx context.Context, c *config.C) (*T, error) {
+func LoadToken(ctx context.Context, c *configs.C) (*T, error) {
 	path := TokenFilePath()
 	b, err := os.ReadFile(path)
 	if err != nil {

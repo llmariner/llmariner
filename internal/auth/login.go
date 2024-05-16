@@ -11,7 +11,7 @@ import (
 	"github.com/cli/browser"
 
 	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/config"
+	"github.com/llm-operator/cli/internal/configs"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +31,7 @@ func loginCmd() *cobra.Command {
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			c, err := config.LoadOrCreate()
+			c, err := configs.LoadOrCreate()
 			if err != nil {
 				return fmt.Errorf("load config: %s", err)
 			}
