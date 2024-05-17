@@ -2,7 +2,7 @@
 
 global:
   database:
-    host: postgres.postgres.svc.cluster.local
+    host: postgres.postgres
     port: 5432
     username: ps_user
     ssl:

@@ -2,7 +2,7 @@ global:
   auth:
     enable: true
     # This default value works if rbac-server runs in the same namespace.
-    rbacInternalServerAddr: llm-operator-rbac-server-internal-grpc:8082
+    rbacInternalServerAddr: rbac-server-internal-grpc:8082
 
 # To avoid adding a release name prefix
 dex-server:
