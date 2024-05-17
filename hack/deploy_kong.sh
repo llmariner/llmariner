@@ -6,5 +6,4 @@ set -euo pipefail
 
 helm repo add kong https://charts.konghq.com
 helm repo update
-kubectl create namespace kong
-helm install kong kong/kong -n kong --set ingressController.installCRDs=false -f kong_values.yaml
+helm install --create-namespace kong-proxy kong/kong -n kong --set ingressController.installCRDs=false -f kong_values.yaml
