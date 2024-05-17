@@ -25,7 +25,7 @@ func Cmd() *cobra.Command {
 		Use:                "jobs",
 		Short:              "Jobs commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())

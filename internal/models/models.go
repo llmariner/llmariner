@@ -24,7 +24,7 @@ func Cmd() *cobra.Command {
 		Use:                "models",
 		Short:              "Models commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())

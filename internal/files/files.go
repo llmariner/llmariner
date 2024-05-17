@@ -25,7 +25,7 @@ func Cmd() *cobra.Command {
 		Use:                "files",
 		Short:              "Files commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())

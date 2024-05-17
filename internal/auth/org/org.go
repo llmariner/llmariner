@@ -26,7 +26,7 @@ func Cmd() *cobra.Command {
 		Short:              "organizations commands",
 		Aliases:            []string{"orgs", "org"},
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())

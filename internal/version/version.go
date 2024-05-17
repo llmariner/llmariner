@@ -18,7 +18,7 @@ func Cmd() *cobra.Command {
 		Use:                "version",
 		Short:              "CLI version",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			if gitTag == "" && gitCommitSha == "" {
 				fmt.Println("No version associated")

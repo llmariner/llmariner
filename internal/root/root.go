@@ -17,7 +17,7 @@ func cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "llmo",
 		Short:              "LLM Operator CLI",
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.PersistentFlags().StringVar(&ui.Color, "color", string(ui.ColorAuto), "Control color output. Available options are 'auto', 'always' and 'never'.")
 

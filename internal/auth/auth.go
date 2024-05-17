@@ -12,7 +12,7 @@ func Cmd() *cobra.Command {
 		Use:                "auth",
 		Short:              "Auth commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(apikeys.Cmd())
 	cmd.AddCommand(org.Cmd())

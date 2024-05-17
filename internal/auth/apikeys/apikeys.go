@@ -24,7 +24,7 @@ func Cmd() *cobra.Command {
 		Use:                "api-keys",
 		Short:              "API Keys commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())

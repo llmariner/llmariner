@@ -25,7 +25,7 @@ func Cmd() *cobra.Command {
 		Use:                "completions",
 		Short:              "Completions commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(createCmd())
 	return cmd

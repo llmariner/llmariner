@@ -11,7 +11,7 @@ func Cmd() *cobra.Command {
 		Use:                "chat",
 		Short:              "Chat commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(completions.Cmd())
 	return cmd

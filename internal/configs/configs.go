@@ -92,7 +92,7 @@ func Cmd() *cobra.Command {
 		Use:                "config",
 		Short:              "Config commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(createCmd())
 	return cmd

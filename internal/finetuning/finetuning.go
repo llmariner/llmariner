@@ -11,7 +11,7 @@ func Cmd() *cobra.Command {
 		Use:                "fine-tuning",
 		Short:              "Fine tuning commands",
 		Args:               cobra.NoArgs,
-		DisableFlagParsing: false,
+		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(jobs.Cmd())
 	return cmd
