@@ -11,7 +11,7 @@ data:
         provider: openai
         name: google-gemma-2b-it-q4
         config:
-         openai_api_base: http://kong-kong-proxy.kong/v1
+         openai_api_base: http://kong-proxy.kong/v1
          openai_api_key: $OPENAI_API_KEY
 
 ---

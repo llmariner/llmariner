@@ -29,7 +29,7 @@ global:
   auth:
     # This works when Kong is used as an ingress controller and it
     # is deployed to the kong namespace.
-    oidcIssuerUrl: http://kong-kong-proxy.kong/v1/dex
+    oidcIssuerUrl: http://kong-proxy.kong/v1/dex
 
 inference-manager-engine:
   # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,

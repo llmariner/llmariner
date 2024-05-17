@@ -15,3 +15,5 @@ tolerations:
 - key: node-role.kubernetes.io/master
   operator: Equal
   effect: NoSchedule
+
+fullnameOverride: kong
