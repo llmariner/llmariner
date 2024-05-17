@@ -10,6 +10,7 @@ require (
 	github.com/coreos/go-oidc/v3 v3.10.0
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.16.0
+	github.com/gorilla/schema v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/llm-operator/file-manager v0.22.0
 	github.com/llm-operator/inference-manager v0.38.0

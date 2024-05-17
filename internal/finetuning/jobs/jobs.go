@@ -64,16 +64,27 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	var req jv1.ListJobsRequest
-	var resp jv1.ListJobsResponse
-	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
-		return err
+	var jobs []*jv1.Job
+	var after string
+	for {
+		req := jv1.ListJobsRequest{
+			After: after,
+		}
+		var resp jv1.ListJobsResponse
+		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
+			return err
+		}
+		jobs = append(jobs, resp.Data...)
+		if !resp.HasMore {
+			break
+		}
+		after = resp.Data[len(resp.Data)-1].Id
 	}
 
 	tbl := table.New("ID", "Model", "Fine-tuned Model", "Status", "Created At", "Finished At")
 	ui.FormatTable(tbl)
 
-	for _, j := range resp.Data {
+	for _, j := range jobs {
 		tbl.AddRow(
 			j.Id,
 			j.Model,
