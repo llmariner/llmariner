@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -77,11 +78,31 @@ func (c *Client) SendRequest(
 	if err != nil {
 		return nil, fmt.Errorf("send request: %s", err)
 	}
+
 	if hresp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %s", hresp.Status)
+		defer func() {
+			_ = hresp.Body.Close()
+		}()
+		s := extractErrorMessage(hresp.Body)
+		return nil, fmt.Errorf("unexpected status code: %s (message: %q)", hresp.Status, s)
 	}
 
 	return hresp.Body, nil
+}
+
+func extractErrorMessage(body io.ReadCloser) string {
+	b, err := io.ReadAll(body)
+	if err != nil {
+		return ""
+	}
+	type resp struct {
+		Message string `json:"message"`
+	}
+	var r resp
+	if err := json.Unmarshal(b, &r); err != nil {
+		return ""
+	}
+	return r.Message
 }
 
 // addHeaders adds headers to the request.
