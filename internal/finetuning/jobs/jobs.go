@@ -29,6 +29,7 @@ func Cmd() *cobra.Command {
 	}
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
+	cmd.AddCommand(cancelCmd())
 	return cmd
 }
 
@@ -51,6 +52,22 @@ func getCmd() *cobra.Command {
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return get(cmd.Context(), id)
+		},
+	}
+	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
+	_ = cmd.MarkFlagRequired("id")
+	return cmd
+}
+
+func cancelCmd() *cobra.Command {
+	var (
+		id string
+	)
+	cmd := &cobra.Command{
+		Use:  "cancel",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cancel(cmd.Context(), id)
 		},
 	}
 	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
@@ -116,6 +133,25 @@ func get(ctx context.Context, id string) error {
 		return err
 	}
 	fmt.Println(string(b))
+
+	return nil
+}
+
+func cancel(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := jv1.CancelJobRequest{
+		Id: id,
+	}
+	var resp jv1.Job
+	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s/cancel", path, id), &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Canceled the job (ID: %q).\n", id)
 
 	return nil
 }
