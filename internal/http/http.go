@@ -68,10 +68,28 @@ func (c *Client) SendRequest(
 		return nil, fmt.Errorf("marshal request: %s", err)
 	}
 
+	var params map[string]interface{}
+	if method == http.MethodGet {
+		// Convert the body data to params as GET requests don't have a body.
+		//
+		// TODO(kenji): Support nested params.
+		err := json.Unmarshal(reqBody, &params)
+		if err != nil {
+			return nil, fmt.Errorf("unmarshal request: %s", err)
+		}
+		reqBody = []byte{}
+	}
+
 	hreq, err := http.NewRequest(method, c.env.Config.EndpointURL+path, bytes.NewReader(reqBody))
 	if err != nil {
 		return nil, fmt.Errorf("create request: %s", err)
 	}
+
+	query := hreq.URL.Query()
+	for key, value := range params {
+		query.Add(key, fmt.Sprintf("%v", value))
+	}
+	hreq.URL.RawQuery = query.Encode()
 
 	c.addHeaders(hreq)
 	hresp, err := http.DefaultClient.Do(hreq)
