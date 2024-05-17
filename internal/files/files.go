@@ -2,6 +2,7 @@ package files
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -27,6 +28,7 @@ func Cmd() *cobra.Command {
 		DisableFlagParsing: false,
 	}
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(deleteCmd())
 	return cmd
 }
 
@@ -38,6 +40,22 @@ func listCmd() *cobra.Command {
 			return list(cmd.Context())
 		},
 	}
+}
+
+func deleteCmd() *cobra.Command {
+	var (
+		id string
+	)
+	cmd := &cobra.Command{
+		Use:  "delete",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return delete(cmd.Context(), id)
+		},
+	}
+	cmd.Flags().StringVar(&id, "id", "", "ID of the file to delete")
+	_ = cmd.MarkFlagRequired("id")
+	return cmd
 }
 
 func list(ctx context.Context) error {
@@ -66,6 +84,25 @@ func list(ctx context.Context) error {
 	}
 
 	tbl.Print()
+
+	return nil
+}
+
+func delete(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := &fv1.DeleteFileRequest{
+		Id: id,
+	}
+	var resp fv1.DeleteFileResponse
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, fmt.Sprintf("%s/%s", path, id), &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Deleted the file (ID: %q).\n", id)
 
 	return nil
 }
