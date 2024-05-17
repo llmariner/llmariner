@@ -20,7 +20,7 @@ const (
 	authRedirectURI  = "http://127.0.0.1:5555/callback"
 
 	defaultEndpointURL = "http://localhost:8080/v1"
-	defaultIssuerURL   = "http://kong-kong-proxy.kong/v1/dex"
+	defaultIssuerURL   = "http://kong-proxy.kong/v1/dex"
 )
 
 func createCmd() *cobra.Command {
