@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// cmd represents the base command when called without any subcommands.
-func cmd() *cobra.Command {
+// Cmd represents the base command when called without any subcommands.
+func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "llmo",
 		Short:              "LLM Operator CLI",
@@ -35,5 +35,5 @@ func cmd() *cobra.Command {
 
 // Execute adds all child commands to the root command.
 func Execute() error {
-	return cmd().Execute()
+	return Cmd().Execute()
 }

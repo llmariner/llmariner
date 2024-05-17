@@ -12,3 +12,7 @@ lint: go-lint-all git-clean-check
 .PHONY: build
 build:
 	go build $(BUILD_FLAGS) -o ./bin/llmo ./cmd/
+
+.PHONY: gendoc
+gendoc:
+	@go run ./cmd/gendoc
