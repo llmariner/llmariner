@@ -15,7 +15,7 @@ require (
 	github.com/llm-operator/inference-manager v0.38.0
 	github.com/llm-operator/job-manager v0.76.0
 	github.com/llm-operator/model-manager v0.38.0
-	github.com/llm-operator/user-manager v0.22.0
+	github.com/llm-operator/user-manager v0.24.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/rodaine/table v1.2.0
@@ -43,7 +43,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/crypto v0.22.0 // indirect
-	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/term v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect

@@ -46,8 +46,8 @@ github.com/llm-operator/job-manager v0.76.0 h1:p4p4X6WH0+FNe1gNVyZtVZO5SnUkevsp8
 github.com/llm-operator/job-manager v0.76.0/go.mod h1:FYBDHrabtS9R9dCk2NZqb3B5kTJi6nhMzxOwhYn71J0=
 github.com/llm-operator/model-manager v0.38.0 h1:/5jefo01o9HXsuCqt19+ivV8PRalLajE0o6HJHuYelU=
 github.com/llm-operator/model-manager v0.38.0/go.mod h1:1TYfKq4PtFMmVGtUpTsiEUYDNfMDT/nZcRH2nmTNy9M=
-github.com/llm-operator/user-manager v0.22.0 h1:geKvTTdK88rFQoAnMGHwBmlh2NLmodecg/XYdXAI/Qc=
-github.com/llm-operator/user-manager v0.22.0/go.mod h1:Tr+y/y9ce/9ObJQTzoV/9ujnZy15f1hqqD5LEgonz+A=
+github.com/llm-operator/user-manager v0.24.0 h1:go5AMcvcyRudWpYOUMeKB3HA4+TqA/OEZN77nh7Z9ig=
+github.com/llm-operator/user-manager v0.24.0/go.mod h1:SOkwvktCAbAIOe3O8Iy49uc6qpEoJKH44IJ8fkA4sos=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
 github.com/lucasb-eyer/go-colorful v1.2.0/go.mod h1:R4dSotOR9KMtayYi1e77YzuveK+i7ruzyGqttikkLy0=
 github.com/mattn/go-colorable v0.1.2/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
@@ -103,8 +103,8 @@ golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4/go.mod h1:jJ57K6gSWd91
 golang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
 golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
 golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
-golang.org/x/net v0.21.0 h1:AQyQV4dYCvJ7vGmJyKki9+PBdyvhkSd8EIx/qb0AYv4=
-golang.org/x/net v0.21.0/go.mod h1:bIjVDfnllIU7BJ2DNgfnXvpSvtn8VRwhlsaeUTyUS44=
+golang.org/x/net v0.23.0 h1:7EYJ93RZ9vYSZAIb2x3lnuvqO5zneoD6IvWjuhfxjTs=
+golang.org/x/net v0.23.0/go.mod h1:JKghWKKOSdJwpW2GEx0Ja7fmaKnMsbu+MWVZTokSYmg=
 golang.org/x/oauth2 v0.19.0 h1:9+E/EZBCbTLNrbN35fHv/a/d/mOBatymz1zbtQrXpIg=
 golang.org/x/oauth2 v0.19.0/go.mod h1:vYi7skDa1x015PmRRYZ7+s1cWyPgrPiSYRe4rnsexc8=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
