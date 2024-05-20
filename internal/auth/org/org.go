@@ -32,6 +32,8 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())
 	cmd.AddCommand(addMemberCmd())
+	cmd.AddCommand(listMembersCmd())
+	cmd.AddCommand(removeMemberCmd())
 	return cmd
 }
 
@@ -92,6 +94,37 @@ func addMemberCmd() *cobra.Command {
 	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("email")
 	_ = cmd.MarkFlagRequired("role")
+	return cmd
+}
+
+func listMembersCmd() *cobra.Command {
+	var title string
+	cmd := &cobra.Command{
+		Use:  "list-members",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return listMembers(cmd.Context(), title)
+		},
+	}
+	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
+	_ = cmd.MarkFlagRequired("title")
+	_ = cmd.MarkFlagRequired("role")
+	return cmd
+}
+
+func removeMemberCmd() *cobra.Command {
+	var title, email string
+	cmd := &cobra.Command{
+		Use:  "remove-member",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return removeMember(cmd.Context(), title, email)
+		},
+	}
+	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
+	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
+	_ = cmd.MarkFlagRequired("title")
+	_ = cmd.MarkFlagRequired("email")
 	return cmd
 }
 
@@ -189,6 +222,69 @@ func addMember(ctx context.Context, title, userID string, role uv1.Role) error {
 	}
 
 	fmt.Printf("Added the user %q to the organization %q with role %q.\n", userID, title, role.String())
+
+	return nil
+}
+
+func listMembers(ctx context.Context, title string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	org, found, err := findOrgByTitle(env, title)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("organization %q not found", title)
+	}
+
+	req := uv1.ListOrganizationUsersRequest{
+		OrganizationId: org.Id,
+	}
+	var resp uv1.ListOrganizationUsersResponse
+	p := fmt.Sprintf("%s/%s/users", path, org.Id)
+	if err := ihttp.NewClient(env).Send(http.MethodGet, p, &req, &resp); err != nil {
+		return err
+	}
+
+	tbl := table.New("User ID", "Role")
+	ui.FormatTable(tbl)
+	for _, u := range resp.Users {
+		tbl.AddRow(u.UserId, u.Role.String())
+	}
+
+	tbl.Print()
+
+	return nil
+}
+
+func removeMember(ctx context.Context, title, userID string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	org, found, err := findOrgByTitle(env, title)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("organization %q not found", title)
+	}
+
+	req := uv1.DeleteOrganizationUserRequest{
+		OrganizationId: org.Id,
+		UserId:         userID,
+	}
+	var resp uv1.OrganizationUser
+	p := fmt.Sprintf("%s/%s/users/%s", path, org.Id, userID)
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, p, &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Removed the user %q from the organization %q.\n", userID, title)
 
 	return nil
 }
