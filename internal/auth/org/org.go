@@ -177,15 +177,13 @@ func addMember(ctx context.Context, title, userID string, role uv1.Role) error {
 		return fmt.Errorf("organization %q not found", title)
 	}
 
-	req := uv1.AddUserToOrganizationRequest{
-		User: &uv1.OrganizationUser{
-			OrganizationId: org.Id,
-			UserId:         userID,
-			Role:           role,
-		},
+	req := uv1.CreateOrganizationUserRequest{
+		OrganizationId: org.Id,
+		UserId:         userID,
+		Role:           role,
 	}
-	var resp uv1.AddUserToOrganizationResponse
-	p := fmt.Sprintf("%s/%s/users:addUser", path, org.Id)
+	var resp uv1.OrganizationUser
+	p := fmt.Sprintf("%s/%s/users", path, org.Id)
 	if err := ihttp.NewClient(env).Send(http.MethodPost, p, &req, &resp); err != nil {
 		return err
 	}

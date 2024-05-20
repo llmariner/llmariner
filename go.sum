@@ -46,8 +46,8 @@ github.com/llm-operator/job-manager v0.76.0 h1:p4p4X6WH0+FNe1gNVyZtVZO5SnUkevsp8
 github.com/llm-operator/job-manager v0.76.0/go.mod h1:FYBDHrabtS9R9dCk2NZqb3B5kTJi6nhMzxOwhYn71J0=
 github.com/llm-operator/model-manager v0.38.0 h1:/5jefo01o9HXsuCqt19+ivV8PRalLajE0o6HJHuYelU=
 github.com/llm-operator/model-manager v0.38.0/go.mod h1:1TYfKq4PtFMmVGtUpTsiEUYDNfMDT/nZcRH2nmTNy9M=
-github.com/llm-operator/user-manager v0.13.0 h1:tu5emkKDC9UYtIUkOxQopUbIKuQYgbOfSOQpXMEx8TY=
-github.com/llm-operator/user-manager v0.13.0/go.mod h1:Tr+y/y9ce/9ObJQTzoV/9ujnZy15f1hqqD5LEgonz+A=
+github.com/llm-operator/user-manager v0.20.0 h1:nltLJDbiIFOsG1HDGK7WhwQ4KPmEAg7xZXP5aIIT+XY=
+github.com/llm-operator/user-manager v0.20.0/go.mod h1:Tr+y/y9ce/9ObJQTzoV/9ujnZy15f1hqqD5LEgonz+A=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
 github.com/lucasb-eyer/go-colorful v1.2.0/go.mod h1:R4dSotOR9KMtayYi1e77YzuveK+i7ruzyGqttikkLy0=
 github.com/mattn/go-colorable v0.1.2/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
