@@ -33,5 +33,5 @@ dependencies:
   version: 0.34.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
-  version: 0.16.0
+  version: 0.24.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
