@@ -10,6 +10,7 @@ func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "fine-tuning",
 		Short:              "Fine tuning commands",
+		Aliases:            []string{"ft"},
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
 	}
