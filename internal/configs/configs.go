@@ -35,6 +35,12 @@ func (a *Auth) validate() error {
 	return nil
 }
 
+// Context is a context configuration.
+type Context struct {
+	OrganizationID string `yaml:"organizationId"`
+	ProjectID      string `yaml:"projectId"`
+}
+
 // C is a config file.
 type C struct {
 	Version string `yaml:"version"`
@@ -42,6 +48,8 @@ type C struct {
 	EndpointURL string `yaml:"endpointUrl"`
 
 	Auth Auth `yaml:"auth"`
+
+	Context Context `yaml:"context"`
 }
 
 // Validate validates the config.
