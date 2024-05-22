@@ -50,10 +50,9 @@ func createCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
-	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project")
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&namespace, "kubernetes-namespace", "n", "", "Kubernetes namesapce of the project")
 	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("organization-title")
 	_ = cmd.MarkFlagRequired("kubernetes-namespace")
 	return cmd
 }
@@ -67,8 +66,7 @@ func listCmd() *cobra.Command {
 			return list(cmd.Context(), orgTitle)
 		},
 	}
-	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project")
-	_ = cmd.MarkFlagRequired("organization-title")
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	return cmd
 }
 
@@ -82,9 +80,8 @@ func deleteCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
-	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project")
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("organization-title")
 	return cmd
 }
 
@@ -102,11 +99,10 @@ func addMemberCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
-	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project")
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
 	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the user (owner or reader)")
 	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("organization-title")
 	_ = cmd.MarkFlagRequired("email")
 	_ = cmd.MarkFlagRequired("role")
 	return cmd
@@ -122,9 +118,9 @@ func listMembersCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
-	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project")
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("organization-title")
+
 	return cmd
 }
 
@@ -138,10 +134,9 @@ func removeMemberCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
-	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project")
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
 	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("organization-title")
 	_ = cmd.MarkFlagRequired("email")
 	return cmd
 }
@@ -333,6 +328,7 @@ func removeMember(ctx context.Context, title, orgTitle, userID string) error {
 	return nil
 }
 
+// findProjectByTitle finds a project by title.
 func findProjectByTitle(env *runtime.Env, title, orgTitle string) (*uv1.Project, bool, error) {
 	projects, err := listProjects(env, orgTitle)
 	if err != nil {
@@ -363,6 +359,10 @@ func listProjects(env *runtime.Env, orgTitle string) ([]*uv1.Project, error) {
 }
 
 func buildPath(env *runtime.Env, orgTitle string) (string, string, error) {
+	if orgTitle == "" {
+		orgTitle = env.Config.Context.OrganizationID
+	}
+
 	org, found, err := org.FindOrgByTitle(env, orgTitle)
 	if err != nil {
 		return "", "", err
