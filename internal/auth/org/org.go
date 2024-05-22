@@ -175,7 +175,7 @@ func delete(ctx context.Context, title string) error {
 		return err
 	}
 
-	org, found, err := findOrgByTitle(env, title)
+	org, found, err := FindOrgByTitle(env, title)
 	if err != nil {
 		return err
 	}
@@ -202,7 +202,7 @@ func addMember(ctx context.Context, title, userID string, role uv1.OrganizationR
 		return err
 	}
 
-	org, found, err := findOrgByTitle(env, title)
+	org, found, err := FindOrgByTitle(env, title)
 	if err != nil {
 		return err
 	}
@@ -232,7 +232,7 @@ func listMembers(ctx context.Context, title string) error {
 		return err
 	}
 
-	org, found, err := findOrgByTitle(env, title)
+	org, found, err := FindOrgByTitle(env, title)
 	if err != nil {
 		return err
 	}
@@ -270,7 +270,7 @@ func removeMember(ctx context.Context, title, userID string) error {
 		return err
 	}
 
-	org, found, err := findOrgByTitle(env, title)
+	org, found, err := FindOrgByTitle(env, title)
 	if err != nil {
 		return err
 	}
@@ -293,7 +293,8 @@ func removeMember(ctx context.Context, title, userID string) error {
 	return nil
 }
 
-func findOrgByTitle(env *runtime.Env, title string) (*uv1.Organization, bool, error) {
+// FindOrgByTitle finds an organization by title.
+func FindOrgByTitle(env *runtime.Env, title string) (*uv1.Organization, bool, error) {
 	orgs, err := listOrganizations(env)
 	if err != nil {
 		return nil, false, err
