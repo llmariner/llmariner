@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/runtime"
 	"github.com/llm-operator/cli/internal/ui"
 	uv1 "github.com/llm-operator/user-manager/api/v1"
+	"github.com/llm-operator/user-manager/pkg/role"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )
@@ -47,9 +47,7 @@ func createCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
-	cmd.Flags().StringVarP(&namespace, "kubernetes-namespace", "n", "", "Kubernetes namesapce of the organization")
 	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("kubernetes-namespace")
 	return cmd
 }
 
@@ -78,21 +76,21 @@ func deleteCmd() *cobra.Command {
 }
 
 func addMemberCmd() *cobra.Command {
-	var title, email, role string
+	var title, email, roleStr string
 	cmd := &cobra.Command{
 		Use:  "add-member",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			r, ok := uv1.Role_value[strings.ToUpper(role)]
-			if !ok || r == 0 {
-				return fmt.Errorf("invalid role %q", role)
+			r, ok := role.OrganizationRoleToProtoEnum(roleStr)
+			if !ok {
+				return fmt.Errorf("invalid role %q. Must be 'admin' or 'reader'", roleStr)
 			}
-			return addMember(cmd.Context(), title, email, uv1.Role(r))
+			return addMember(cmd.Context(), title, email, r)
 		},
 	}
 	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
-	cmd.Flags().StringVar(&role, "role", "", "Role of the user (owner or reader)")
+	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the user (owner or reader)")
 	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("email")
 	_ = cmd.MarkFlagRequired("role")
@@ -137,8 +135,7 @@ func create(ctx context.Context, title, namespace string) error {
 	}
 
 	req := uv1.CreateOrganizationRequest{
-		Title:               title,
-		KubernetesNamespace: namespace,
+		Title: title,
 	}
 	var resp uv1.Organization
 	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
@@ -160,11 +157,11 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("Title", "Kubernetes namespace", "Created At")
+	tbl := table.New("Title", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, o := range orgs {
-		tbl.AddRow(o.Title, o.KubernetesNamespace, time.Unix(o.CreatedAt, 0).Format(time.RFC3339))
+		tbl.AddRow(o.Title, time.Unix(o.CreatedAt, 0).Format(time.RFC3339))
 	}
 
 	tbl.Print()
@@ -199,7 +196,7 @@ func delete(ctx context.Context, title string) error {
 	return nil
 }
 
-func addMember(ctx context.Context, title, userID string, role uv1.Role) error {
+func addMember(ctx context.Context, title, userID string, role uv1.OrganizationRole) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -255,7 +252,11 @@ func listMembers(ctx context.Context, title string) error {
 	tbl := table.New("User ID", "Role")
 	ui.FormatTable(tbl)
 	for _, u := range resp.Users {
-		tbl.AddRow(u.UserId, u.Role.String())
+		r, ok := role.OrganizationRoleToString(u.Role)
+		if !ok {
+			return fmt.Errorf("invalid role %q", u.Role)
+		}
+		tbl.AddRow(u.UserId, r)
 	}
 
 	tbl.Print()
