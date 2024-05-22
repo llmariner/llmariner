@@ -12,26 +12,26 @@ dependencies:
   version: 0.29.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-engine
-  version: 0.67.0
+  version: 0.68.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-server
-  version: 0.67.0
+  version: 0.68.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
-  version: 0.85.0
+  version: 0.87.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-server
-  version: 0.85.0
+  version: 0.87.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
-  version: 0.50.0
+  version: 0.51.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-server
-  version: 0.50.0
+  version: 0.51.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: rbac-server
   version: 0.44.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
-  version: 0.41.0
+  version: 0.42.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
