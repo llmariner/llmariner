@@ -6,7 +6,7 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: dex-server
-  version: 0.42.0
+  version: 0.44.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: file-manager-server
   version: 0.29.0
@@ -30,7 +30,7 @@ dependencies:
   version: 0.50.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: rbac-server
-  version: 0.42.0
+  version: 0.44.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
   version: 0.41.0
