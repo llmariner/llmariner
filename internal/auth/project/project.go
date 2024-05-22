@@ -359,16 +359,28 @@ func listProjects(env *runtime.Env, orgTitle string) ([]*uv1.Project, error) {
 }
 
 func buildPath(env *runtime.Env, orgTitle string) (string, string, error) {
+	orgID, err := getOrgID(env, orgTitle)
+	if err != nil {
+		return "", "", err
+	}
+	return fmt.Sprintf(pathPattern, orgID), orgID, nil
+}
+
+func getOrgID(env *runtime.Env, orgTitle string) (string, error) {
 	if orgTitle == "" {
-		orgTitle = env.Config.Context.OrganizationID
+		oid := env.Config.Context.OrganizationID
+		if oid == "" {
+			return "", fmt.Errorf("--organization-title flag must be specified or the organization must be specified in the configuration file")
+		}
+		return oid, nil
 	}
 
 	org, found, err := org.FindOrgByTitle(env, orgTitle)
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 	if !found {
-		return "", "", fmt.Errorf("organization %q not found", orgTitle)
+		return "", fmt.Errorf("organization %q not found", orgTitle)
 	}
-	return fmt.Sprintf(pathPattern, org.Id), org.Id, nil
+	return org.Id, nil
 }
