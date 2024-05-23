@@ -194,7 +194,7 @@ func delete(ctx context.Context, title, orgTitle string) error {
 		return err
 	}
 
-	project, found, err := findProjectByTitle(env, title, orgTitle)
+	project, found, err := FindProjectByTitle(env, title, orgTitle)
 	if err != nil {
 		return err
 	}
@@ -226,7 +226,7 @@ func addMember(ctx context.Context, title, orgTitle, userID string, role uv1.Pro
 		return err
 	}
 
-	project, found, err := findProjectByTitle(env, title, orgTitle)
+	project, found, err := FindProjectByTitle(env, title, orgTitle)
 	if err != nil {
 		return err
 	}
@@ -261,7 +261,7 @@ func listMembers(ctx context.Context, title, orgTitle string) error {
 		return err
 	}
 
-	project, found, err := findProjectByTitle(env, title, orgTitle)
+	project, found, err := FindProjectByTitle(env, title, orgTitle)
 	if err != nil {
 		return err
 	}
@@ -300,7 +300,7 @@ func removeMember(ctx context.Context, title, orgTitle, userID string) error {
 		return err
 	}
 
-	project, found, err := findProjectByTitle(env, title, orgTitle)
+	project, found, err := FindProjectByTitle(env, title, orgTitle)
 	if err != nil {
 		return err
 	}
@@ -328,8 +328,8 @@ func removeMember(ctx context.Context, title, orgTitle, userID string) error {
 	return nil
 }
 
-// findProjectByTitle finds a project by title.
-func findProjectByTitle(env *runtime.Env, title, orgTitle string) (*uv1.Project, bool, error) {
+// FindProjectByTitle finds a project by title.
+func FindProjectByTitle(env *runtime.Env, title, orgTitle string) (*uv1.Project, bool, error) {
 	projects, err := listProjects(env, orgTitle)
 	if err != nil {
 		return nil, false, err
