@@ -171,7 +171,7 @@ func list(ctx context.Context, orgTitle string) error {
 		return err
 	}
 
-	projects, err := listProjects(env, orgTitle)
+	projects, err := ListProjects(env, orgTitle)
 	if err != nil {
 		return err
 	}
@@ -330,7 +330,7 @@ func removeMember(ctx context.Context, title, orgTitle, userID string) error {
 
 // FindProjectByTitle finds a project by title.
 func FindProjectByTitle(env *runtime.Env, title, orgTitle string) (*uv1.Project, bool, error) {
-	projects, err := listProjects(env, orgTitle)
+	projects, err := ListProjects(env, orgTitle)
 	if err != nil {
 		return nil, false, err
 	}
@@ -342,7 +342,8 @@ func FindProjectByTitle(env *runtime.Env, title, orgTitle string) (*uv1.Project,
 	return nil, false, nil
 }
 
-func listProjects(env *runtime.Env, orgTitle string) ([]*uv1.Project, error) {
+// ListProjects lists projects.
+func ListProjects(env *runtime.Env, orgTitle string) ([]*uv1.Project, error) {
 	path, orgID, err := buildPath(env, orgTitle)
 	if err != nil {
 		return nil, err

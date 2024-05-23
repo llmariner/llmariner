@@ -152,7 +152,7 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	orgs, err := listOrganizations(env)
+	orgs, err := ListOrganizations(env)
 	if err != nil {
 		return err
 	}
@@ -295,7 +295,7 @@ func removeMember(ctx context.Context, title, userID string) error {
 
 // FindOrgByTitle finds an organization by title.
 func FindOrgByTitle(env *runtime.Env, title string) (*uv1.Organization, bool, error) {
-	orgs, err := listOrganizations(env)
+	orgs, err := ListOrganizations(env)
 	if err != nil {
 		return nil, false, err
 	}
@@ -307,7 +307,8 @@ func FindOrgByTitle(env *runtime.Env, title string) (*uv1.Organization, bool, er
 	return nil, false, nil
 }
 
-func listOrganizations(env *runtime.Env) ([]*uv1.Organization, error) {
+// ListOrganizations lists organizations.
+func ListOrganizations(env *runtime.Env) ([]*uv1.Organization, error) {
 	var req uv1.ListOrganizationsRequest
 	var resp uv1.ListOrganizationsResponse
 	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
