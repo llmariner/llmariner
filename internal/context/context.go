@@ -129,6 +129,10 @@ func set(ctx context.Context, key, value string) error {
 			return err
 		}
 	case projectKey:
+		if env.Config.Context.OrganizationID == "" {
+			return fmt.Errorf("organization must be set. Please run 'llmo context set organization <title>'")
+		}
+
 		p, found, err := project.FindProjectByTitle(env, value, "")
 		if err != nil {
 			return err
