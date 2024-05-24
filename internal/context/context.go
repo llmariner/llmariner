@@ -68,39 +68,47 @@ func get(ctx context.Context, args []string) error {
 		switch key {
 		case orgKey, organizationKey:
 			oid := env.Config.Context.OrganizationID
-			orgs, err := org.ListOrganizations(env)
-			if err != nil {
-				return err
-			}
-			var found *uv1.Organization
-			for _, o := range orgs {
-				if o.Id == oid {
-					found = o
-					break
+			if oid == "" {
+				fmt.Printf("Organization:\n  (not selected)\n")
+			} else {
+				orgs, err := org.ListOrganizations(env)
+				if err != nil {
+					return err
 				}
+				var found *uv1.Organization
+				for _, o := range orgs {
+					if o.Id == oid {
+						found = o
+						break
+					}
+				}
+				if found == nil {
+					return fmt.Errorf("org %q not found", oid)
+				}
+				fmt.Printf("Organization:\n  Title: %q\n  ID: %q\n", found.Title, oid)
 			}
-			if found == nil {
-				return fmt.Errorf("org %q not found", oid)
-			}
-			fmt.Printf("Organization:\n  Title: %q\n  ID: %q\n", found.Title, oid)
 		case projectKey:
 			pid := env.Config.Context.ProjectID
-			ps, err := project.ListProjects(env, "")
-			if err != nil {
-				return err
-			}
-			var found *uv1.Project
-			for _, p := range ps {
-				if p.Id == pid {
-					found = p
-					break
+			if pid == "" {
+				fmt.Printf("Project:\n  (not selected)\n")
+			} else {
+				ps, err := project.ListProjects(env, "")
+				if err != nil {
+					return err
 				}
-			}
+				var found *uv1.Project
+				for _, p := range ps {
+					if p.Id == pid {
+						found = p
+						break
+					}
+				}
 
-			if found == nil {
-				return fmt.Errorf("project not found")
+				if found == nil {
+					return fmt.Errorf("project not found")
+				}
+				fmt.Printf("Project:\n  Title: %q\n  ID: %q\n", found.Title, pid)
 			}
-			fmt.Printf("Project:\n  Title: %q\n  ID: %q\n", found.Title, pid)
 		default:
 			return fmt.Errorf("unknown key %s", key)
 		}
@@ -124,7 +132,13 @@ func set(ctx context.Context, key, value string) error {
 		if !found {
 			return fmt.Errorf("organization not found")
 		}
+		if o.Id == env.Config.Context.OrganizationID {
+			// Do nothing
+			return nil
+		}
 		env.Config.Context.OrganizationID = o.Id
+		// Clear the project.
+		env.Config.Context.ProjectID = ""
 		if err := env.Config.Save(); err != nil {
 			return err
 		}
