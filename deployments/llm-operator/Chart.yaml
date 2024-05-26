@@ -32,6 +32,12 @@ dependencies:
 - name: rbac-server
   version: 0.57.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+- name: session-manager-agent
+  version: 0.5.0
+  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+- name: session-manager-server
+  version: 0.5.0
+  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
   version: 0.61.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
