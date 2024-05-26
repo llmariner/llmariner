@@ -48,5 +48,5 @@ inference-manager-server:
 
 model-manager-loader:
   baseModels:
-  - google-gemma-2b-it
+  - google/gemma-2b-it
   - google/gemma-2b-it-q4
