@@ -32,5 +32,11 @@ model-manager-server:
 rbac-server:
   fullnameOverride: rbac-server
 
+session-manager-agent:
+  fullnameOverride: session-manager-agent
+
+session-manager-server:
+  fullnameOverride: session-manager-server
+
 user-manager-server:
   fullnameOverride: user-manager-server
