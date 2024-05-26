@@ -131,8 +131,7 @@ func (e *TokenExchanger) ObtainToken(ctx context.Context, code string) error {
 }
 
 func (e *TokenExchanger) refreshTokenIfExpired(ctx context.Context, token T) (T, error) {
-	const buffer = 5 * time.Minute
-	if token.TokenExpiry.After(time.Now().Add(buffer)) {
+	if token.TokenExpiry.After(time.Now()) {
 		// No need to refresh.
 		return token, nil
 	}
