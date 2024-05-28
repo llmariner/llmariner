@@ -153,11 +153,11 @@ func set(ctx context.Context) error {
 
 	defaultTitle = projects[0].Title
 	if id := env.Config.Context.ProjectID; id != "" && !orgChanged {
-		o, err := findOrgByID(orgs, id)
+		p, err := findProjectByID(projects, id)
 		if err != nil {
 			return err
 		}
-		defaultTitle = o.Title
+		defaultTitle = p.Title
 	}
 
 	var projectTitles []string
