@@ -9,6 +9,7 @@ import (
 	"github.com/llm-operator/cli/internal/models"
 	"github.com/llm-operator/cli/internal/ui"
 	"github.com/llm-operator/cli/internal/version"
+	"github.com/llm-operator/cli/internal/workspaces"
 	"github.com/spf13/cobra"
 )
 
@@ -26,6 +27,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(context.Cmd())
 	cmd.AddCommand(files.Cmd())
 	cmd.AddCommand(finetuning.Cmd())
+	cmd.AddCommand(workspaces.Cmd())
 	cmd.AddCommand(models.Cmd())
 	cmd.AddCommand(version.Cmd())
 	cmd.SilenceUsage = true
