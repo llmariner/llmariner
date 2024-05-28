@@ -42,6 +42,9 @@ func LoadToken(ctx context.Context, c *configs.C) (*T, error) {
 	path := TokenFilePath()
 	b, err := os.ReadFile(path)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("token file not found. Please run 'llmo auth login'")
+		}
 		return nil, fmt.Errorf("read token: %s", err)
 	}
 	var token T
