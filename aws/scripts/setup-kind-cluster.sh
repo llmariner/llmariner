@@ -5,6 +5,8 @@ set -xe
 cat <<EOF > kind-cluster-template.yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+featureGates:
+  "PortForwardWebsockets": true
 nodes:
 - role: control-plane
   labels:
