@@ -181,7 +181,7 @@ completion = client.chat.completions.create(
   stream=True
 )
 for response in completion:
-   print(response.choices[0].delta.content, end="")
+  print(response.choices[0].delta.content, end="")
 ```
 
 This is based on a small set of training data. While the answer is still not perfect, you can see a different response.
