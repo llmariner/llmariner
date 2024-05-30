@@ -118,7 +118,8 @@ func extractErrorMessage(body io.ReadCloser) string {
 	}
 	var r resp
 	if err := json.Unmarshal(b, &r); err != nil {
-		return ""
+		// Return the original body if it's not JSON (error response from an non-gRPC HTTP handler).
+		return string(b)
 	}
 	return r.Message
 }
