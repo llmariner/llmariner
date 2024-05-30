@@ -11,11 +11,11 @@ import (
 
 // NewClient creates a new Kubernetes client.
 func NewClient(env *runtime.Env) (kubernetes.Interface, error) {
-	return kubernetes.NewForConfig(NewConfig(env))
+	return kubernetes.NewForConfig(newConfig(env))
 }
 
-// NewConfig creates a new Kubernetes configuration.
-func NewConfig(env *runtime.Env) *rest.Config {
+// newConfig creates a new Kubernetes configuration.
+func newConfig(env *runtime.Env) *rest.Config {
 	return &rest.Config{
 		Host:        fmt.Sprintf("%s/sessions", env.Config.EndpointURL),
 		BearerToken: env.Token.AccessToken,

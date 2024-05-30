@@ -26,7 +26,7 @@ func PortForward(ctx context.Context, pod *corev1.Pod, localPort, remotePort int
 		return nil
 	}
 
-	config := NewConfig(env)
+	config := newConfig(env)
 	url, err := url.Parse(config.Host)
 	if err != nil {
 		return err
