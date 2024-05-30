@@ -1,6 +1,8 @@
 # This values file is for a dev env where kong, minio, and postgres are installed in the same k8s cluster.
 
 global:
+  llmOperatorBaseURL: http://kong-proxy.kong/v1/
+
   database:
     host: postgres.postgres
     port: 5432
