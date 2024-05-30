@@ -3,6 +3,7 @@ package notebooks
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -31,6 +32,8 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
+	cmd.AddCommand(stopCmd())
+	cmd.AddCommand(startCmd())
 	return cmd
 }
 
@@ -63,18 +66,50 @@ func listCmd() *cobra.Command {
 }
 
 func getCmd() *cobra.Command {
-	var (
-		id string
-	)
 	cmd := &cobra.Command{
-		Use:  "get",
-		Args: cobra.NoArgs,
+		Use:  "get <NAME>",
+		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return get(cmd.Context(), id)
+			ctx := cmd.Context()
+			nbID, err := getNotebookIDByName(ctx, args[0])
+			if err != nil {
+				return err
+			}
+			return get(ctx, nbID)
 		},
 	}
-	cmd.Flags().StringVar(&id, "id", "", "ID of the notebook")
-	_ = cmd.MarkFlagRequired("id")
+	return cmd
+}
+
+func stopCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "stop <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx := cmd.Context()
+			nbID, err := getNotebookIDByName(ctx, args[0])
+			if err != nil {
+				return err
+			}
+			return stop(ctx, nbID)
+		},
+	}
+	return cmd
+}
+
+func startCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "start <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx := cmd.Context()
+			nbID, err := getNotebookIDByName(ctx, args[0])
+			if err != nil {
+				return err
+			}
+			return start(ctx, nbID)
+		},
+	}
 	return cmd
 }
 
@@ -98,26 +133,9 @@ func create(ctx context.Context, name, imageType string) error {
 }
 
 func list(ctx context.Context) error {
-	env, err := runtime.NewEnv(ctx)
+	nbs, err := listNotebooks(ctx)
 	if err != nil {
 		return err
-	}
-
-	var nbs []*jv1.Notebook
-	var after string
-	for {
-		req := jv1.ListNotebooksRequest{
-			After: after,
-		}
-		var resp jv1.ListNotebooksResponse
-		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
-			return err
-		}
-		nbs = append(nbs, resp.Notebooks...)
-		if !resp.HasMore {
-			break
-		}
-		after = resp.Notebooks[len(resp.Notebooks)-1].Id
 	}
 
 	tbl := table.New("ID", "Name", "Image", "Status", "Created At", "Started At", "Stopped At")
@@ -138,14 +156,68 @@ func list(ctx context.Context) error {
 }
 
 func get(ctx context.Context, id string) error {
+	return sendRequestAndPrintNotebook(ctx, http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetNotebookRequest{})
+}
+
+func stop(ctx context.Context, id string) error {
+	return sendRequestAndPrintNotebook(ctx, http.MethodPost, fmt.Sprintf("%s/%s/actions:stop", path, id), &jv1.StopNotebookRequest{})
+}
+
+func start(ctx context.Context, id string) error {
+	return sendRequestAndPrintNotebook(ctx, http.MethodPost, fmt.Sprintf("%s/%s/actions:start", path, id), &jv1.StartNotebookRequest{})
+}
+
+func validateNameArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<NAME> is required argument")
+	}
+	return nil
+}
+
+func getNotebookIDByName(ctx context.Context, name string) (string, error) {
+	nbs, err := listNotebooks(ctx)
+	if err != nil {
+		return "", nil
+	}
+	for _, nb := range nbs {
+		if nb.Name == name {
+			return nb.Id, nil
+		}
+	}
+	return "", fmt.Errorf("notebook %q not found", name)
+}
+
+func listNotebooks(ctx context.Context) ([]*jv1.Notebook, error) {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var nbs []*jv1.Notebook
+	var after string
+	for {
+		req := jv1.ListNotebooksRequest{
+			After: after,
+		}
+		var resp jv1.ListNotebooksResponse
+		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
+			return nil, err
+		}
+		nbs = append(nbs, resp.Notebooks...)
+		if !resp.HasMore {
+			break
+		}
+		after = resp.Notebooks[len(resp.Notebooks)-1].Id
+	}
+	return nbs, nil
+}
+
+func sendRequestAndPrintNotebook(ctx context.Context, method, path string, req any) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
 	}
-
-	var req jv1.GetNotebookRequest
 	var resp jv1.Notebook
-	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(method, path, req, &resp); err != nil {
 		return err
 	}
 	return printNotebook(&resp)
