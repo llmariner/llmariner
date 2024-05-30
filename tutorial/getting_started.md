@@ -187,6 +187,8 @@ This is based on a small set of training data. While the answer is still not per
 If you have access to a Hugging Face dataset, you can use that for fine-tuning. The basic flow is
 the same as the previous one, but the dataset is loaded from Hugging Face.
 
+Please note that this might not work if there is no sufficient GPU memory a node.
+
 The prerequisite is following:
 
 - Set `HUGGING_FACE_HUB_TOKEN` to your Hugging Face token
