@@ -166,17 +166,11 @@ models = list(map(lambda m: m.id, client.models.list().data))
 print(models)
 ```
 
-Then you can get the model ID and use that for the chat completion request.
-
-```python
-# Remove "ft:". This follows OpenAI convention.
-model_id = fine_tuned_model[3:]
-print(model_id)
-```
+Then you can use that for the chat completion request.
 
 ```python
 completion = client.chat.completions.create(
-  model=model_id,
+  model=fine_tuned_model,
   messages=[
     {"role": "user", "content": "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
   ],
@@ -271,10 +265,9 @@ Once the job completes, you can try chat completion:
 ```python
 fine_tuned_model = client.fine_tuning.jobs.list().data[-1].fine_tuned_model
 print(fine_tuned_model)
-model_id = fine_tuned_model[3:]
 
 completion = client.chat.completions.create(
-  model=model_id,
+  model=fine_tuned_model,
   messages=[
     {"role": "user", "content": "Below is an instruction that describes a task. Write a response that appropriately completes the request. Please answer with one of the option in the bracket. Write reasoning in between <analysis></analysis>. Write answer in between <answer></answer>.here are the inputs:Q:A 34-year-old man presents to a clinic with complaints of abdominal discomfort and blood in the urine for 2 days. He has had similar abdominal discomfort during the past 5 years, although he does not remember passing blood in the urine. He has had hypertension for the past 2 years, for which he has been prescribed medication. There is no history of weight loss, skin rashes, joint pain, vomiting, change in bowel habits, and smoking. On physical examination, there are ballotable flank masses bilaterally. The bowel sounds are normal. Renal function tests are as follows:\nUrea 50 mg/dL\nCreatinine 1.4 mg/dL\nProtein Negative\nRBC Numerous\nThe patient underwent ultrasonography of the abdomen, which revealed enlarged kidneys and multiple anechoic cysts with well-defined walls. A CT scan confirmed the presence of multiple cysts in the kidneys. What is the most likely diagnosis?? \n{'A': 'Autosomal dominant polycystic kidney disease (ADPKD)', 'B': 'Autosomal recessive polycystic kidney disease (ARPKD)', 'C': 'Medullary cystic disease', 'D': 'Simple renal cysts', 'E': 'Acquired cystic kidney disease'}"} ],
   stream=True
