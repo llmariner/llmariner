@@ -16,7 +16,7 @@ require (
 	github.com/llm-operator/inference-manager v0.38.0
 	github.com/llm-operator/job-manager v0.102.0
 	github.com/llm-operator/model-manager v0.53.0
-	github.com/llm-operator/user-manager v0.41.0
+	github.com/llm-operator/user-manager v0.63.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/rodaine/table v1.2.0

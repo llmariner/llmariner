@@ -92,8 +92,8 @@ github.com/llm-operator/job-manager v0.102.0 h1:RrxwM8A9UsYyVKo+KM30bjDN8AnRl+b+
 github.com/llm-operator/job-manager v0.102.0/go.mod h1:vnL2iYZSAwUnkK/puTGp1DASR/K1p3wLYhLQ429xJ0U=
 github.com/llm-operator/model-manager v0.53.0 h1:LsaddMQ50CnjxAANX8b+5kEo6axqshuH0z5vmsF2A48=
 github.com/llm-operator/model-manager v0.53.0/go.mod h1:tHqHGI9pdAZMEZGRv7kB6Ooq7qRVyrtRNGrAWcTqwpA=
-github.com/llm-operator/user-manager v0.41.0 h1:25cbm69QR0bb5F/9akYE5S6NZDafJP+LEGjPVzBLom0=
-github.com/llm-operator/user-manager v0.41.0/go.mod h1:+CjSJM3KjZ0IqjtTXVfN5awMGrQjKwMj7hj8jML/NzU=
+github.com/llm-operator/user-manager v0.63.0 h1:vO+CwYEr8AXfvlchYHZvllNZEO5QN3Y9JKuvaqc8SpE=
+github.com/llm-operator/user-manager v0.63.0/go.mod h1:tYXc00mtyR6HI79T2E2/xFZ3/VxJ/rgYKwFT0Q+ZdaE=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
 github.com/lucasb-eyer/go-colorful v1.2.0/go.mod h1:R4dSotOR9KMtayYi1e77YzuveK+i7ruzyGqttikkLy0=
 github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0=
@@ -112,8 +112,6 @@ github.com/mattn/go-runewidth v0.0.15/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh
 github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b/go.mod h1:01TrycV0kFyexm33Z7vhZRXopbI8J3TDReVlkTgMUxE=
 github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d h1:5PJl274Y63IEHC+7izoQE9x6ikvDFZS2mDVS3drnohI=
 github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d/go.mod h1:01TrycV0kFyexm33Z7vhZRXopbI8J3TDReVlkTgMUxE=
-github.com/moby/spdystream v0.2.0 h1:cjW1zVyyoiM0T7b6UoySUFqzXMoqRckQtXwGPiBhOM8=
-github.com/moby/spdystream v0.2.0/go.mod h1:f7i0iNDQJ059oMTcWxx8MA/zKFIuD/lY+0GqbN2Wy8c=
 github.com/moby/spdystream v0.2.0 h1:cjW1zVyyoiM0T7b6UoySUFqzXMoqRckQtXwGPiBhOM8=
 github.com/moby/spdystream v0.2.0/go.mod h1:f7i0iNDQJ059oMTcWxx8MA/zKFIuD/lY+0GqbN2Wy8c=
 github.com/moby/term v0.5.0 h1:xt8Q1nalod/v7BqbG21f8mQPqH+xAaC9C3N3wfWbVP0=
