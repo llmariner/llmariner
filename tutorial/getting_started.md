@@ -146,7 +146,9 @@ resp = client.fine_tuning.jobs.create(
 print('Created job. ID=%s' % resp.id)
 ```
 
-A pod is created in your Kubernetes cluster. You can check the progress of the fine-tuning job from its log.
+A pod is created in your Kubernetes cluster in a namespace where a project is associated. By default pods run in the `default` namespace.
+
+You can check the progress of the fine-tuning job by accessing the K8s cluster or run the CLI command (e.g., `llmo fine-tuning jobs list`, `llmo fine-tuning jobs logs --id <job-id>`).
 
 You will need to wait for several minutes for job completion.
 
