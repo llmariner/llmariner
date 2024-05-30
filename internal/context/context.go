@@ -47,7 +47,7 @@ func setCmd() *cobra.Command {
 		Use:  "set",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return set(cmd.Context())
+			return Set(cmd.Context())
 		},
 	}
 }
@@ -93,7 +93,8 @@ func get(ctx context.Context) error {
 	return nil
 }
 
-func set(ctx context.Context) error {
+// Set sets the organization and project context.
+func Set(ctx context.Context) error {
 	p := ui.NewPrompter()
 
 	env, err := runtime.NewEnv(ctx)

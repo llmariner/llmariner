@@ -12,6 +12,7 @@ import (
 
 	"github.com/llm-operator/cli/internal/accesstoken"
 	"github.com/llm-operator/cli/internal/configs"
+	"github.com/llm-operator/cli/internal/context"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,6 @@ func loginCmd() *cobra.Command {
 		Short: "Login to LLM service",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			c, err := configs.LoadOrCreate()
 			if err != nil {
 				return fmt.Errorf("load config: %s", err)
@@ -68,6 +68,11 @@ func loginCmd() *cobra.Command {
 				if !strings.Contains(err.Error(), "use of closed network connection") {
 					return err
 				}
+			}
+
+			fmt.Println("\nSetting the context...")
+			if err := context.Set(cmd.Context()); err != nil {
+				return err
 			}
 
 			return nil
