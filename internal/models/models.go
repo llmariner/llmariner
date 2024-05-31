@@ -69,7 +69,7 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("ID", "Owned By", "Finished At")
+	tbl := table.New("ID", "Owned By", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, m := range resp.Data {
