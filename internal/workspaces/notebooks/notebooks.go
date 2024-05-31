@@ -10,6 +10,7 @@ import (
 
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/runtime"
+	itime "github.com/llm-operator/cli/internal/time"
 	"github.com/llm-operator/cli/internal/ui"
 	jv1 "github.com/llm-operator/job-manager/api/v1"
 	"github.com/rodaine/table"
@@ -155,7 +156,7 @@ func list(ctx context.Context) error {
 	for _, j := range nbs {
 		var age string
 		if j.StartedAt > 0 {
-			age = timeToAge(time.Unix(j.StartedAt, 0))
+			age = itime.ToAge(time.Unix(j.StartedAt, 0))
 		}
 		tbl.AddRow(
 			j.Id,
@@ -257,21 +258,4 @@ func printNotebook(nb *jv1.Notebook) error {
 	}
 	fmt.Println(string(b))
 	return nil
-}
-
-// timeToAge formats a time into an human-redable age string.
-func timeToAge(t time.Time) string {
-	d := time.Since(t)
-	if sec := int(d.Seconds()); sec < 60 {
-		return fmt.Sprintf("%ds", sec)
-	} else if min := int(d.Minutes()); min < 60 {
-		return fmt.Sprintf("%dm", min)
-	} else if d.Hours() < 6 {
-		return fmt.Sprintf("%.0fh%dm", d.Hours(), min%60)
-	} else if d.Hours() < 24 {
-		return fmt.Sprintf("%.0fh", d.Hours())
-	} else if d.Hours() < 24*7 {
-		return fmt.Sprintf("%.0fd", d.Hours()/24)
-	}
-	return fmt.Sprintf("%.0fy", d.Hours()/(24*365))
 }
