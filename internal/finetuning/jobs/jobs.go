@@ -100,16 +100,18 @@ func execCmd() *cobra.Command {
 
 func logsCmd() *cobra.Command {
 	var (
-		id string
+		id     string
+		follow bool
 	)
 	cmd := &cobra.Command{
 		Use:  "logs",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return logs(cmd.Context(), id)
+			return logs(cmd.Context(), id, follow)
 		},
 	}
 	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
+	cmd.Flags().BoolVarP(&follow, "follow", "f", false, "True if the logs should be streamed")
 	_ = cmd.MarkFlagRequired("id")
 	return cmd
 }
@@ -195,7 +197,7 @@ func cancel(ctx context.Context, id string) error {
 	return nil
 }
 
-func logs(ctx context.Context, id string) error {
+func logs(ctx context.Context, id string, follow bool) error {
 	pods, err := listPodsForJob(ctx, id)
 	if err != nil {
 		return err
@@ -218,13 +220,13 @@ func logs(ctx context.Context, id string) error {
 	}
 
 	if lastFailed != nil {
-		return podLog(ctx, lastFailed)
+		return podLog(ctx, lastFailed, follow)
 	}
 
-	return podLog(ctx, latestPod)
+	return podLog(ctx, latestPod, follow)
 }
 
-func podLog(ctx context.Context, pod *corev1.Pod) error {
+func podLog(ctx context.Context, pod *corev1.Pod, follow bool) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return nil
@@ -235,7 +237,7 @@ func podLog(ctx context.Context, pod *corev1.Pod) error {
 	}
 
 	req := kc.CoreV1().Pods(pod.Namespace).GetLogs(pod.Name, &corev1.PodLogOptions{
-		Follow: true,
+		Follow: follow,
 	})
 	stream, err := req.Stream(ctx)
 	if err != nil {
