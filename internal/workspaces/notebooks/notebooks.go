@@ -38,20 +38,15 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var (
-		name    string
-		imgType string
-	)
+	var imgType string
 	cmd := &cobra.Command{
 		Use:  "create",
-		Args: cobra.NoArgs,
+		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), name, imgType)
+			return create(cmd.Context(), args[0], imgType)
 		},
 	}
-	cmd.Flags().StringVar(&name, "name", "", "Name of the Notebook")
 	cmd.Flags().StringVar(&imgType, "image-type", "jupyter-lab-base", "Type of the Notebook Image")
-	_ = cmd.MarkFlagRequired("name")
 	return cmd
 }
 
