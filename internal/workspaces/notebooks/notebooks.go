@@ -138,17 +138,19 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("ID", "Name", "Image", "Status", "Created At", "Started At", "Stopped At")
+	tbl := table.New("ID", "Name", "Image", "Status", "Age")
 	ui.FormatTable(tbl)
 	for _, j := range nbs {
+		var age string
+		if j.StartedAt > 0 {
+			age = timeToAge(time.Unix(j.StartedAt, 0))
+		}
 		tbl.AddRow(
 			j.Id,
 			j.Name,
 			j.Image,
 			j.Status,
-			time.Unix(j.CreatedAt, 0).Format(time.RFC3339),
-			time.Unix(j.StartedAt, 0).Format(time.RFC3339),
-			time.Unix(j.StoppedAt, 0).Format(time.RFC3339),
+			age,
 		)
 	}
 	tbl.Print()
@@ -230,4 +232,21 @@ func printNotebook(nb *jv1.Notebook) error {
 	}
 	fmt.Println(string(b))
 	return nil
+}
+
+// timeToAge formats a time into an human-redable age string.
+func timeToAge(t time.Time) string {
+	d := time.Since(t)
+	if sec := int(d.Seconds()); sec < 60 {
+		return fmt.Sprintf("%ds", sec)
+	} else if min := int(d.Minutes()); min < 60 {
+		return fmt.Sprintf("%dm", min)
+	} else if d.Hours() < 6 {
+		return fmt.Sprintf("%.0fh%dm", d.Hours(), min%60)
+	} else if d.Hours() < 24 {
+		return fmt.Sprintf("%.0fh", d.Hours())
+	} else if d.Hours() < 24*7 {
+		return fmt.Sprintf("%.0fd", d.Hours()/24)
+	}
+	return fmt.Sprintf("%.0fy", d.Hours()/(24*365))
 }
