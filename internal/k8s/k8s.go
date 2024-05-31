@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/llm-operator/cli/internal/runtime"
 	"k8s.io/client-go/kubernetes"
@@ -19,6 +18,5 @@ func newConfig(env *runtime.Env) *rest.Config {
 	return &rest.Config{
 		Host:        fmt.Sprintf("%s/sessions", env.Config.EndpointURL),
 		BearerToken: env.Token.AccessToken,
-		Timeout:     30 * time.Second,
 	}
 }
