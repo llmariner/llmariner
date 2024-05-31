@@ -34,6 +34,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(getCmd())
 	cmd.AddCommand(stopCmd())
 	cmd.AddCommand(startCmd())
+	cmd.AddCommand(deleteCmd())
 	return cmd
 }
 
@@ -108,6 +109,22 @@ func startCmd() *cobra.Command {
 	return cmd
 }
 
+func deleteCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "delete <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx := cmd.Context()
+			nbID, err := getNotebookIDByName(ctx, args[0])
+			if err != nil {
+				return err
+			}
+			return delete(ctx, nbID)
+		},
+	}
+	return cmd
+}
+
 func create(ctx context.Context, name, imageType string) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
@@ -162,6 +179,19 @@ func stop(ctx context.Context, id string) error {
 
 func start(ctx context.Context, id string) error {
 	return sendRequestAndPrintNotebook(ctx, http.MethodPost, fmt.Sprintf("%s/%s/actions:start", path, id), &jv1.StartNotebookRequest{})
+}
+
+func delete(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+	var resp jv1.DeleteNotebookResponse
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, path, fmt.Sprintf("%s/%s", path, id), &resp); err != nil {
+		return err
+	}
+	fmt.Printf("Deleted the notebook (ID: %q).\n", id)
+	return nil
 }
 
 func validateNameArg(cmd *cobra.Command, args []string) error {
