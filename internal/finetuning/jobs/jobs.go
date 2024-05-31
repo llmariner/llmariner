@@ -12,6 +12,7 @@ import (
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/k8s"
 	"github.com/llm-operator/cli/internal/runtime"
+	itime "github.com/llm-operator/cli/internal/time"
 	"github.com/llm-operator/cli/internal/ui"
 	jv1 "github.com/llm-operator/job-manager/api/v1"
 	"github.com/rodaine/table"
@@ -139,7 +140,7 @@ func list(ctx context.Context) error {
 		after = resp.Data[len(resp.Data)-1].Id
 	}
 
-	tbl := table.New("ID", "Model", "Fine-tuned Model", "Status", "Created At", "Finished At")
+	tbl := table.New("ID", "Model", "Fine-tuned Model", "Status", "Age")
 	ui.FormatTable(tbl)
 
 	for _, j := range jobs {
@@ -148,7 +149,7 @@ func list(ctx context.Context) error {
 			j.Model,
 			j.FineTunedModel,
 			j.Status,
-			time.Unix(j.CreatedAt, 0).Format(time.RFC3339),
+			itime.ToAge(time.Unix(j.CreatedAt, 0)),
 		)
 	}
 
