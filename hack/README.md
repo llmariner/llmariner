@@ -46,7 +46,7 @@ Running a fine-tuning job requires GPU. If you want to test an end-to-end flow o
 ```yaml
 job-manager-dispatcher:
   job:
-    image: public.ecrp.aws/v8n3t7y5/llm-operator/fake-job
+    image: public.ecr.aws/v8n3t7y5/llm-operator/fake-job
     version: latest
     imagePullPolicy: IfNotPresent
 ```
