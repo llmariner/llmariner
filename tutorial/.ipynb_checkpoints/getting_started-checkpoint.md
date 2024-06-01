@@ -132,7 +132,7 @@ print('Uploaded file. ID=%s' % file.id)
 You can verify the update succeeded.
 
 ```python
-print(client.files.list().data[0])
+print(client.files.list().data[-1])
 ```
 
 Then start a fine-tuning job.
@@ -155,7 +155,7 @@ You will need to wait for several minutes for job completion.
 Once the job completes, you can check the generated models.
 
 ```python
-fine_tuned_model = client.fine_tuning.jobs.list().data[0].fine_tuned_model
+fine_tuned_model = client.fine_tuning.jobs.list().data[-1].fine_tuned_model
 print(fine_tuned_model)
 ```
 
@@ -265,7 +265,7 @@ print('Created job. ID=%s' % resp.id)
 Once the job completes, you can try chat completion:
 
 ```python
-fine_tuned_model = client.fine_tuning.jobs.list().data[0].fine_tuned_model
+fine_tuned_model = client.fine_tuning.jobs.list().data[-1].fine_tuned_model
 print(fine_tuned_model)
 
 completion = client.chat.completions.create(
