@@ -38,6 +38,21 @@ helm dependencies build deployments/llm-operator
 helm upgrade --install -n llm-operator llm-operator ./deployments/llm-operator  -f hack/llm-operator-values.yaml
 ```
 
+## Run a Fake Fine-Tuning Job
+
+Running a fine-tuning job requires GPU. If you want to test an end-to-end flow of fine-tuning without GPU, you can configure
+`job-manager-dispatcher` to create a fake job by adding the following to `values.yaml`:
+
+```yaml
+job-manager-dispatcher:
+  job:
+    image: public.ecrp.aws/v8n3t7y5/llm-operator/fake-job
+    version: latest
+    imagePullPolicy: IfNotPresent
+```
+
+The fake-job already has an output model in its container image, and it just copies to the output directory.
+
 ## Deployment to a Nvidia H100 Launchpad Instance
 
 ```bash
