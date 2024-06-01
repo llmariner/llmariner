@@ -138,12 +138,13 @@ print(client.files.list().data[0])
 Then start a fine-tuning job.
 
 ```python
-resp = client.fine_tuning.jobs.create(
+job = client.fine_tuning.jobs.create(
   model="google-gemma-2b-it",
   suffix='fine-tuning',
   training_file=file.id,
+  hyperparameters={"n_epochs": 100},
 )
-print('Created job. ID=%s' % resp.id)
+print('Created job. ID=%s' % job.id)
 ```
 
 A pod is created in your Kubernetes cluster in a namespace where a project is associated. By default pods run in the `default` namespace.
@@ -253,13 +254,13 @@ vfile = client.files.create(
 )
 print('Uploaded file. ID=%s' % vfile.id)
 
-resp = client.fine_tuning.jobs.create(
+job = client.fine_tuning.jobs.create(
   model="google-gemma-2b-it",
   suffix='fine-tuning',
   training_file=tfile.id,
   validation_file=vfile.id,
 )
-print('Created job. ID=%s' % resp.id)
+print('Created job. ID=%s' % job.id)
 ```
 
 Once the job completes, you can try chat completion:
