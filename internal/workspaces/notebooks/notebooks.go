@@ -188,7 +188,7 @@ func delete(ctx context.Context, id string) error {
 		return err
 	}
 	var resp jv1.DeleteNotebookResponse
-	if err := ihttp.NewClient(env).Send(http.MethodDelete, path, fmt.Sprintf("%s/%s", path, id), &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, fmt.Sprintf("%s/%s", path, id), &jv1.DeleteNotebookRequest{}, &resp); err != nil {
 		return err
 	}
 	fmt.Printf("Deleted the notebook (ID: %q).\n", id)
