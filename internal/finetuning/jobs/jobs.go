@@ -3,6 +3,7 @@ package jobs
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -52,68 +53,54 @@ func listCmd() *cobra.Command {
 }
 
 func getCmd() *cobra.Command {
-	var (
-		id string
-	)
-	cmd := &cobra.Command{
-		Use:  "get",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "get <ID>",
+		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return get(cmd.Context(), id)
+			return get(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
-	_ = cmd.MarkFlagRequired("id")
-	return cmd
 }
 
 func cancelCmd() *cobra.Command {
-	var (
-		id string
-	)
-	cmd := &cobra.Command{
-		Use:  "cancel",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "cancel <ID>",
+		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return cancel(cmd.Context(), id)
+			return cancel(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
-	_ = cmd.MarkFlagRequired("id")
-	return cmd
 }
 
 func execCmd() *cobra.Command {
-	var (
-		id string
-	)
-	cmd := &cobra.Command{
-		Use:  "exec",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "exec <ID>",
+		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return exec(cmd.Context(), id)
+			return exec(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
-	_ = cmd.MarkFlagRequired("id")
-	return cmd
+}
+
+func validateIDArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<ID> is required argument")
+	}
+	return nil
 }
 
 func logsCmd() *cobra.Command {
 	var (
-		id     string
 		follow bool
 	)
 	cmd := &cobra.Command{
-		Use:  "logs",
-		Args: cobra.NoArgs,
+		Use:  "logs <ID>",
+		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return logs(cmd.Context(), id, follow)
+			return logs(cmd.Context(), args[0], follow)
 		},
 	}
-	cmd.Flags().StringVar(&id, "id", "", "ID of the job")
 	cmd.Flags().BoolVarP(&follow, "follow", "f", false, "True if the logs should be streamed")
-	_ = cmd.MarkFlagRequired("id")
 	return cmd
 }
 
