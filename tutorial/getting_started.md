@@ -142,7 +142,6 @@ job = client.fine_tuning.jobs.create(
   model="google-gemma-2b-it",
   suffix='fine-tuning',
   training_file=file.id,
-  hyperparameters={"n_epochs": 100},
 )
 print('Created job. ID=%s' % job.id)
 ```
