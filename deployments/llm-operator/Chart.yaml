@@ -6,7 +6,7 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: dex-server
-  version: 0.60.0
+  version: 0.61.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: file-manager-server
   version: 0.35.0
@@ -18,10 +18,10 @@ dependencies:
   version: 0.94.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
-  version: 0.112.0
+  version: 0.117.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-server
-  version: 0.112.0
+  version: 0.117.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
   version: 0.56.0
@@ -30,7 +30,7 @@ dependencies:
   version: 0.56.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: rbac-server
-  version: 0.60.0
+  version: 0.61.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: session-manager-agent
   version: 0.13.0
