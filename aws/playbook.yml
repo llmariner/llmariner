@@ -190,7 +190,7 @@
       state: present
       namespace: minio
       src: minio.yaml
-  - name: wait for minio ready
+  - name: Wait for minio ready
     kubernetes.core.k8s_info:
       api_version: v1
       kind: Pod
@@ -213,7 +213,18 @@
       cmd: scripts/setup-minio-bucket.sh
     when: result.resources | length == 0
 
-  - name: Copy llm-operator-values file.
+  - name: Setup keda helm repository
+    kubernetes.core.helm_repository:
+      name: kedacore
+      repo_url: https://kedacore.github.io/charts
+  - name: Deploy keda
+    kubernetes.core.helm:
+      release_name: keda
+      release_namespace: keda
+      create_namespace: true
+      chart_ref: kedacore/keda
+
+  - name: Copy llm-operator-values file
     ansible.builtin.copy:
       src: ../hack/llm-operator-values.yaml
       dest: llm-operator-values.yaml
