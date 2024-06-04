@@ -47,6 +47,10 @@ cat <<EOF > prom-scrape-configs.yaml
   scrape_interval: 5s
   static_configs:
   - targets: ['nvidia-dcgm-exporter.nvidia.svc:9400']
+- job_name: inference-manager-engine-metrics
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['inference-manager-server-http.llm-operator.svc:8083']
 EOF
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
@@ -54,7 +58,7 @@ helm upgrade --install --wait \
      --namespace monitoring \
      --create-namespace \
      --set-file extraScrapeConfigs=prom-scrape-configs.yaml \
-     prometheus prometheus-community/prometheus
+     prometheus prometheus-community/kube-prometheus-stack
 
 # Add Grafana with DCGM dashboard
 cat <<EOF > grafana-values.yaml
