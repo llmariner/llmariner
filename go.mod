@@ -14,7 +14,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/llm-operator/file-manager v0.22.0
 	github.com/llm-operator/inference-manager v0.38.0
-	github.com/llm-operator/job-manager v0.102.0
+	github.com/llm-operator/job-manager v0.116.0
 	github.com/llm-operator/model-manager v0.53.0
 	github.com/llm-operator/user-manager v0.63.0
 	github.com/mattn/go-colorable v0.1.13

@@ -8,7 +8,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cli/browser"
 	ihttp "github.com/llm-operator/cli/internal/http"
+	"github.com/llm-operator/cli/internal/nbtoken"
 	"github.com/llm-operator/cli/internal/runtime"
 	itime "github.com/llm-operator/cli/internal/time"
 	"github.com/llm-operator/cli/internal/ui"
@@ -36,6 +38,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(stopCmd())
 	cmd.AddCommand(startCmd())
 	cmd.AddCommand(deleteCmd())
+	cmd.AddCommand(openCmd())
 	return cmd
 }
 
@@ -126,6 +129,22 @@ func deleteCmd() *cobra.Command {
 	return cmd
 }
 
+func openCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "open <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx := cmd.Context()
+			nbID, err := getNotebookIDByName(ctx, args[0])
+			if err != nil {
+				return err
+			}
+			return open(ctx, nbID)
+		},
+	}
+	return cmd
+}
+
 func create(ctx context.Context, name, imageType string) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
@@ -142,7 +161,9 @@ func create(ctx context.Context, name, imageType string) error {
 	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
 		return err
 	}
-	return printNotebook(&resp)
+	fmt.Printf("created the notebook (ID: %q).\n", resp.Id)
+
+	return nbtoken.SaveToken(resp.Id, resp.Token)
 }
 
 func list(ctx context.Context) error {
@@ -200,6 +221,31 @@ func validateNameArg(cmd *cobra.Command, args []string) error {
 		return errors.New("<NAME> is required argument")
 	}
 	return nil
+}
+
+func open(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	token, err := nbtoken.LoadToken(id)
+	if err != nil {
+		// TODO(aya): implement get token API?
+		return err
+	}
+
+	var resp jv1.Notebook
+	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetJobRequest{}, &resp); err != nil {
+		return err
+	}
+	if resp.Status != "running" {
+		return fmt.Errorf("notebook %q is not running (status: %s)", resp.Name, resp.Status)
+	}
+
+	fmt.Println("Opening browser...")
+	nbURL := fmt.Sprintf("%s/services/notebooks/%s?token=%s", env.Config.EndpointURL, id, token)
+	return browser.OpenURL(nbURL)
 }
 
 func getNotebookIDByName(ctx context.Context, name string) (string, error) {
