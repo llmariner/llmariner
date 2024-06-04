@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/cli/browser"
@@ -43,15 +44,30 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var imgType string
+	var (
+		envs []string
+		opts createOpts
+	)
 	cmd := &cobra.Command{
 		Use:  "create",
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), args[0], imgType)
+			if len(envs) > 0 {
+				opts.envs = make(map[string]string, len(envs))
+				for _, e := range envs {
+					ss := strings.SplitN(e, "=", 2)
+					if len(ss) != 2 {
+						return fmt.Errorf("invalid env format: %q", e)
+					}
+					opts.envs[ss[0]] = ss[1]
+				}
+			}
+			return create(cmd.Context(), args[0], opts)
 		},
 	}
-	cmd.Flags().StringVar(&imgType, "image-type", "jupyter-lab-base", "Type of the Notebook Image")
+	cmd.Flags().StringVar(&opts.imageType, "image-type", "jupyter-lab-base", "Type of the Notebook Image")
+	cmd.Flags().StringArrayVar(&envs, "env", nil, "Environment variables used within the Notebook (e.g., MY_ENV=somevalue)")
+	cmd.Flags().Int32Var(&opts.gpuCount, "gpu", 0, "Number of GPUs")
 	return cmd
 }
 
@@ -145,7 +161,13 @@ func openCmd() *cobra.Command {
 	return cmd
 }
 
-func create(ctx context.Context, name, imageType string) error {
+type createOpts struct {
+	imageType string
+	envs      map[string]string
+	gpuCount  int32
+}
+
+func create(ctx context.Context, name string, opts createOpts) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -154,9 +176,16 @@ func create(ctx context.Context, name, imageType string) error {
 	req := jv1.CreateNotebookRequest{
 		Name: name,
 		Image: &jv1.CreateNotebookRequest_Image{
-			Image: &jv1.CreateNotebookRequest_Image_Type{Type: imageType},
+			Image: &jv1.CreateNotebookRequest_Image_Type{Type: opts.imageType},
 		},
+		Envs: opts.envs,
 	}
+	if opts.gpuCount > 0 {
+		req.Resources = &jv1.Resources{
+			GpuCount: opts.gpuCount,
+		}
+	}
+
 	var resp jv1.Notebook
 	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
 		return err
