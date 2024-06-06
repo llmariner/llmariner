@@ -40,6 +40,12 @@ inference-manager-engine:
   # TODO(kenji): Enable GPU sharing
   resources:
     gpu: 0
+  autoscaling:
+    enableKeda: true
+    scaledobject:
+      minReplicaCount: 1
+      maxReplicaCount: 2
+      prometheusServerAddr:
 
 inference-manager-server:
   service:
