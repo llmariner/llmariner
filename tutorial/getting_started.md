@@ -124,9 +124,9 @@ Next upload the file to the system.
 ```python
 file = client.files.create(
   file=open(training_filename, "rb"),
-  purpose='fine-tune',
+  purpose="fine-tune",
 )
-print('Uploaded file. ID=%s' % file.id)
+print("Uploaded file. ID=%s" % file.id)
 ```
 
 You can verify the update succeeded.
@@ -140,10 +140,10 @@ Then start a fine-tuning job.
 ```python
 job = client.fine_tuning.jobs.create(
   model="google-gemma-2b-it",
-  suffix='fine-tuning',
+  suffix="fine-tuning",
   training_file=file.id,
 )
-print('Created job. ID=%s' % job.id)
+print("Created job. ID=%s" % job.id)
 ```
 
 A pod is created in your Kubernetes cluster in a namespace where a project is associated. By default pods run in the `default` namespace.
@@ -223,7 +223,7 @@ def format_datapoint(data_point):
     return """{"messages": [{"role": "user", "content": "%s"}, {"role": "assistant", "content": "%s"}]}""" % (prompt, output)
 
 def create_file(data, filename):
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
       for d in data:
           f.write("%s\n" % format_datapoint(d))
 
@@ -242,24 +242,24 @@ training_filename = "training.jsonl"
 
 tfile = client.files.create(
   file=open(training_filename, "rb"),
-  purpose='fine-tune',
+  purpose="fine-tune",
 )
-print('Uploaded file. ID=%s' % tfile.id)
+print("Uploaded file. ID=%s" % tfile.id)
 
 validation_filename = "validation.jsonl"
 vfile = client.files.create(
   file=open(validation_filename, "rb"),
-  purpose='fine-tune',
+  purpose="fine-tune",
 )
-print('Uploaded file. ID=%s' % vfile.id)
+print("Uploaded file. ID=%s" % vfile.id)
 
 job = client.fine_tuning.jobs.create(
   model="google-gemma-2b-it",
-  suffix='fine-tuning',
+  suffix="fine-tuning",
   training_file=tfile.id,
   validation_file=vfile.id,
 )
-print('Created job. ID=%s' % job.id)
+print("Created job. ID=%s" % job.id)
 ```
 
 Once the job completes, you can try chat completion:
