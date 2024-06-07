@@ -11,17 +11,12 @@ cat <<EOF > prom-scrape-configs.yaml
 EOF
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
+# TODO(kenji): Consider deploy prometheus-operator instead.
 helm upgrade --install --wait \
      --namespace monitoring \
      --create-namespace \
      --set-file extraScrapeConfigs=prom-scrape-configs.yaml \
      prometheus prometheus-community/prometheus
-
-# Add Prometheus Operator for ServiceMonitor CRD.
-helm upgrade --install --wait \
-    --namespace monitoring \
-    --create-namespace \
-    prometheus-operator prometheus-community/kube-prometheus-stack
 
 # Add Grafana with DCGM dashboard
 cat <<EOF > grafana-values.yaml
