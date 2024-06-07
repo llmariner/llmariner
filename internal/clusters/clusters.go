@@ -101,6 +101,11 @@ func list(ctx context.Context) error {
 }
 
 func unregister(ctx context.Context, name string) error {
+	id, err := getClusterIDByName(ctx, name)
+	if err != nil {
+		return err
+	}
+
 	p := ui.NewPrompter()
 	s := &survey.Confirm{
 		Message: fmt.Sprintf("Unregister Cluster %q?", name),
@@ -111,11 +116,6 @@ func unregister(ctx context.Context, name string) error {
 		return err
 	} else if !ok {
 		return nil
-	}
-
-	id, err := getClusterIDByName(ctx, name)
-	if err != nil {
-		return err
 	}
 
 	env, err := runtime.NewEnv(ctx)

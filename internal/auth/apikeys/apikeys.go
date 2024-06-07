@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/llm-operator/cli/internal/auth/org"
 	"github.com/llm-operator/cli/internal/auth/project"
 	ihttp "github.com/llm-operator/cli/internal/http"
@@ -151,6 +152,18 @@ func list(ctx context.Context, orgTitle, projectTitle string) error {
 }
 
 func delete(ctx context.Context, name, orgTitle, projectTitle string) error {
+	p := ui.NewPrompter()
+	s := &survey.Confirm{
+		Message: fmt.Sprintf("Delete API key %q?", name),
+		Default: false,
+	}
+	var ok bool
+	if err := p.Ask(s, &ok); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/dustin/go-humanize"
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/runtime"
@@ -89,6 +90,18 @@ func list(ctx context.Context) error {
 }
 
 func delete(ctx context.Context, id string) error {
+	p := ui.NewPrompter()
+	s := &survey.Confirm{
+		Message: fmt.Sprintf("Delete file %q?", id),
+		Default: false,
+	}
+	var ok bool
+	if err := p.Ask(s, &ok); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err

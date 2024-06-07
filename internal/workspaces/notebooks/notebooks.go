@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/cli/browser"
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/nbtoken"
@@ -134,12 +135,7 @@ func deleteCmd() *cobra.Command {
 		Use:  "delete <NAME>",
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx := cmd.Context()
-			nbID, err := getNotebookIDByName(ctx, args[0])
-			if err != nil {
-				return err
-			}
-			return delete(ctx, nbID)
+			return delete(cmd.Context(), args[0])
 		},
 	}
 	return cmd
@@ -232,7 +228,24 @@ func start(ctx context.Context, id string) error {
 	return sendRequestAndPrintNotebook(ctx, http.MethodPost, fmt.Sprintf("%s/%s/actions:start", path, id), &jv1.StartNotebookRequest{})
 }
 
-func delete(ctx context.Context, id string) error {
+func delete(ctx context.Context, name string) error {
+	id, err := getNotebookIDByName(ctx, name)
+	if err != nil {
+		return err
+	}
+
+	p := ui.NewPrompter()
+	s := &survey.Confirm{
+		Message: fmt.Sprintf("Delete notebook %q?", name),
+		Default: false,
+	}
+	var ok bool
+	if err := p.Ask(s, &ok); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err

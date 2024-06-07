@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/AlecAivazis/survey/v2"
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/runtime"
 	"github.com/llm-operator/cli/internal/ui"
@@ -170,6 +171,18 @@ func list(ctx context.Context) error {
 }
 
 func delete(ctx context.Context, title string) error {
+	p := ui.NewPrompter()
+	s := &survey.Confirm{
+		Message: fmt.Sprintf("Delete organization %q?", title),
+		Default: false,
+	}
+	var ok bool
+	if err := p.Ask(s, &ok); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -265,6 +278,18 @@ func listMembers(ctx context.Context, title string) error {
 }
 
 func removeMember(ctx context.Context, title, userID string) error {
+	p := ui.NewPrompter()
+	s := &survey.Confirm{
+		Message: fmt.Sprintf("Remove %q from organization %q?", userID, title),
+		Default: false,
+	}
+	var ok bool
+	if err := p.Ask(s, &ok); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -283,8 +308,8 @@ func removeMember(ctx context.Context, title, userID string) error {
 		UserId:         userID,
 	}
 	var resp uv1.OrganizationUser
-	p := fmt.Sprintf("%s/%s/users/%s", path, org.Id, userID)
-	if err := ihttp.NewClient(env).Send(http.MethodDelete, p, &req, &resp); err != nil {
+	rp := fmt.Sprintf("%s/%s/users/%s", path, org.Id, userID)
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, rp, &req, &resp); err != nil {
 		return err
 	}
 
