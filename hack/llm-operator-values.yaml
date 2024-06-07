@@ -45,7 +45,7 @@ inference-manager-engine:
     scaledobject:
       minReplicaCount: 1
       maxReplicaCount: 2
-      prometheusServerAddr:
+      prometheusServerAddr: http://prometheus-server.monitoring:80
 
 inference-manager-server:
   service:
