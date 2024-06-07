@@ -1,4 +1,4 @@
-deployments/llm-operator/values.yamlglobal:
+global:
   auth:
     enable: true
     # This default value works if rbac-server runs in the same namespace.
