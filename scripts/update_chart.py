@@ -30,6 +30,7 @@ def get_latest_tag(repo):
 
 def update_chart(filename):
     repos = [
+        'cluster-manager',
         'file-manager',
         'inference-manager',
         'job-manager',
@@ -49,6 +50,9 @@ type: application
 version: 0.1.0
 appVersion: 0.1.0
 dependencies:
+- name: cluster-manager-server
+  version: %(cluster-manager)s
+  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: dex-server
   version: %(rbac-manager)s
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
