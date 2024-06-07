@@ -16,4 +16,6 @@ kubectl create namespace llm-operator
 
 ./deploy_keda.sh
 
+./deploy_milvus.sh
+
 ./deploy_llm_operator.sh
