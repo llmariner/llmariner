@@ -33,6 +33,11 @@ global:
     # is deployed to the kong namespace.
     oidcIssuerUrl: http://kong-proxy.kong/v1/dex
 
+  worker:
+    registrationKeySecret:
+      name: default-cluster-registration-key
+      key: key
+
 inference-manager-engine:
   # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,
   # and it is needed for the fine-tuning job
