@@ -20,13 +20,13 @@ import (
 // This first attempts tunneling (websocket) dialer, then fallback to SPDY dialer.
 // Please note that the websocket works only with k8s 1.30 with the "PortForwardWebsockets"
 // feature gate enabled.
-func PortForward(ctx context.Context, pod *corev1.Pod, localPort, remotePort int) error {
+func PortForward(ctx context.Context, clusterID string, pod *corev1.Pod, localPort, remotePort int) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return nil
 	}
 
-	config := newConfig(env)
+	config := newConfig(env, clusterID)
 	url, err := url.Parse(config.Host)
 	if err != nil {
 		return err

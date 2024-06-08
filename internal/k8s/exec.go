@@ -16,12 +16,12 @@ import (
 )
 
 // ExecPod exects into a pod.
-func ExecPod(ctx context.Context, pod *corev1.Pod) error {
+func ExecPod(ctx context.Context, clusterID string, pod *corev1.Pod) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return nil
 	}
-	kc, err := NewClient(env)
+	kc, err := NewClient(env, clusterID)
 	if err != nil {
 		return err
 	}
@@ -43,14 +43,16 @@ func ExecPod(ctx context.Context, pod *corev1.Pod) error {
 			scheme.ParameterCodec,
 		)
 
+	config := newConfig(env, clusterID)
+
 	// Use SPDY or websocket.
 	// Please note that Kong Ingress Controller does not support SPDY (https://github.com/Kong/kong/discussions/7334).
-	spdyExec, err := remotecommand.NewSPDYExecutor(newConfig(env), http.MethodPost, req.URL())
+	spdyExec, err := remotecommand.NewSPDYExecutor(config, http.MethodPost, req.URL())
 	if err != nil {
 		return err
 	}
 	// V5 is the latest protocol that is used from NewWebSocketExecutor(), but a k8s cluster may not support it.
-	wsExec, err := remotecommand.NewWebSocketExecutorForProtocols(newConfig(env), http.MethodGet, req.URL().String(),
+	wsExec, err := remotecommand.NewWebSocketExecutorForProtocols(config, http.MethodGet, req.URL().String(),
 		rc.StreamProtocolV5Name,
 		rc.StreamProtocolV4Name,
 		rc.StreamProtocolV3Name,

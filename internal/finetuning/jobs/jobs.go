@@ -186,7 +186,12 @@ func cancel(ctx context.Context, id string) error {
 }
 
 func logs(ctx context.Context, id string, follow bool) error {
-	pods, err := listPodsForJob(ctx, id)
+	job, err := getJob(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	pods, err := listPodsForJob(ctx, job)
 	if err != nil {
 		return err
 	}
@@ -208,18 +213,18 @@ func logs(ctx context.Context, id string, follow bool) error {
 	}
 
 	if lastFailed != nil {
-		return podLog(ctx, lastFailed, follow)
+		return podLog(ctx, job.ClusterId, lastFailed, follow)
 	}
 
-	return podLog(ctx, latestPod, follow)
+	return podLog(ctx, job.ClusterId, latestPod, follow)
 }
 
-func podLog(ctx context.Context, pod *corev1.Pod, follow bool) error {
+func podLog(ctx context.Context, clusterID string, pod *corev1.Pod, follow bool) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return nil
 	}
-	kc, err := k8s.NewClient(env)
+	kc, err := k8s.NewClient(env, clusterID)
 	if err != nil {
 		return err
 	}
@@ -242,7 +247,12 @@ func podLog(ctx context.Context, pod *corev1.Pod, follow bool) error {
 }
 
 func exec(ctx context.Context, id string) error {
-	pods, err := listPodsForJob(ctx, id)
+	job, err := getJob(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	pods, err := listPodsForJob(ctx, job)
 	if err != nil {
 		return err
 	}
@@ -263,40 +273,41 @@ func exec(ctx context.Context, id string) error {
 		return fmt.Errorf("the pod is not running")
 	}
 
-	return k8s.ExecPod(ctx, latestPod)
+	return k8s.ExecPod(ctx, job.ClusterId, latestPod)
 }
 
-func listPodsForJob(ctx context.Context, id string) ([]corev1.Pod, error) {
+func listPodsForJob(ctx context.Context, job *jv1.Job) ([]corev1.Pod, error) {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	job, err := getJob(env, id)
-	if err != nil {
-		return nil, err
-	}
 	namespace := job.KubernetesNamespace
 
-	kc, err := k8s.NewClient(env)
+	kc, err := k8s.NewClient(env, job.ClusterId)
 	if err != nil {
 		return nil, err
 	}
 	podClient := kc.CoreV1().Pods(namespace)
 	resp, err := podClient.List(ctx, metav1.ListOptions{
 		// This is an implicit assumption that the pod name is "job-<job_id>".
-		LabelSelector: fmt.Sprintf("job-name=job-%s", id),
+		LabelSelector: fmt.Sprintf("job-name=job-%s", job.Id),
 	})
 	if err != nil {
 		return nil, err
 	}
 	if len(resp.Items) == 0 {
-		return nil, fmt.Errorf("no pod found for the job %q", id)
+		return nil, fmt.Errorf("no pod found for the job %q", job.Id)
 	}
 	return resp.Items, nil
 }
 
-func getJob(env *runtime.Env, id string) (*jv1.Job, error) {
+func getJob(ctx context.Context, id string) (*jv1.Job, error) {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	var req jv1.GetJobRequest
 	var resp jv1.Job
 	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &req, &resp); err != nil {

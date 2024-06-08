@@ -9,14 +9,14 @@ import (
 )
 
 // NewClient creates a new Kubernetes client.
-func NewClient(env *runtime.Env) (kubernetes.Interface, error) {
-	return kubernetes.NewForConfig(newConfig(env))
+func NewClient(env *runtime.Env, clusterID string) (kubernetes.Interface, error) {
+	return kubernetes.NewForConfig(newConfig(env, clusterID))
 }
 
 // newConfig creates a new Kubernetes configuration.
-func newConfig(env *runtime.Env) *rest.Config {
+func newConfig(env *runtime.Env, clusterID string) *rest.Config {
 	return &rest.Config{
-		Host:        fmt.Sprintf("%s/sessions", env.Config.EndpointURL),
+		Host:        fmt.Sprintf("%s/sessions/%s", env.Config.EndpointURL, clusterID),
 		BearerToken: env.Token.AccessToken,
 	}
 }
