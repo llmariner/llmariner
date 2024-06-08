@@ -290,8 +290,8 @@ func listPodsForJob(ctx context.Context, job *jv1.Job) ([]corev1.Pod, error) {
 	}
 	podClient := kc.CoreV1().Pods(namespace)
 	resp, err := podClient.List(ctx, metav1.ListOptions{
-		// This is an implicit assumption that the pod name is "job-<job_id>".
-		LabelSelector: fmt.Sprintf("job-name=job-%s", job.Id),
+		// This is an implicit assumption that the job name is equal to "<job_id>".
+		LabelSelector: fmt.Sprintf("job-name=%s", job.Id),
 	})
 	if err != nil {
 		return nil, err
