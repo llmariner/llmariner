@@ -43,3 +43,6 @@ session-manager-server:
 
 user-manager-server:
   fullnameOverride: user-manager-server
+
+vector-store-manager-server:
+  fullnameOverride: vector-store-manager-server
