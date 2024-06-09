@@ -38,6 +38,7 @@ def update_chart(filename):
         'user-manager',
         'rbac-manager',
         'session-manager',
+        'vector-store-manager',
         ]
     tags = {}
     for repo in repos:
@@ -88,6 +89,9 @@ dependencies:
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
   version: %(user-manager)s
+  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+- name: vector-store-manager-server
+  version: %(vector-store-manager)s
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 """ % tags
     # Write the chart to the file
