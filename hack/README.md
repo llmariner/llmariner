@@ -53,6 +53,18 @@ job-manager-dispatcher:
 
 The fake-job already has an output model in its container image, and it just copies to the output directory.
 
+You can also update `deploy_llm_operator.sh` to take `llm-operator-values-cpu-only.yaml` when deploying a Helm chart.
+
+```console
+helm upgrade \
+  --install \
+  -n llm-operator \
+  llm-operator \
+  llm-operator/llm-operator \
+  -f llm-operator-values.yaml \
+  -f llm-operator-values-cpu-only.yaml
+```
+
 ## Deployment to a Nvidia H100 Launchpad Instance
 
 ```bash
