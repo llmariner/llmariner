@@ -2,8 +2,10 @@
 
 set -euo pipefail
 
+basedir=$(dirname "$0")
+
 kubectl create namespace postgres
-kubectl apply --namespace postgres -f postgres.yaml
+kubectl apply --namespace postgres -f "${basedir}"/postgres.yaml
 kubectl wait --timeout=60s --for=condition=ready pod -n postgres -l app=postgres
 # Wait for extra seconds
 sleep 5
@@ -13,4 +15,4 @@ for db in "${dbs[@]}"; do
   kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE ${db};"
 done
 
-kubectl apply -n llm-operator -f postgres-secret.yaml
+kubectl apply -n llm-operator -f "${basedir}"/postgres-secret.yaml
