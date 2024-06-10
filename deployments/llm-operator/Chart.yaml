@@ -15,10 +15,10 @@ dependencies:
   version: 0.47.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-engine
-  version: 0.100.0
+  version: 0.101.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-server
-  version: 0.100.0
+  version: 0.101.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
   version: 0.144.0
