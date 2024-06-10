@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+basedir=$(dirname "$0")
+
 cluster_name="llm-operator-demo"
 
-kind create cluster --name "${cluster_name}" --config ./kind-cluster.yaml
+kind create cluster --name "${cluster_name}" --config "${basedir}"/kind-cluster.yaml
