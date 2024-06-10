@@ -27,10 +27,10 @@ dependencies:
   version: 0.144.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
-  version: 0.68.0
+  version: 0.71.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-server
-  version: 0.68.0
+  version: 0.71.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: rbac-server
   version: 0.74.0
