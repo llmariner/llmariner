@@ -138,28 +138,25 @@ func CreateNewConfig() error {
 	if err != nil {
 		return err
 	}
-
 	// Remove the trailing slash.
 	endpointURL = strings.TrimSuffix(endpointURL, "/")
-	d := defaultIssuerURL
-	if !strings.HasPrefix(endpointURL, "https//localhost") {
-		// If the endpoint URL is not a localhost, use that for the issuer URL.
-		d = fmt.Sprintf("%s/dex", endpointURL)
-	}
 
-	issuerURL, err := askWithDefaultValue(
-		p,
-		"Input OIDC Issuer URL for login",
-		d,
-		func(v string) error {
-			if !isHTTPURL(v) {
-				return errors.New("must start with 'http://' or 'https://'")
-			}
-			return nil
-		},
-	)
-	if err != nil {
-		return err
+	issuerURL := fmt.Sprintf("%s/dex", endpointURL)
+	if strings.HasPrefix(endpointURL, "http://localhost") {
+		issuerURL, err = askWithDefaultValue(
+			p,
+			"Input OIDC Issuer URL for login",
+			defaultIssuerURL,
+			func(v string) error {
+				if !isHTTPURL(v) {
+					return errors.New("must start with 'http://' or 'https://'")
+				}
+				return nil
+			},
+		)
+		if err != nil {
+			return err
+		}
 	}
 
 	c := &C{
