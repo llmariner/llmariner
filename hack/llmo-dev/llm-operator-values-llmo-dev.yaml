@@ -1,0 +1,8 @@
+global:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls:
+      hosts:
+      - api.dev.llmo.cloudnatix.com
+      secretName: api-tls
