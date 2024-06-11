@@ -6,3 +6,27 @@ global:
       hosts:
       - api.dev.llmo.cloudnatix.com
       secretName: api-tls
+
+  auth:
+    oidcIssuerUrl: https://api.dev.llmo.cloudnatix.com/v1/dex
+
+dex-server:
+  oauth2:
+    passwordConnector:
+      enable: false
+    responseTypes:
+    - code
+  connectors:
+  - type: oidc
+    id: okta
+    name: okta
+    config:
+      issuer: https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7
+      clientID: 0oak1yta82395U5wP4x7
+      clientSecret: nxU6XRatwKdweHn-CgS5YiYKNfahfS8l1N3kjhqNeWfPEAEb7ub2TfvezU5OYifH
+      redirectURI: https://api.dev.llmo.cloudnatix.com/v1/dex/callback
+      insecureSkipEmailVerified: true
+
+  enablePasswordDb: false
+  staticPassword:
+    enable: false
