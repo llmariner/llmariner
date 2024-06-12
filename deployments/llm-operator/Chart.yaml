@@ -6,44 +6,44 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: cluster-manager-server
-  version: 0.5.0
+  version: 0.6.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: dex-server
-  version: 0.74.0
+  version: 0.77.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: file-manager-server
-  version: 0.47.0
+  version: 0.48.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-engine
-  version: 0.101.0
+  version: 0.102.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: inference-manager-server
-  version: 0.101.0
+  version: 0.102.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
-  version: 0.144.0
+  version: 0.148.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-server
-  version: 0.144.0
+  version: 0.148.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
-  version: 0.71.0
+  version: 0.72.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-server
-  version: 0.71.0
+  version: 0.72.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: rbac-server
-  version: 0.74.0
+  version: 0.77.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: session-manager-agent
-  version: 0.17.0
+  version: 0.18.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: session-manager-server
-  version: 0.17.0
+  version: 0.18.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
-  version: 0.69.0
+  version: 0.71.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: vector-store-manager-server
-  version: 0.2.0
+  version: 0.3.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
