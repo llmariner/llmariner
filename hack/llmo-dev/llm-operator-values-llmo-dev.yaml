@@ -23,7 +23,7 @@ dex-server:
     config:
       issuer: https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7
       clientID: 0oak1yta82395U5wP4x7
-      clientSecret: nxU6XRatwKdweHn-CgS5YiYKNfahfS8l1N3kjhqNeWfPEAEb7ub2TfvezU5OYifH
+      clientSecret: $CLIENT_SECRET
       redirectURI: https://api.dev.llmo.cloudnatix.com/v1/dex/callback
       insecureSkipEmailVerified: true
 
