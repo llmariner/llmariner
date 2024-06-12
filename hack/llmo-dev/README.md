@@ -3,7 +3,7 @@
 This directory contains the configurations and scripts for deploying
 LLM Operator and configure endpoint with https://api.dev.llmo.cloudnatix.com/v1.
 
-```console
+```bash
 ./deploy_cert_manager.sh
 ./deploy_external_dns.sh
 
@@ -13,6 +13,18 @@ kubectl apply -f kong_plugin.yaml
 ```
 
 Cert Manager and External DNS require IAM role `arn:aws:iam::730335229895:role/LLMOperatorVMRole`.
+
+
+You'll need to create organization owners in the database.
+
+```console
+kubectl exec -it -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d user_manager
+
+> insert into organization_users
+  (organization_id, user_id, role, created_at, updated_at)
+values
+  ...
+```
 
 # Limitation: External DNS
 
