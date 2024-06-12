@@ -21,10 +21,10 @@ dependencies:
   version: 0.102.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-dispatcher
-  version: 0.148.0
+  version: 0.150.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: job-manager-server
-  version: 0.148.0
+  version: 0.150.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: model-manager-loader
   version: 0.72.0
@@ -36,10 +36,10 @@ dependencies:
   version: 0.77.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: session-manager-agent
-  version: 0.18.0
+  version: 0.20.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: session-manager-server
-  version: 0.18.0
+  version: 0.20.0
   repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
 - name: user-manager-server
   version: 0.71.0
