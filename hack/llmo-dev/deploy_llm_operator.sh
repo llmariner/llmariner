@@ -4,14 +4,11 @@ set -euo pipefail
 
 basedir=$(dirname "$0")
 
-helm repo add llm-operator http://llm-operator-charts.s3-website-us-west-2.amazonaws.com/
-helm repo update
-
 helm upgrade \
   --install \
   -n llm-operator \
   llm-operator \
-  llm-operator/llm-operator \
+  oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator \
   -f "${basedir}"/../llm-operator-values.yaml \
   -f "${basedir}"/../llm-operator-values-cpu-only.yaml \
   -f "${basedir}"/llm-operator-values-llmo-dev.yaml
