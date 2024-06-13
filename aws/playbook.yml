@@ -228,10 +228,6 @@
     ansible.builtin.copy:
       src: ../hack/llm-operator-values.yaml
       dest: llm-operator-values.yaml
-  - name: Setup llm-operator helm repository
-    kubernetes.core.helm_repository:
-      name: llm-operator
-      repo_url: oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator
   - name: Deploy llm-operator
     kubernetes.core.helm:
       release_name: llm-operator
