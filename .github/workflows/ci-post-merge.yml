@@ -35,17 +35,16 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::803339316953:role/github-actions-ecr-push-llm-operators
-        aws-region: us-west-2
+        aws-region: us-east-1
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        registry-type: public
     - name: Set up Helm
       uses: Azure/setup-helm@v4
-    - name: Set up charts directory
-      run: mkdir charts
-    - name: build helm chart
+    - name: build and push helm chart
       run: |
         helm dependency build ./deployments/llm-operator
-        helm package --version ${{ needs.update-tag.outputs.new_version }} --destination ./charts ./deployments/llm-operator
-    - name: Rebuild index.yaml and push
-      run: |
-        curl -o index.yaml http://llm-operator-charts.s3-website-us-west-2.amazonaws.com/index.yaml
-        helm repo index charts --merge index.yaml --url http://llm-operator-charts.s3-website-us-west-2.amazonaws.com/
-        aws s3 sync ./charts s3://llm-operator-charts
+        helm package --version ${{ needs.update-tag.outputs.new_version }} ./deployments/llm-operator
+        helm push llm-operator-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/v8n3t7y5/llm-operator-charts
