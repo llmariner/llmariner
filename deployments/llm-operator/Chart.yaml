@@ -9,7 +9,7 @@ dependencies:
   version: 0.7.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: dex-server
-  version: 0.78.0
+  version: 0.79.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: file-manager-server
   version: 0.49.0
@@ -33,7 +33,7 @@ dependencies:
   version: 0.73.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: rbac-server
-  version: 0.78.0
+  version: 0.79.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: session-manager-agent
   version: 0.22.0

@@ -44,6 +44,24 @@ def update_chart(filename):
     for repo in repos:
         tag = get_latest_tag(repo)
         tags[repo] = tag
+
+    deps = {
+        'cluster-manager-server': tags['cluster-manager'],
+        'dex-server': tags['rbac-manager'],
+        'file-manager-server': tags['file-manager'],
+        'inference-manager-engine': tags['inference-manager'],
+        'inference-manager-server': tags['inference-manager'],
+        'job-manager-dispatcher': tags['job-manager'],
+        'job-manager-server': tags['job-manager'],
+        'model-manager-loader': tags['model-manager'],
+        'model-manager-server': tags['model-manager'],
+        'rbac-server': tags['rbac-manager'],
+        'session-manager-agent': tags['session-manager'],
+        'session-manager-server': tags['session-manager'],
+        'user-manager-server': tags['user-manager'],
+        'vector-store-manager-server': tags['vector-store-manager'],
+    }
+
     chart = """apiVersion: v2
 name: llm-operator
 description: A Helm chart for LLM Operator
@@ -51,49 +69,12 @@ type: application
 version: 0.1.0
 appVersion: 0.1.0
 dependencies:
-- name: cluster-manager-server
-  version: %(cluster-manager)s
+"""
+    for dep, tag in deps.items():
+        chart += """- name: %(dep)s
+  version: %(tag)s
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: dex-server
-  version: %(rbac-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: file-manager-server
-  version: %(file-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: inference-manager-engine
-  version: %(inference-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: inference-manager-server
-  version: %(inference-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: job-manager-dispatcher
-  version: %(job-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: job-manager-server
-  version: %(job-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: model-manager-loader
-  version: %(model-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: model-manager-server
-  version: %(model-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: rbac-server
-  version: %(rbac-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: session-manager-agent
-  version: %(session-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: session-manager-server
-  version: %(session-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: user-manager-server
-  version: %(user-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-- name: vector-store-manager-server
-  version: %(vector-store-manager)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-""" % tags
+""" % {'dep': dep, 'tag': tag}
     # Write the chart to the file
     with open(filename, 'w') as f:
         f.write(chart)
