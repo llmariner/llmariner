@@ -53,46 +53,46 @@ appVersion: 0.1.0
 dependencies:
 - name: cluster-manager-server
   version: %(cluster-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: dex-server
   version: %(rbac-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: file-manager-server
   version: %(file-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: inference-manager-engine
   version: %(inference-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: inference-manager-server
   version: %(inference-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: job-manager-dispatcher
   version: %(job-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: job-manager-server
   version: %(job-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: model-manager-loader
   version: %(model-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: model-manager-server
   version: %(model-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: rbac-server
   version: %(rbac-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: session-manager-agent
   version: %(session-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: session-manager-server
   version: %(session-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: user-manager-server
   version: %(user-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 - name: vector-store-manager-server
   version: %(vector-store-manager)s
-  repository: "http://llm-operator-charts.s3-website-us-west-2.amazonaws.com"
+  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
 """ % tags
     # Write the chart to the file
     with open(filename, 'w') as f:
