@@ -1,0 +1,17 @@
+# Helm values for multi-cluster deployment.
+
+global:
+  workerServiceGrpcService:
+    annotations:
+      konghq.com/protocol: grpc
+
+  workerServiceIngress:
+    create: true
+    ingressClassName: kong
+    annotations:
+      konghq.com/protocols: grpc,grpcs
+
+# TODO(kenji): Add more.
+
+job-manager-dispatcher:
+  jobManagerServerWorkerServiceAddr: kong-proxy.kong:80
