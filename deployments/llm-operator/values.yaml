@@ -4,6 +4,10 @@ global:
     # This default value works if rbac-server runs in the same namespace.
     rbacInternalServerAddr: rbac-server-internal-grpc:8082
 
+tags:
+  controle-plane: true
+  worker: true
+
 # To avoid adding a release name prefix
 cluster-manager-server:
   fullnameOverride: cluster-manager-server
