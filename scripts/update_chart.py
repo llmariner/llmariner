@@ -78,7 +78,7 @@ appVersion: 0.1.0
 dependencies:
 """
     for dep, ver in deps.items():
-        component_type = "worker" if dep in workers else "controle-plane"
+        component_type = "worker" if dep in workers else "control-plane"
         chart += """- name: %(dep)s
   version: %(ver)s
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"

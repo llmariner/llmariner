@@ -9,17 +9,17 @@ dependencies:
   version: 0.7.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: dex-server
   version: 0.79.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: file-manager-server
   version: 0.49.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: inference-manager-engine
   version: 0.104.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
@@ -29,7 +29,7 @@ dependencies:
   version: 0.104.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: job-manager-dispatcher
   version: 0.152.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
@@ -39,7 +39,7 @@ dependencies:
   version: 0.152.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: model-manager-loader
   version: 0.73.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
@@ -49,12 +49,12 @@ dependencies:
   version: 0.73.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: rbac-server
   version: 0.79.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: session-manager-agent
   version: 0.22.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
@@ -64,14 +64,14 @@ dependencies:
   version: 0.22.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: user-manager-server
   version: 0.72.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane
 - name: vector-store-manager-server
   version: 0.4.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - controle-plane
+  - control-plane

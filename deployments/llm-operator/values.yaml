@@ -5,7 +5,7 @@ global:
     rbacInternalServerAddr: rbac-server-internal-grpc:8082
 
 tags:
-  controle-plane: true
+  control-plane: true
   worker: true
 
 # To avoid adding a release name prefix
