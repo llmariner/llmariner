@@ -233,6 +233,6 @@
       release_name: llm-operator
       release_namespace: llm-operator
       create_namespace: true
-      chart_ref: llm-operator/llm-operator
+      chart_ref: oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator
       values_files:
       - llm-operator-values.yaml
