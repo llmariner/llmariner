@@ -62,7 +62,7 @@ def update_chart(filename):
         'vector-store-manager-server': vers['vector-store-manager'],
     }
 
-    worker_set = {
+    workers = {
         'inference-manager-engine',
         'job-manager-dispatcher',
         'model-manager-loader',
@@ -78,12 +78,13 @@ appVersion: 0.1.0
 dependencies:
 """
     for dep, ver in deps.items():
+        component_type = "worker" if dep in workers else "controle-plane"
         chart += """- name: %(dep)s
   version: %(ver)s
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
-  - %(tag)s
-""" % {'dep': dep, 'ver': ver, 'tag': "worker" if dep in worker_set else "controle-plane"}
+  - %(component_type)s
+""" % {'dep': dep, 'ver': ver, 'component_type': component_type}
 
     # Write the chart to the file
     with open(filename, 'w') as f:
