@@ -8,42 +8,70 @@ dependencies:
 - name: cluster-manager-server
   version: 0.7.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: dex-server
   version: 0.79.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: file-manager-server
   version: 0.49.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: inference-manager-engine
   version: 0.104.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - worker
 - name: inference-manager-server
   version: 0.104.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: job-manager-dispatcher
   version: 0.152.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - worker
 - name: job-manager-server
   version: 0.152.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: model-manager-loader
   version: 0.73.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - worker
 - name: model-manager-server
   version: 0.73.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: rbac-server
   version: 0.79.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: session-manager-agent
   version: 0.22.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - worker
 - name: session-manager-server
   version: 0.22.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: user-manager-server
   version: 0.72.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
 - name: vector-store-manager-server
   version: 0.4.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  tags:
+  - controle-plane
