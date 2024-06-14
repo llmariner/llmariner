@@ -7,7 +7,7 @@
 import subprocess
 import sys
 
-def get_latest_tag(repo):
+def get_latest_version(repo):
     cmds = [
         'git',
         'ls-remote',
@@ -40,26 +40,33 @@ def update_chart(filename):
         'session-manager',
         'vector-store-manager',
         ]
-    tags = {}
+    vers = {}
     for repo in repos:
-        tag = get_latest_tag(repo)
-        tags[repo] = tag
+        ver = get_latest_version(repo)
+        vers[repo] = ver
 
     deps = {
-        'cluster-manager-server': tags['cluster-manager'],
-        'dex-server': tags['rbac-manager'],
-        'file-manager-server': tags['file-manager'],
-        'inference-manager-engine': tags['inference-manager'],
-        'inference-manager-server': tags['inference-manager'],
-        'job-manager-dispatcher': tags['job-manager'],
-        'job-manager-server': tags['job-manager'],
-        'model-manager-loader': tags['model-manager'],
-        'model-manager-server': tags['model-manager'],
-        'rbac-server': tags['rbac-manager'],
-        'session-manager-agent': tags['session-manager'],
-        'session-manager-server': tags['session-manager'],
-        'user-manager-server': tags['user-manager'],
-        'vector-store-manager-server': tags['vector-store-manager'],
+        'cluster-manager-server': vers['cluster-manager'],
+        'dex-server': vers['rbac-manager'],
+        'file-manager-server': vers['file-manager'],
+        'inference-manager-engine': vers['inference-manager'],
+        'inference-manager-server': vers['inference-manager'],
+        'job-manager-dispatcher': vers['job-manager'],
+        'job-manager-server': vers['job-manager'],
+        'model-manager-loader': vers['model-manager'],
+        'model-manager-server': vers['model-manager'],
+        'rbac-server': vers['rbac-manager'],
+        'session-manager-agent': vers['session-manager'],
+        'session-manager-server': vers['session-manager'],
+        'user-manager-server': vers['user-manager'],
+        'vector-store-manager-server': vers['vector-store-manager'],
+    }
+
+    worker_set = {
+        'inference-manager-engine',
+        'job-manager-dispatcher',
+        'model-manager-loader',
+        'session-manager-agent',
     }
 
     chart = """apiVersion: v2
@@ -70,11 +77,14 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 """
-    for dep, tag in deps.items():
+    for dep, ver in deps.items():
         chart += """- name: %(dep)s
-  version: %(tag)s
+  version: %(ver)s
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
-""" % {'dep': dep, 'tag': tag}
+  tags:
+  - %(tag)s
+""" % {'dep': dep, 'ver': ver, 'tag': "worker" if dep in worker_set else "controle-plane"}
+
     # Write the chart to the file
     with open(filename, 'w') as f:
         f.write(chart)
