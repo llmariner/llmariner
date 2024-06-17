@@ -13,11 +13,12 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/llm-operator/cluster-manager v0.2.0
-	github.com/llm-operator/file-manager v0.42.0
+	github.com/llm-operator/file-manager v0.47.0
 	github.com/llm-operator/inference-manager v0.38.0
 	github.com/llm-operator/job-manager v0.144.0
 	github.com/llm-operator/model-manager v0.66.0
 	github.com/llm-operator/user-manager v0.63.0
+	github.com/llm-operator/vector-store-manager v0.10.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/rodaine/table v1.2.0
