@@ -44,7 +44,7 @@ func LoadToken(nbID string) (string, error) {
 
 	token, ok := t.Tokens[nbID]
 	if !ok {
-		return "", fmt.Errorf("key not found")
+		return "", fmt.Errorf("notebook token not found")
 	}
 	return token, nil
 }
