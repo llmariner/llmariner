@@ -31,22 +31,22 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.152.0
+  version: 0.154.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.152.0
+  version: 0.154.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.73.0
+  version: 0.75.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.73.0
+  version: 0.75.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
@@ -56,12 +56,12 @@ dependencies:
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 0.22.0
+  version: 0.24.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - worker
 - name: session-manager-server
-  version: 0.22.0
+  version: 0.24.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
@@ -71,7 +71,7 @@ dependencies:
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.4.0
+  version: 0.5.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
