@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -43,19 +44,13 @@ func listCmd() *cobra.Command {
 }
 
 func deleteCmd() *cobra.Command {
-	var (
-		id string
-	)
-	cmd := &cobra.Command{
-		Use:  "delete",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "delete <ID>",
+		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return delete(cmd.Context(), id)
+			return delete(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&id, "id", "", "ID of the model to delete")
-	_ = cmd.MarkFlagRequired("id")
-	return cmd
 }
 
 func list(ctx context.Context) error {
@@ -114,5 +109,12 @@ func delete(ctx context.Context, id string) error {
 
 	fmt.Printf("Deleted the model (ID: %q).\n", id)
 
+	return nil
+}
+
+func validateIDArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<ID> is required argument")
+	}
 	return nil
 }
