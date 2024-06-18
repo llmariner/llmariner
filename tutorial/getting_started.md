@@ -8,7 +8,7 @@ This notebook goes through the basic usage of the LLM endpoints provided by LLM 
   the [documentation site](https://llm-operator.readthedocs.io/en/latest/index.html) for the installation procedure.
 - This notebook uses the [OpenAI Python library](https://github.com/openai/openai-python). Please run
   `pip install openai` to install it.
-- This notebook requires an API key. Please run `llmo auth login` and `llmo auth api-keys create --name <Name>` to create an API key.
+- This notebook requires an API key. Please run `llmo auth login` and `llmo auth api-keys create <Name>` to create an API key.
 
 ## Set up a Client
 
