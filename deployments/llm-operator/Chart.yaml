@@ -66,12 +66,12 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.72.0
+  version: 0.73.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.11.0
+  version: 0.15.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
