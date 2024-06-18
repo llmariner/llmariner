@@ -2,6 +2,7 @@ package org
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,17 +40,13 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var title, namespace string
-	cmd := &cobra.Command{
-		Use:  "create",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "create <TITLE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), title, namespace)
+			return create(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
-	_ = cmd.MarkFlagRequired("title")
-	return cmd
 }
 
 func listCmd() *cobra.Command {
@@ -63,73 +60,60 @@ func listCmd() *cobra.Command {
 }
 
 func deleteCmd() *cobra.Command {
-	var title string
-	cmd := &cobra.Command{
-		Use:  "delete",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "delete <TITIE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return delete(cmd.Context(), title)
+			return delete(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
-	_ = cmd.MarkFlagRequired("title")
-	return cmd
 }
 
 func addMemberCmd() *cobra.Command {
-	var title, email, roleStr string
+	var email, roleStr string
 	cmd := &cobra.Command{
-		Use:  "add-member",
-		Args: cobra.NoArgs,
+		Use:  "add-member <TITLE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			r, ok := role.OrganizationRoleToProtoEnum(roleStr)
 			if !ok {
-				return fmt.Errorf("invalid role %q. Must be 'admin' or 'reader'", roleStr)
+				return fmt.Errorf("invalid role %q. Must be 'owner' or 'reader'", roleStr)
 			}
-			return addMember(cmd.Context(), title, email, r)
+			return addMember(cmd.Context(), args[0], email, r)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
 	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the user (owner or reader)")
-	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("email")
 	_ = cmd.MarkFlagRequired("role")
 	return cmd
 }
 
 func listMembersCmd() *cobra.Command {
-	var title string
-	cmd := &cobra.Command{
-		Use:  "list-members",
-		Args: cobra.NoArgs,
+	return &cobra.Command{
+		Use:  "list-members <TITIE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return listMembers(cmd.Context(), title)
+			return listMembers(cmd.Context(), args[0])
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
-	_ = cmd.MarkFlagRequired("title")
-	_ = cmd.MarkFlagRequired("role")
-	return cmd
 }
 
 func removeMemberCmd() *cobra.Command {
-	var title, email string
+	var email string
 	cmd := &cobra.Command{
-		Use:  "remove-member",
+		Use:  "remove-member <TITLE>",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return removeMember(cmd.Context(), title, email)
+			return removeMember(cmd.Context(), args[0], email)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the organization")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
-	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("email")
 	return cmd
 }
 
-func create(ctx context.Context, title, namespace string) error {
+func create(ctx context.Context, title string) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -340,4 +324,11 @@ func ListOrganizations(env *runtime.Env) ([]*uv1.Organization, error) {
 		return nil, err
 	}
 	return resp.Organizations, nil
+}
+
+func validateTitleArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<TITLE> is required argument")
+	}
+	return nil
 }
