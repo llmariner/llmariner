@@ -11,7 +11,17 @@ global:
     annotations:
       konghq.com/protocols: grpc,grpcs
 
-# TODO(kenji): Add more.
+inference-manager-engine:
+  jobManagerServerWorkerServiceAddr: kong-proxy.kong:80
 
 job-manager-dispatcher:
+  fileManagerServerWorkerServiceAddr: kong-proxy.kong:80
   jobManagerServerWorkerServiceAddr: kong-proxy.kong:80
+  modelManagerServerWorkerServiceAddr: kong-proxy.kong:80
+
+model-manager-loader:
+  modelManagerServerWorkerServiceAddr: kong-proxy.kong:80
+
+session-manager-agent:
+  proxy:
+    baseUrl: http://kong-proxy.kong:80
