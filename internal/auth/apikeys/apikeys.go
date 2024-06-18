@@ -2,6 +2,7 @@ package apikeys
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -37,18 +38,16 @@ func Cmd() *cobra.Command {
 
 func createCmd() *cobra.Command {
 	var (
-		name         string
 		orgTitle     string
 		projectTitle string
 	)
 	cmd := &cobra.Command{
-		Use:  "create",
-		Args: cobra.NoArgs,
+		Use:  "create <NAME>",
+		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), name, orgTitle, projectTitle)
+			return create(cmd.Context(), args[0], orgTitle, projectTitle)
 		},
 	}
-	cmd.Flags().StringVar(&name, "name", "", "Name of the API key")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Title of the organization. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&projectTitle, "project-title", "p", "", "Title of the project. The project in the current context is used if not specified.")
 	_ = cmd.MarkFlagRequired("name")
@@ -74,21 +73,18 @@ func listCmd() *cobra.Command {
 
 func deleteCmd() *cobra.Command {
 	var (
-		name         string
 		orgTitle     string
 		projectTitle string
 	)
 	cmd := &cobra.Command{
 		Use:  "delete",
-		Args: cobra.NoArgs,
+		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return delete(cmd.Context(), name, orgTitle, projectTitle)
+			return delete(cmd.Context(), args[0], orgTitle, projectTitle)
 		},
 	}
-	cmd.Flags().StringVar(&name, "name", "", "Name of the API key")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Title of the organization. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&projectTitle, "project-title", "p", "", "Title of the project. The project in the current context is used if not specified.")
-	_ = cmd.MarkFlagRequired("name")
 	return cmd
 }
 
@@ -272,4 +268,11 @@ func findKeyByName(
 		}
 	}
 	return nil, false, nil
+}
+
+func validateNameArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<NAME> is required argument")
+	}
+	return nil
 }
