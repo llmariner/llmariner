@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -42,18 +43,16 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var title, orgTitle, namespace string
+	var orgTitle, namespace string
 	cmd := &cobra.Command{
-		Use:  "create",
-		Args: cobra.NoArgs,
+		Use:  "create <TITLE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), title, orgTitle, namespace)
+			return create(cmd.Context(), args[0], orgTitle, namespace)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&namespace, "kubernetes-namespace", "n", "", "Kubernetes namesapce of the project")
-	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("kubernetes-namespace")
 	return cmd
 }
@@ -72,72 +71,64 @@ func listCmd() *cobra.Command {
 }
 
 func deleteCmd() *cobra.Command {
-	var title, orgTitle string
+	var orgTitle string
 	cmd := &cobra.Command{
-		Use:  "delete",
-		Args: cobra.NoArgs,
+		Use:  "delete <TITLE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return delete(cmd.Context(), title, orgTitle)
+			return delete(cmd.Context(), args[0], orgTitle)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
-	_ = cmd.MarkFlagRequired("title")
 	return cmd
 }
 
 func addMemberCmd() *cobra.Command {
-	var title, orgTitle, email, roleStr string
+	var orgTitle, email, roleStr string
 	cmd := &cobra.Command{
-		Use:  "add-member",
-		Args: cobra.NoArgs,
+		Use:  "add-member <TITLE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			r, ok := role.ProjectRoleToProtoEnum(roleStr)
 			if !ok {
 				return fmt.Errorf("invalid role %q", roleStr)
 			}
-			return addMember(cmd.Context(), title, orgTitle, email, r)
+			return addMember(cmd.Context(), args[0], orgTitle, email, r)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
 	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the user (owner or reader)")
-	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("email")
 	_ = cmd.MarkFlagRequired("role")
 	return cmd
 }
 
 func listMembersCmd() *cobra.Command {
-	var title, orgTitle string
+	var orgTitle string
 	cmd := &cobra.Command{
-		Use:  "list-members",
-		Args: cobra.NoArgs,
+		Use:  "list-members <TITLE>",
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return listMembers(cmd.Context(), title, orgTitle)
+			return listMembers(cmd.Context(), args[0], orgTitle)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
-	_ = cmd.MarkFlagRequired("title")
 
 	return cmd
 }
 
 func removeMemberCmd() *cobra.Command {
-	var title, orgTitle, email string
+	var orgTitle, email string
 	cmd := &cobra.Command{
-		Use:  "remove-member",
+		Use:  "remove-member <TITLE>",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return removeMember(cmd.Context(), title, orgTitle, email)
+			return removeMember(cmd.Context(), args[0], orgTitle, email)
 		},
 	}
-	cmd.Flags().StringVar(&title, "title", "", "Title of the project")
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
-	_ = cmd.MarkFlagRequired("title")
 	_ = cmd.MarkFlagRequired("email")
 	return cmd
 }
@@ -409,4 +400,11 @@ func getOrgID(env *runtime.Env, orgTitle string) (string, error) {
 		return "", fmt.Errorf("organization %q not found", orgTitle)
 	}
 	return org.Id, nil
+}
+
+func validateTitleArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<TITLE> is required argument")
+	}
+	return nil
 }
