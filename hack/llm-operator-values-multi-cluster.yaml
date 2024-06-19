@@ -11,7 +11,20 @@ global:
     annotations:
       konghq.com/protocols: grpc,grpcs
 
-# TODO(kenji): Add more.
+inference-manager-engine:
+  jobManagerServerWorkerServiceAddr: kong-proxy.kong:80
 
 job-manager-dispatcher:
+  fileManagerServerWorkerServiceAddr: kong-proxy.kong:80
   jobManagerServerWorkerServiceAddr: kong-proxy.kong:80
+  modelManagerServerWorkerServiceAddr: kong-proxy.kong:80
+
+model-manager-loader:
+  modelManagerServerWorkerServiceAddr: kong-proxy.kong:80
+
+# TODO(kenji): Fix this. We cannot currently make the agent connect
+# to the server via Kong since Kong does route a CONNECT request
+# to a backend. Instead Kong returns a method-not-alowed error.
+# session-manager-agent:
+#   proxy:
+#     baseUrl: http://kong-proxy.kong:80
