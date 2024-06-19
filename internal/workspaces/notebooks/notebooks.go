@@ -197,7 +197,7 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("ID", "Name", "Image", "Status", "Age")
+	tbl := table.New("Name", "Image", "Status", "Age")
 	ui.FormatTable(tbl)
 	for _, j := range nbs {
 		var age string
@@ -205,7 +205,6 @@ func list(ctx context.Context) error {
 			age = itime.ToAge(time.Unix(j.StartedAt, 0))
 		}
 		tbl.AddRow(
-			j.Id,
 			j.Name,
 			j.Image,
 			j.Status,
