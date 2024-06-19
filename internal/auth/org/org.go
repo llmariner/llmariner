@@ -127,7 +127,7 @@ func create(ctx context.Context, title string) error {
 		return err
 	}
 
-	fmt.Printf("Created a new organization. (ID: %s)\n", resp.Id)
+	fmt.Printf("Created the organization (ID: %q).\n", resp.Id)
 	return nil
 }
 

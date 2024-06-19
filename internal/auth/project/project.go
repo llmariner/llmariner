@@ -153,7 +153,7 @@ func create(ctx context.Context, title, orgTitle, namespace string) error {
 		return err
 	}
 
-	fmt.Printf("Created a new project. (ID: %s)\n", resp.Id)
+	fmt.Printf("Created the project (ID: %q).\n", resp.Id)
 	return nil
 }
 

@@ -186,7 +186,7 @@ func create(ctx context.Context, name string, opts createOpts) error {
 	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
 		return err
 	}
-	fmt.Printf("created the notebook (ID: %q).\n", resp.Id)
+	fmt.Printf("Created the notebook (ID: %q).\n", resp.Id)
 
 	return nbtoken.SaveToken(resp.Id, resp.Token)
 }

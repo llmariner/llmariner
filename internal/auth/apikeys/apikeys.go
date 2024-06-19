@@ -110,7 +110,7 @@ func create(ctx context.Context, name, orgTitle, projectTitle string) error {
 		return err
 	}
 
-	fmt.Printf("Created a new API key. Secret: %s\n", resp.Secret)
+	fmt.Printf("Created the API key. Secret: %s\n", resp.Secret)
 	return nil
 }
 
