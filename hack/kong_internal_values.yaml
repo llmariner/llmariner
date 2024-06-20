@@ -1,0 +1,7 @@
+ingressController:
+  ingressClass: kong-internal
+
+proxy:
+  type: ClusterIP
+
+fullnameOverride: kong-internal

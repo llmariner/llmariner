@@ -134,6 +134,20 @@
       - value: ingressController.installCRDs=false
       values_files:
       - kong_values.yaml
+  - name: Copy kong_internal_values file
+    ansible.builtin.copy:
+      src: ../hack/kong_internal_values.yaml
+      dest: kong_internal_values.yaml
+  - name: Deploy kong internal
+    kubernetes.core.helm:
+      release_name: kong-internal
+      release_namespace: kong-internal
+      create_namespace: true
+      chart_ref: kong/kong
+      set_values:
+      - value: ingressController.installCRDs=false
+      values_files:
+      - kong_internal_values.yaml
 
   - name: Setup postgres namespace
     kubernetes.core.k8s:
