@@ -6,7 +6,7 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: cluster-manager-server
-  version: 0.10.0
+  version: 0.11.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
@@ -31,12 +31,12 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.162.0
+  version: 0.163.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.162.0
+  version: 0.163.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
