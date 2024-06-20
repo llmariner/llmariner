@@ -63,3 +63,7 @@ model-manager-loader:
   baseModels:
   - google/gemma-2b-it
   - google/gemma-2b-it-q4
+
+session-manager-agent:
+  ingressControllerAddress: kong-internal-proxy.kong-internal
+  ingressControllerPort: 80
