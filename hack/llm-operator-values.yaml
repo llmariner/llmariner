@@ -59,6 +59,10 @@ inference-manager-server:
       konghq.com/read-timeout: "360000"
       konghq.com/write-timeout: "360000"
 
+job-manager-dispatcher:
+  notebook:
+    ingressClassName: kong-internal
+
 model-manager-loader:
   baseModels:
   - google/gemma-2b-it
