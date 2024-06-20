@@ -8,7 +8,7 @@ Please follow https://jupyter.org/install to install Juypter. The following is a
 install procedure
 
 ```bash
-VENV_PATH=<your virtual env path
+VENV_PATH=<your virtual env path>
 python -m venv "${VENV_PATH}"
 source "${VENV_PATH}/bin/activate"
 pip install jupyterlab
