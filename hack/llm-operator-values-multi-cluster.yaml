@@ -16,6 +16,7 @@ inference-manager-engine:
   modelManagerServerWorkerServiceAddr: kong-proxy.kong:80
 
 job-manager-dispatcher:
+  clusterManagerServerWorkerServiceAddr: kong-proxy.kong:80
   fileManagerServerWorkerServiceAddr: kong-proxy.kong:80
   jobManagerServerWorkerServiceAddr: kong-proxy.kong:80
   modelManagerServerWorkerServiceAddr: kong-proxy.kong:80
