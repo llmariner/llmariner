@@ -1,9 +1,9 @@
 package root
 
 import (
+	"github.com/llm-operator/cli/internal/admin"
 	"github.com/llm-operator/cli/internal/auth"
 	"github.com/llm-operator/cli/internal/chat"
-	"github.com/llm-operator/cli/internal/clusters"
 	"github.com/llm-operator/cli/internal/context"
 	"github.com/llm-operator/cli/internal/files"
 	"github.com/llm-operator/cli/internal/finetuning"
@@ -25,8 +25,8 @@ func Cmd() *cobra.Command {
 	cmd.PersistentFlags().StringVar(&ui.Color, "color", string(ui.ColorAuto), "Control color output. Available options are 'auto', 'always' and 'never'.")
 
 	cmd.AddCommand(auth.Cmd())
+	cmd.AddCommand(admin.Cmd())
 	cmd.AddCommand(chat.Cmd())
-	cmd.AddCommand(clusters.Cmd())
 	cmd.AddCommand(context.Cmd())
 	cmd.AddCommand(files.Cmd())
 	cmd.AddCommand(finetuning.Cmd())
