@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/llm-operator/cli/internal/auth/org"
-	"github.com/llm-operator/cli/internal/auth/project"
+	"github.com/llm-operator/cli/internal/admin/org"
+	"github.com/llm-operator/cli/internal/admin/project"
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/runtime"
 	"github.com/llm-operator/cli/internal/ui"

@@ -2,6 +2,8 @@ package admin
 
 import (
 	"github.com/llm-operator/cli/internal/admin/clusters"
+	"github.com/llm-operator/cli/internal/admin/org"
+	"github.com/llm-operator/cli/internal/admin/project"
 	"github.com/spf13/cobra"
 )
 
@@ -14,5 +16,7 @@ func Cmd() *cobra.Command {
 		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(clusters.Cmd())
+	cmd.AddCommand(org.Cmd())
+	cmd.AddCommand(project.Cmd())
 	return cmd
 }
