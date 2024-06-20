@@ -285,7 +285,7 @@ func open(ctx context.Context, id string) error {
 	}
 
 	fmt.Println("Opening browser...")
-	nbURL := fmt.Sprintf("%s/services/notebooks/%s?token=%s", env.Config.EndpointURL, id, token)
+	nbURL := fmt.Sprintf("%s/sessions/%s/v1/services/notebooks/%s?token=%s", env.Config.EndpointURL, resp.ClusterId, id, token)
 	return browser.OpenURL(nbURL)
 }
 
