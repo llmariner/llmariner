@@ -71,7 +71,7 @@ dependencies:
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.19.0
+  version: 0.20.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
