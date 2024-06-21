@@ -2,6 +2,7 @@ package vectorstores
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -29,8 +30,8 @@ func Cmd() *cobra.Command {
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
 	}
-	// TODO(kenji): Support create, update, and get.
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
 	return cmd
 }
@@ -45,9 +46,19 @@ func listCmd() *cobra.Command {
 	}
 }
 
+func getCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "get <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), args[0])
+		},
+	}
+}
+
 func deleteCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:  "delete",
+		Use:  "delete <NAME>",
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return delete(cmd.Context(), args[0])
@@ -75,6 +86,20 @@ func list(ctx context.Context) error {
 
 	tbl.Print()
 
+	return nil
+}
+
+func get(ctx context.Context, name string) error {
+	vs, err := getVectorStoreByName(ctx, name)
+	if err != nil {
+		return err
+	}
+
+	b, err := json.MarshalIndent(vs, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 	return nil
 }
 
