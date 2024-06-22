@@ -1,0 +1,24 @@
+global:
+  worker:
+    registrationKeySecret:
+      name: cluster-registration-key
+      key: regKey
+
+inference-manager-engine:
+  jobManagerServerWorkerServiceAddr: control-plane:80
+  modelManagerServerWorkerServiceAddr: control-plane:80
+  autoscaling:
+    enableKeda: false
+
+job-manager-dispatcher:
+  clusterManagerServerWorkerServiceAddr: control-plane:80
+  fileManagerServerWorkerServiceAddr: control-plane:80
+  jobManagerServerWorkerServiceAddr: control-plane:80
+  modelManagerServerWorkerServiceAddr: control-plane:80
+
+model-manager-loader:
+  modelManagerServerWorkerServiceAddr: control-plane:80
+
+session-manager-agent:
+  proxy:
+    baseUrl: http://control-plane:81

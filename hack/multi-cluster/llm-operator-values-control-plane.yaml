@@ -1,0 +1,10 @@
+global:
+  workerServiceGrpcService:
+    annotations:
+      konghq.com/protocol: grpc
+
+  workerServiceIngress:
+    create: true
+    ingressClassName: kong
+    annotations:
+      konghq.com/protocols: grpc,grpcs
