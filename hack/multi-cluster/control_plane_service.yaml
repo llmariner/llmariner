@@ -1,0 +1,10 @@
+# See https://github.com/kubernetes-sigs/kind/issues/1200#issuecomment-1304855791
+# This is for Mac/Windows (Docker Desktop)
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-plane
+  namespace: llm-operator-wp
+spec:
+  type: ExternalName
+  externalName: host.docker.internal

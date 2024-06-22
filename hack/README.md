@@ -65,52 +65,6 @@ helm upgrade \
   -f llm-operator-values-cpu-only.yaml
 ```
 
-## Test multi-cluster deployment
-
-You can deploy the LLM control plane to the `llm-operator` namespace and
-deploy the worker components to a different namespace (e.g., `llm-operator-worker`).
-
-Here is an example installation flow:
-
-```console
-# Deploy the control plane to the llm-operator namespace.
-helm upgrade \
-  --install \
-  -n llm-operator \
-  llm-operator \
-  oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator \
-  --set tags.worker=false \
-  -f "${basedir}"/llm-operator-values.yaml \
-  -f "${basedir}"/llm-operator-values-cpu-only.yaml \
-  -f "${basedir}"/llm-operator-values-multi-cluster.yaml \
-  --set inference-manager-server.inferenceManagerEngine.namespace=llm-operator-worker
-
-kubectl create namespace llm-operator-worker
-
-# Copy the secret for cluster registration
-kubectl get secrets -n llm-operator default-cluster-registration-key -o yaml > secret.yaml
-# Update the namespace in the YAML file to llm-operator-wroerk.
-kubectl apply -n llm-operator-worker -f secret.yaml
-
-# Create a secret for accessing MinIO.
-export AWS_ACCESS_KEY_ID=llm-operator-key
-export AWS_SECRET_ACCESS_KEY=llm-operator-secret
-kubectl create secret generic -n llm-operator-worker aws \
-  --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
-  --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
-
-# Deploy the worker components to the llm-operator-worker namespace.
-helm upgrade \
-  --install \
-  -n llm-operator-worker \
-  llm-operator \
-  oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator \
-  --set tags.control-plane=false \
-  -f "${basedir}"/llm-operator-values.yaml \
-  -f "${basedir}"/llm-operator-values-cpu-only.yaml \
-  -f "${basedir}"/llm-operator-values-multi-cluster.yaml
-```
-
 ## Deployment to a Nvidia H100 Launchpad Instance
 
 ```bash
