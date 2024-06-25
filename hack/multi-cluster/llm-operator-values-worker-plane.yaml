@@ -4,6 +4,10 @@ global:
       name: cluster-registration-key
       key: regKey
 
+  objectStore:
+    s3:
+      endpointUrl: http://minio:9000
+
 inference-manager-engine:
   jobManagerServerWorkerServiceAddr: control-plane:80
   modelManagerServerWorkerServiceAddr: control-plane:80
