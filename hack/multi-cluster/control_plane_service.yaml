@@ -8,3 +8,14 @@ metadata:
 spec:
   type: ExternalName
   externalName: host.docker.internal
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: llm-operator-wp
+spec:
+  type: ExternalName
+  externalName: host.docker.internal
