@@ -11,7 +11,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 0.82.0
+  version: 0.83.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
@@ -21,22 +21,22 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.129.0
+  version: 0.135.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.129.0
+  version: 0.135.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.165.0
+  version: 0.166.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.165.0
+  version: 0.166.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
@@ -51,7 +51,7 @@ dependencies:
   tags:
   - control-plane
 - name: rbac-server
-  version: 0.82.0
+  version: 0.83.0
   repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
   tags:
   - control-plane
