@@ -14,5 +14,4 @@ kubectl create namespace llm-operator
 "${basedir}"/deploy_llm_operator_control_plane.sh
 
 kubectl apply -n llm-operator -f "${basedir}"/session_manager_server_service.yaml
-
-# Create a service of node port to map port 80 to session-manager-server
+kubectl apply -n llm-operator -f "${basedir}"/inference_manager_server_service.yaml

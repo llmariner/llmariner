@@ -9,7 +9,7 @@ global:
       endpointUrl: http://minio:9000
 
 inference-manager-engine:
-  jobManagerServerWorkerServiceAddr: control-plane:80
+  inferenceManagerServerWorkerServiceAddr: control-plane:82
   modelManagerServerWorkerServiceAddr: control-plane:80
   autoscaling:
     enableKeda: false
