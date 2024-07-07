@@ -85,11 +85,11 @@ spec:
     targetPort: api
     protocol: TCP
     name: api
-    nodePort: 31235
+    nodePort: 31236
   - port: 9090
     targetPort: admin
     protocol: TCP
     name: admin
-    nodePort: 31236
+    nodePort: 31237
   selector:
     app: minio
