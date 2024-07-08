@@ -9,7 +9,7 @@ helm upgrade \
   --wait \
   -n llm-operator \
   llm-operator \
-  oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator \
+  oci://public.ecr.aws/cloudnatix/llm-operator-charts/llm-operator \
   --set tags.worker=false \
   -f "${basedir}"/../llm-operator-values.yaml \
   -f "${basedir}"/../llm-operator-values-cpu-only.yaml \

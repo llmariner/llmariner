@@ -7,71 +7,71 @@ appVersion: 0.1.0
 dependencies:
 - name: cluster-manager-server
   version: 0.11.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: dex-server
   version: 0.83.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: file-manager-server
   version: 0.51.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: inference-manager-engine
   version: 0.135.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: inference-manager-server
   version: 0.135.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: job-manager-dispatcher
   version: 0.166.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
   version: 0.166.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: model-manager-loader
   version: 0.76.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
   version: 0.76.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: rbac-server
   version: 0.83.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: session-manager-agent
   version: 0.33.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: session-manager-server
   version: 0.33.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: user-manager-server
   version: 0.74.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server
   version: 0.27.0
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane

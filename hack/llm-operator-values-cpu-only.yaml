@@ -6,6 +6,6 @@ model-manager-loader:
 # Use a fake job.
 job-manager-dispatcher:
   job:
-    image: public.ecr.aws/v8n3t7y5/llm-operator/fake-job
+    image: public.ecr.aws/cloudnatix/llm-operator/fake-job
     version: latest
     imagePullPolicy: IfNotPresent
