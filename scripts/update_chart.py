@@ -81,7 +81,7 @@ dependencies:
         component_type = "worker" if dep in workers else "control-plane"
         chart += """- name: %(dep)s
   version: %(ver)s
-  repository: "oci://public.ecr.aws/v8n3t7y5/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - %(component_type)s
 """ % {'dep': dep, 'ver': ver, 'component_type': component_type}

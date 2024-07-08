@@ -32,7 +32,7 @@ spec:
     spec:
       initContainers:
       - name: envsubst
-        image: public.ecr.aws/v8n3t7y5/llm-operator/envsubst:latest
+        image: public.ecr.aws/cloudnatix/llm-operator/envsubst:latest
         args:
         - /bin/sh
         - -c

@@ -46,7 +46,7 @@ Running a fine-tuning job requires GPU. If you want to test an end-to-end flow o
 ```yaml
 job-manager-dispatcher:
   job:
-    image: public.ecr.aws/v8n3t7y5/llm-operator/fake-job
+    image: public.ecr.aws/cloudnatix/llm-operator/fake-job
     version: latest
     imagePullPolicy: IfNotPresent
 ```
@@ -60,7 +60,7 @@ helm upgrade \
   --install \
   -n llm-operator \
   llm-operator \
-  oci://public.ecr.aws/v8n3t7y5/llm-operator-charts/llm-operator \
+  oci://public.ecr.aws/cloudnatix/llm-operator-charts/llm-operator \
   -f llm-operator-values.yaml \
   -f llm-operator-values-cpu-only.yaml
 ```
