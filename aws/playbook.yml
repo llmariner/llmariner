@@ -238,6 +238,23 @@
       create_namespace: true
       chart_ref: kedacore/keda
 
+  - name: Setup milvus helm repository
+    kubernetes.core.helm_repository:
+      name: milvus
+      repo_url: https://zilliztech.github.io/milvus-helm
+  - name: Copy milvus_values file
+    ansible.builtin.copy:
+      src: ../hack/milvus_values.yaml
+      dest: milvus_values.yaml
+  - name: Deploy milvus
+    kubernetes.core.helm:
+      release_name: milvus
+      release_namespace: milvus
+      create_namespace: true
+      chart_ref: milvus/milvus
+      values_files:
+      - milvus_values.yaml
+
   - name: Copy llm-operator-values file
     ansible.builtin.copy:
       src: ../hack/llm-operator-values.yaml
