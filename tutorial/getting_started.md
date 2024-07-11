@@ -178,6 +178,7 @@ completion = client.chat.completions.create(
 )
 for response in completion:
   print(response.choices[0].delta.content, end="")
+print("\n")
 ```
 
 This is based on a small set of training data. While the answer is still not perfect, you can see a different response.
@@ -276,4 +277,5 @@ completion = client.chat.completions.create(
 )
 for response in completion:
    print(response.choices[0].delta.content, end="")
+print("\n")
 ```
