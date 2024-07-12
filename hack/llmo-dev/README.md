@@ -15,7 +15,7 @@ kubectl apply -f kong_plugin.yaml
 Please note that
 - Incoming traffic to port 443 must be allowed.
 - EC2 instance requires IAM role `arn:aws:iam::730335229895:role/LLMOperatorVMRole`.
-- `clientSecret` in `llm-operator-values-llmo-dev.yaml` must be to a real value.
+- `clientSecret` (in `dex-server.connectors.config`) in `llm-operator-values-llmo-dev.yaml` must be to a real value.
 - You'll need to create organization owners in the database manually.
 
 ```console
