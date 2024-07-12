@@ -1,4 +1,5 @@
 global:
+  llmOperatorBaseUrl: https://api.dev.llmo.cloudnatix.com/v1
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -30,3 +31,20 @@ dex-server:
   enablePasswordDb: false
   staticPassword:
     enable: false
+  staticClient:
+    enable: true
+    clients:
+    - id: llm-operator
+      name: LLM Operator
+      secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+      redirectURIs:
+      - http://127.0.0.1:5555/callback
+    - id: session-manager
+      name: LLM Operator
+      secret: o15FQlUB8SeOOBiw3Pg5vD5p
+      redirectURIs:
+      - https://api.dev.llmo.cloudnatix.com/v1/sessions/callback
+
+session-manager-server:
+  auth:
+    resolverAddr: ""
