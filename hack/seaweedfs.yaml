@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: seaweedfs-volume
+  labels:
+    type: local
+    app: seaweedfs
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 500Mi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: /data/seaweedfs
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: seaweedfs-volume-claim
+  labels:
+    app: seaweedfs
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seaweedfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seaweedfs
+  template:
+    metadata:
+      labels:
+        app: seaweedfs
+    spec:
+      containers:
+      - name: seaweedfs
+        image: chrislusf/seaweedfs
+        args:
+        - server -s3 -s3.config=/etc/config/s3-config.json -dir=/data
+        ports:
+        - name: master
+          containerPort: 9333
+          protocol: TCP
+        - name: s3
+          containerPort: 8333
+          protocol: TCP
+        volumeMounts:
+        - name: seaweedfsdata
+          mountPath: /data
+        - name: config
+          mountPath: /etc/config
+      volumes:
+      - name: seaweedfsdata
+        persistentVolumeClaim:
+          claimName: seaweedfs-volume-claim
+      - name: config
+        secret:
+          secretName: seaweedfs
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: seaweedfs
+  labels:
+    app: seaweedfs
+spec:
+  type: NodePort
+  ports:
+  - port: 9333
+    targetPort: master
+    protocol: TCP
+    name: master
+    nodePort: 31238
+  - port: 8333
+    targetPort: s3
+    protocol: TCP
+    name: s3
+    nodePort: 31239
+  selector:
+    app: seaweedfs
