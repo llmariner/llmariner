@@ -12,10 +12,10 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
-	github.com/llm-operator/cluster-manager v0.2.0
+	github.com/llm-operator/cluster-manager v0.9.0
 	github.com/llm-operator/file-manager v0.51.0
 	github.com/llm-operator/inference-manager v0.139.0
-	github.com/llm-operator/job-manager v0.144.0
+	github.com/llm-operator/job-manager v0.170.0
 	github.com/llm-operator/model-manager v0.76.0
 	github.com/llm-operator/user-manager v0.63.0
 	github.com/llm-operator/vector-store-manager v0.27.0
