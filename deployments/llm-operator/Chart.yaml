@@ -21,22 +21,22 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.144.0
+  version: 0.145.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.144.0
+  version: 0.145.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.169.0
+  version: 0.170.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.169.0
+  version: 0.170.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -56,12 +56,12 @@ dependencies:
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 0.34.0
+  version: 0.37.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: session-manager-server
-  version: 0.34.0
+  version: 0.37.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
