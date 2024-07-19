@@ -106,6 +106,9 @@ func Set(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	if len(orgs) == 0 {
+		return fmt.Errorf("no organizations found")
+	}
 	defaultTitle := orgs[0].Title
 	if id := env.Config.Context.OrganizationID; id != "" {
 		o, err := findOrgByID(orgs, id)
