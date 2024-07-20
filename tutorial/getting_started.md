@@ -87,6 +87,85 @@ for response in completion:
 
 Google Gemma does not know LLM Operator, so the result is a hallucinated one.
 
+## Retrieval-Augmented Generation (RAG)
+
+Retrieval-Augmented Generation (RAG) allows a chat completion to argument a prompt with data retrieved from a vector database.
+
+This section explain how RAG works in LLM Operator.
+
+First try the following query without RAG. The output is a hallucinated one as the model doesn't have knowledge
+on LLM Operator.
+
+```python
+completion = client.chat.completions.create(
+  model="google-gemma-2b-it-q4",
+  messages=[
+    {"role": "user", "content": "What is LLM Operator?"}
+  ],
+  stream=True
+)
+for response in completion:
+  print(response.choices[0].delta.content, end="")
+print("\n")
+```
+
+Then create a vector store and create a document that describes LLM Operator.
+
+```python
+filename = "llm_operator_overview.txt"
+with open(filename, "w") as fp:
+  fp.write("LLM Operator builds a software stack that provides LLM as a service. It provides the OpenAI-compatible API.")
+file = client.files.create(
+  file=open(filename, "rb"),
+  purpose="assistants",
+)
+print("Uploaded file. ID=%s" % file.id)
+
+vs = client.beta.vector_stores.create(
+  name='Test vector store',
+)
+print("Created vector store. ID=%s" % vs.id)
+
+vfs = client.beta.vector_stores.files.create(
+  vector_store_id=vs.id,
+  file_id=file.id,
+)
+print("Created vector store file. ID=%s" % vfs.id)
+```
+
+Running the same prompt with RAG generates an output that uses the information retrieved from the vector store
+without hallucinations.
+
+```python
+completion = client.chat.completions.create(
+  model="google-gemma-2b-it-q4",
+  messages=[
+    {"role": "user", "content": "What is LLM Operator?"}
+  ],
+  tool_choice = {
+   "choice": "auto",
+   "type": "function",
+   "function": {
+     "name": "rag"
+   }
+ },
+ tools = [
+   {
+     "type": "function",
+     "function": {
+       "name": "rag",
+       "parameters": "{\"vector_store_name\":\"Test vector store\"}"
+     }
+   }
+ ],
+  stream=True
+)
+for response in completion:
+  print(response.choices[0].delta.content, end="")
+print("\n")
+```
+
+
 ## Fine-tune a Model
 
 Let's fine-tune a model so that we can get a better answer on the above question.
