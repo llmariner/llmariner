@@ -26,6 +26,9 @@ kubectl create namespace llm-operator
 ./deploy_cert_manager.sh
 kubectl apply -n llm-operator -f ./certificate.yaml
 
+# Need Ollama for vector store embedding (and inference-manager-engine is not reachable from control plane).
+kubectl apply -f ./ollma.yaml
+
 ./deploy_llm_operator.sh
 
 kubectl apply -f kong_plugin.yaml

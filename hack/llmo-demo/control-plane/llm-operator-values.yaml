@@ -66,3 +66,6 @@ session-manager-server:
   tls:
     enable: true
     secretName: llmo-cert
+
+vector-store-manager-server:
+  ollamaServerAddr: ollama.ollama:8080
