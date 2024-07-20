@@ -71,22 +71,6 @@ for response in completion:
    print(response.choices[0].delta.content, end="")
 ```
 
-Let's try another prompt.
-
-```python
-completion = client.chat.completions.create(
-  model=model_id,
-  messages=[
-    {"role": "user", "content": "You are an expert text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
-  ],
-  stream=True
-)
-for response in completion:
-   print(response.choices[0].delta.content, end="")
-```
-
-Google Gemma does not know LLM Operator, so the result is a hallucinated one.
-
 ## Retrieval-Augmented Generation (RAG)
 
 Retrieval-Augmented Generation (RAG) allows a chat completion to argument a prompt with data retrieved from a vector database.
