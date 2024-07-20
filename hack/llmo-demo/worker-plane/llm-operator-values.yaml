@@ -1,0 +1,36 @@
+global:
+  llmOperatorBaseUrl: https://api.llmo.cloudnatix.com/v1
+
+  auth:
+    oidcIssuerUrl: https://api.llmo.cloudnatix.com/v1/dex
+
+  worker:
+    registrationKeySecret:
+      name: cluster-registration-key
+      key: regKey
+    tls:
+      enable: true
+
+  objectStore:
+    s3:
+      # TODO(kenji): Use HTTPS instead of HTTP.
+      endpointUrl: http://api.llmo.cloudnatix.com:9000
+
+inference-manager-engine:
+  inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
+  modelManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
+  autoscaling:
+    enableKeda: false
+
+job-manager-dispatcher:
+  clusterManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
+  fileManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
+  jobManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
+  modelManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
+
+model-manager-loader:
+  modelManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
+
+session-manager-agent:
+  proxy:
+    baseUrl: https://api.llmo.cloudnatix.com:444
