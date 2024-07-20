@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: session-manager-service-nodeport
+  namespace: llm-operator
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 8082
+    protocol: TCP
+    targetPort: ws-http
+    nodePort: 31234
+  selector:
+    app.kubernetes.io/instance: llm-operator
+    app.kubernetes.io/name: session-manager-server

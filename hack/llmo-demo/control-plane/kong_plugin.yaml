@@ -1,0 +1,19 @@
+# Enable CORS Plugin.
+#
+# This plugin is useful for development/debug as we can hit
+# the API endpoint from local web server.
+#
+# See https://docs.konghq.com/hub/kong-inc/cors/
+
+apiVersion: configuration.konghq.com/v1
+kind: KongClusterPlugin
+metadata:
+  name: cors
+  annotations:
+    kubernetes.io/ingress.class: kong
+  labels:
+    global: "true"
+config:
+  origins:
+  - "*"
+plugin: cors
