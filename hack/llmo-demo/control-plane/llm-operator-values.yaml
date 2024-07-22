@@ -32,6 +32,7 @@ dex-server:
     id: okta
     name: okta
     config:
+      # Using the "Internal" Okta API authorization server
       issuer: https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7
       clientID: 0oak1yta82395U5wP4x7
       clientSecret: $CLIENT_SECRET
