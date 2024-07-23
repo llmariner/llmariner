@@ -17,3 +17,7 @@ tolerations:
   effect: NoSchedule
 
 fullnameOverride: kong
+
+proxy:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "300"
