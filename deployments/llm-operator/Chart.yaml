@@ -41,12 +41,12 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.81.0
+  version: 0.82.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.81.0
+  version: 0.82.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
