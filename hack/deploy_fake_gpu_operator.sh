@@ -10,4 +10,5 @@ kubectl get nodes -o name | xargs -I '{}' kubectl label '{}' nvidia.com/gpu.depl
 
 helm repo add fake-gpu-operator https://fake-gpu-operator.storage.googleapis.com
 helm repo update
-helm upgrade -i gpu-operator fake-gpu-operator/fake-gpu-operator --namespace gpu-operator --create-namespace
+# Pinned to 0.0.51 since 0.0.53 didn't work (and there is no 0.0.52).
+helm upgrade -i gpu-operator fake-gpu-operator/fake-gpu-operator --namespace gpu-operator --create-namespace --version 0.0.51
