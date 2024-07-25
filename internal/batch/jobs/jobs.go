@@ -1,0 +1,240 @@
+package jobs
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
+
+	ihttp "github.com/llm-operator/cli/internal/http"
+	"github.com/llm-operator/cli/internal/runtime"
+	itime "github.com/llm-operator/cli/internal/time"
+	"github.com/llm-operator/cli/internal/ui"
+	jv1 "github.com/llm-operator/job-manager/api/v1"
+	"github.com/rodaine/table"
+	"github.com/spf13/cobra"
+)
+
+const (
+	path = "/batch/jobs"
+)
+
+// Cmd is the root command for batch jobs.
+func Cmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                "jobs",
+		Short:              "Batch Job commands",
+		Aliases:            []string{"job"},
+		Args:               cobra.NoArgs,
+		DisableFlagParsing: true,
+	}
+	cmd.AddCommand(createCmd())
+	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
+	cmd.AddCommand(cancelCmd())
+	return cmd
+}
+
+func createCmd() *cobra.Command {
+	var (
+		envs   []string
+		fpaths []string
+		opts   createOpts
+	)
+	cmd := &cobra.Command{
+		Use:  "create",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			opts.scripts = make(map[string][]byte, len(fpaths))
+			for _, fpath := range fpaths {
+				data, err := os.ReadFile(fpath)
+				if err != nil {
+					return err
+				}
+				opts.scripts[filepath.Base(fpath)] = data
+			}
+
+			if len(envs) > 0 {
+				opts.envs = make(map[string]string, len(envs))
+				for _, e := range envs {
+					ss := strings.SplitN(e, "=", 2)
+					if len(ss) != 2 {
+						return fmt.Errorf("invalid env format: %q", e)
+					}
+					opts.envs[ss[0]] = ss[1]
+				}
+			}
+			return create(cmd.Context(), opts)
+		},
+	}
+
+	cmd.Flags().StringVar(&opts.image, "image", "", "Image for the batch job")
+	cmd.Flags().StringVar(&opts.command, "command", "", "Command to be run by the batch job")
+	cmd.Flags().StringArrayVar(&envs, "env", nil, "Environment variables used within the batch job (e.g., MY_ENV=somevalue)")
+	cmd.Flags().StringArrayVar(&opts.fileIDs, "file-id", nil, "Data file id that will be downloaded to the job container")
+	cmd.Flags().StringArrayVar(&fpaths, "from-file", nil, "Specify the path to a file that will be loaded as a job script")
+	cmd.Flags().Int32Var(&opts.gpuCount, "gpu", 0, "Number of GPUs")
+
+	_ = cmd.MarkFlagRequired("image")
+	_ = cmd.MarkFlagRequired("command")
+	_ = cmd.MarkFlagRequired("from-file")
+	_ = cmd.MarkFlagFilename("from-file")
+	return cmd
+}
+
+func listCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "list",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return list(cmd.Context())
+		},
+	}
+}
+
+func getCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "get <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), args[0])
+		},
+	}
+	return cmd
+}
+
+func cancelCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "cancel <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cancel(cmd.Context(), args[0])
+		},
+	}
+	return cmd
+}
+
+type createOpts struct {
+	image    string
+	command  string
+	scripts  map[string][]byte
+	fileIDs  []string
+	envs     map[string]string
+	gpuCount int32
+}
+
+func create(ctx context.Context, opts createOpts) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := jv1.CreateBatchJobRequest{
+		Image:     opts.image,
+		Command:   opts.command,
+		Scripts:   opts.scripts,
+		Envs:      opts.envs,
+		DataFiles: opts.fileIDs,
+	}
+	if opts.gpuCount > 0 {
+		req.Resources = &jv1.BatchJob_Resources{
+			GpuCount: opts.gpuCount,
+		}
+	}
+
+	var resp jv1.BatchJob
+	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
+		return err
+	}
+	fmt.Printf("Created the batch job (ID: %q).\n", resp.Id)
+	return nil
+}
+
+func list(ctx context.Context) error {
+	nbs, err := listBatchJobs(ctx)
+	if err != nil {
+		return err
+	}
+
+	tbl := table.New("ID", "Image", "Status", "Age")
+	ui.FormatTable(tbl)
+	for _, j := range nbs {
+		var age string
+		if j.CreatedAt > 0 {
+			age = itime.ToAge(time.Unix(j.CreatedAt, 0))
+		}
+		tbl.AddRow(
+			j.Id,
+			j.Image,
+			j.Status,
+			age,
+		)
+	}
+	tbl.Print()
+	return nil
+}
+
+func get(ctx context.Context, id string) error {
+	return sendRequestAndPrintBatchJob(ctx, http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetBatchJobRequest{})
+}
+
+func cancel(ctx context.Context, id string) error {
+	return sendRequestAndPrintBatchJob(ctx, http.MethodPost, fmt.Sprintf("%s/%s/cancel", path, id), &jv1.CancelBatchJobRequest{})
+}
+
+func validateIDArg(cmd *cobra.Command, args []string) error {
+	if len(args) != 1 {
+		return errors.New("<ID> is required argument")
+	}
+	return nil
+}
+
+func listBatchJobs(ctx context.Context) ([]*jv1.BatchJob, error) {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var nbs []*jv1.BatchJob
+	var after string
+	for {
+		req := jv1.ListBatchJobsRequest{
+			After: after,
+		}
+		var resp jv1.ListBatchJobsResponse
+		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
+			return nil, err
+		}
+		nbs = append(nbs, resp.Jobs...)
+		if !resp.HasMore {
+			break
+		}
+		after = resp.Jobs[len(resp.Jobs)-1].Id
+	}
+	return nbs, nil
+}
+
+func sendRequestAndPrintBatchJob(ctx context.Context, method, path string, req any) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+	var resp jv1.BatchJob
+	if err := ihttp.NewClient(env).Send(method, path, req, &resp); err != nil {
+		return err
+	}
+	return printBatchJob(&resp)
+}
+
+func printBatchJob(nb *jv1.BatchJob) error {
+	b, err := json.MarshalIndent(&nb, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
+	return nil
+}

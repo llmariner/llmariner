@@ -3,6 +3,7 @@ package root
 import (
 	"github.com/llm-operator/cli/internal/admin"
 	"github.com/llm-operator/cli/internal/auth"
+	"github.com/llm-operator/cli/internal/batch"
 	"github.com/llm-operator/cli/internal/chat"
 	"github.com/llm-operator/cli/internal/context"
 	"github.com/llm-operator/cli/internal/finetuning"
@@ -29,6 +30,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(context.Cmd())
 	cmd.AddCommand(finetuning.Cmd())
 	cmd.AddCommand(workspaces.Cmd())
+	cmd.AddCommand(batch.Cmd())
 	cmd.AddCommand(models.Cmd())
 	cmd.AddCommand(storage.Cmd())
 	cmd.AddCommand(version.Cmd())
