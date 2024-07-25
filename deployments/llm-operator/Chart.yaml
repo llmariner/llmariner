@@ -31,12 +31,12 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.175.0
+  version: 0.176.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.175.0
+  version: 0.176.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
