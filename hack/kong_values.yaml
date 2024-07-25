@@ -4,6 +4,8 @@ proxy:
    hostPort: 80
  tls:
    hostPort: 443
+ annotations:
+   service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "300"
 
 nodeSelector:
   ingress-ready: "true"
@@ -17,7 +19,3 @@ tolerations:
   effect: NoSchedule
 
 fullnameOverride: kong
-
-proxy:
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "300"
