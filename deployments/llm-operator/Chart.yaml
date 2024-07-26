@@ -16,7 +16,7 @@ dependencies:
   tags:
   - control-plane
 - name: file-manager-server
-  version: 0.54.0
+  version: 0.55.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -31,12 +31,12 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.179.0
+  version: 0.180.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.179.0
+  version: 0.180.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
