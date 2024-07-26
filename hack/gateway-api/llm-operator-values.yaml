@@ -1,0 +1,11 @@
+job-manager-dispatcher:
+  notebook:
+    ingressClassName: ""
+    gatewayName: kong-gateway
+    gatewayNamespace: llm-operator
+
+
+session-manager-agent:
+  ingressControllerAddress: ""
+  gatewayAddress: kong-gateway-proxy.llm-operator.svc.cluster.local
+  gatewayPort: 80
