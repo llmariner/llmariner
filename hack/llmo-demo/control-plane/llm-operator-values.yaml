@@ -56,10 +56,14 @@ dex-server:
       redirectURIs:
       - https://api.llmo.cloudnatix.com/v1/sessions/callback
 
+
 inference-manager-server:
   workerServiceTls:
     enable: true
     secretName: llmo-cert
+  workerServiceGrpcService:
+    type: NodePort
+    nodePort: 31235
 
 session-manager-server:
   auth:
@@ -67,6 +71,10 @@ session-manager-server:
   tls:
     enable: true
     secretName: llmo-cert
+  workerServiceHttpService:
+    type: NodePort
+    nodePort: 31234
+
 
 vector-store-manager-server:
   ollamaServerAddr: ollama.ollama:8080

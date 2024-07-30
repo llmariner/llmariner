@@ -32,6 +32,4 @@ kubectl apply -f ./ollma.yaml
 ./deploy_llm_operator.sh
 
 kubectl apply -f kong_plugin.yaml
-kubectl apply -n llm-operator -f ./session_manager_server_service.yaml
-kubectl apply -n llm-operator -f ./inference_manager_server_service.yaml
 ```
