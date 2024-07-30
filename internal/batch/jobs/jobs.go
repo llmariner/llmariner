@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/AlecAivazis/survey/v2"
 	ihttp "github.com/llm-operator/cli/internal/http"
 	"github.com/llm-operator/cli/internal/runtime"
 	itime "github.com/llm-operator/cli/internal/time"
@@ -36,6 +37,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
+	cmd.AddCommand(deleteCmd())
 	cmd.AddCommand(cancelCmd())
 	return cmd
 }
@@ -105,6 +107,19 @@ func getCmd() *cobra.Command {
 			return get(cmd.Context(), args[0])
 		},
 	}
+	return cmd
+}
+
+func deleteCmd() *cobra.Command {
+	var force bool
+	cmd := &cobra.Command{
+		Use:  "delete <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return delete(cmd.Context(), args[0], force)
+		},
+	}
+	cmd.Flags().BoolVarP(&force, "force", "f", false, "Skip the confirmation prompt")
 	return cmd
 }
 
@@ -181,6 +196,23 @@ func list(ctx context.Context) error {
 
 func get(ctx context.Context, id string) error {
 	return sendRequestAndPrintBatchJob(ctx, http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetBatchJobRequest{})
+}
+
+func delete(ctx context.Context, id string, force bool) error {
+	if !force {
+		p := ui.NewPrompter()
+		s := &survey.Confirm{
+			Message: fmt.Sprintf("Delete batch job %q?", id),
+			Default: false,
+		}
+		var ok bool
+		if err := p.Ask(s, &ok); err != nil {
+			return err
+		} else if !ok {
+			return nil
+		}
+	}
+	return sendRequestAndPrintBatchJob(ctx, http.MethodDelete, fmt.Sprintf("%s/%s", path, id), &jv1.GetBatchJobRequest{})
 }
 
 func cancel(ctx context.Context, id string) error {
