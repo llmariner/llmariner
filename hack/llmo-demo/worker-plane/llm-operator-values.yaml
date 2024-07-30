@@ -10,6 +10,7 @@ global:
       key: regKey
     tls:
       enable: true
+    controlPlaneAddr: api.llmo.cloudnatix.com:443
 
   objectStore:
     s3:
@@ -18,18 +19,8 @@ global:
 
 inference-manager-engine:
   inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
-  modelManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
   autoscaling:
     enableKeda: false
-
-job-manager-dispatcher:
-  clusterManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
-  fileManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
-  jobManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
-  modelManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
-
-model-manager-loader:
-  modelManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:443
 
 session-manager-agent:
   proxy:
