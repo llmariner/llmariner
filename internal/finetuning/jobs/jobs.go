@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
-	"os"
 	"time"
 
 	ihttp "github.com/llm-operator/cli/internal/http"
@@ -19,7 +17,6 @@ import (
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -191,59 +188,16 @@ func logs(ctx context.Context, id string, follow bool) error {
 		return err
 	}
 
-	pods, err := listPodsForJob(ctx, job)
+	pods, err := k8s.ListPodsForJob(ctx, job.ClusterId, job.KubernetesNamespace, job.Id)
 	if err != nil {
 		return err
 	}
 
-	// Choose the latest pod or the last failed job.
-	var latestPod *corev1.Pod
-	var lastFailed *corev1.Pod
-	for _, pod := range pods {
-		if latestPod == nil || pod.CreationTimestamp.After(latestPod.CreationTimestamp.Time) {
-			latestPod = &pod
-		}
-
-		if pod.Status.Phase != corev1.PodFailed {
-			continue
-		}
-		if lastFailed == nil || pod.CreationTimestamp.After(lastFailed.CreationTimestamp.Time) {
-			lastFailed = &pod
-		}
-	}
-
+	latestPod, lastFailed := k8s.FindLatestOrLastFailedPod(pods)
 	if lastFailed != nil {
-		return podLog(ctx, job.ClusterId, lastFailed, follow)
+		return k8s.StreamPodLogs(ctx, job.ClusterId, lastFailed, follow)
 	}
-
-	return podLog(ctx, job.ClusterId, latestPod, follow)
-}
-
-func podLog(ctx context.Context, clusterID string, pod *corev1.Pod, follow bool) error {
-	env, err := runtime.NewEnv(ctx)
-	if err != nil {
-		return nil
-	}
-	kc, err := k8s.NewClient(env, clusterID)
-	if err != nil {
-		return err
-	}
-
-	req := kc.CoreV1().Pods(pod.Namespace).GetLogs(pod.Name, &corev1.PodLogOptions{
-		Follow: follow,
-	})
-	stream, err := req.Stream(ctx)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		_ = stream.Close()
-	}()
-	_, err = io.Copy(os.Stdout, stream)
-	if err != nil {
-		return err
-	}
-	return nil
+	return k8s.StreamPodLogs(ctx, job.ClusterId, latestPod, follow)
 }
 
 func exec(ctx context.Context, id string) error {
@@ -252,7 +206,7 @@ func exec(ctx context.Context, id string) error {
 		return err
 	}
 
-	pods, err := listPodsForJob(ctx, job)
+	pods, err := k8s.ListPodsForJob(ctx, job.ClusterId, job.KubernetesNamespace, job.Id)
 	if err != nil {
 		return err
 	}
@@ -274,32 +228,6 @@ func exec(ctx context.Context, id string) error {
 	}
 
 	return k8s.ExecPod(ctx, job.ClusterId, latestPod)
-}
-
-func listPodsForJob(ctx context.Context, job *jv1.Job) ([]corev1.Pod, error) {
-	env, err := runtime.NewEnv(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	namespace := job.KubernetesNamespace
-
-	kc, err := k8s.NewClient(env, job.ClusterId)
-	if err != nil {
-		return nil, err
-	}
-	podClient := kc.CoreV1().Pods(namespace)
-	resp, err := podClient.List(ctx, metav1.ListOptions{
-		// This is an implicit assumption that the job name is equal to "<job_id>".
-		LabelSelector: fmt.Sprintf("job-name=%s", job.Id),
-	})
-	if err != nil {
-		return nil, err
-	}
-	if len(resp.Items) == 0 {
-		return nil, fmt.Errorf("no pod found for the job %q", job.Id)
-	}
-	return resp.Items, nil
 }
 
 func getJob(ctx context.Context, id string) (*jv1.Job, error) {

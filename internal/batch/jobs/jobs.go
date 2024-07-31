@@ -13,6 +13,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	ihttp "github.com/llm-operator/cli/internal/http"
+	"github.com/llm-operator/cli/internal/k8s"
 	"github.com/llm-operator/cli/internal/runtime"
 	itime "github.com/llm-operator/cli/internal/time"
 	"github.com/llm-operator/cli/internal/ui"
@@ -39,6 +40,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
 	cmd.AddCommand(cancelCmd())
+	cmd.AddCommand(logsCmd())
 	return cmd
 }
 
@@ -131,6 +133,19 @@ func cancelCmd() *cobra.Command {
 			return cancel(cmd.Context(), args[0])
 		},
 	}
+	return cmd
+}
+
+func logsCmd() *cobra.Command {
+	var follow bool
+	cmd := &cobra.Command{
+		Use:  "logs <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return logs(cmd.Context(), args[0], follow)
+		},
+	}
+	cmd.Flags().BoolVarP(&follow, "follow", "f", false, "True if the logs should be streamed")
 	return cmd
 }
 
@@ -248,6 +263,27 @@ func listBatchJobs(ctx context.Context) ([]*jv1.BatchJob, error) {
 		after = resp.Jobs[len(resp.Jobs)-1].Id
 	}
 	return nbs, nil
+}
+
+func logs(ctx context.Context, id string, follow bool) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+	var job jv1.BatchJob
+	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetBatchJobRequest{}, &job); err != nil {
+		return err
+	}
+
+	pods, err := k8s.ListPodsForJob(ctx, job.ClusterId, job.KubernetesNamespace, job.Id)
+	if err != nil {
+		return err
+	}
+	latestPod, lastFailed := k8s.FindLatestOrLastFailedPod(pods)
+	if lastFailed != nil {
+		return k8s.StreamPodLogs(ctx, job.ClusterId, lastFailed, follow)
+	}
+	return k8s.StreamPodLogs(ctx, job.ClusterId, latestPod, follow)
 }
 
 func sendRequestAndPrintBatchJob(ctx context.Context, method, path string, req any) error {
