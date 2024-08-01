@@ -1,0 +1,28 @@
+cluster:
+  enabled: true
+
+etcd:
+  enabled: true
+
+pulsar:
+  enabled: true
+
+minio:
+  enabled: false
+
+externalS3:
+  enabled: true
+  # TODO(guangrui): revisit. It seems only buckets in us-east-1 works.
+  host: s3.us-east-1.amazonaws.com
+  port: 443
+  # Replace with your own access key and secret key, e.g. dev-engineer's key.
+  accessKey: "access key"
+  secretKey: "secret key"
+  useIAM: false
+  iamEndpoint: 
+  # Refer https://repost.aws/knowledge-center/s3-enforce-modern-tls, and set bucket policy as "UpdateTLSv12".
+  useSSL: true
+  bucketName: cloudnatix-milvus-test
+  cloudProvider: aws
+  logLevel: info
+
