@@ -31,6 +31,8 @@ model-manager-loader:
   - google/gemma-2b-it-q4
   - meta-llama/Meta-Llama-3.1-8B-Instruct
   - meta-llama/Meta-Llama-3.1-8B-Instruct-q4
+  - deepseek-ai/deepseek-coder-6.7b-base-q4
+  - deepseek-ai/deepseek-coder-6.7b-base
 
 session-manager-agent:
   proxy:
