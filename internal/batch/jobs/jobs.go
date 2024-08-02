@@ -290,11 +290,7 @@ func logs(ctx context.Context, id string, follow bool) error {
 	if err != nil {
 		return err
 	}
-	latestPod, lastFailed := k8s.FindLatestOrLastFailedPod(pods)
-	if lastFailed != nil {
-		return k8s.StreamPodLogs(ctx, job.ClusterId, lastFailed, follow)
-	}
-	return k8s.StreamPodLogs(ctx, job.ClusterId, latestPod, follow)
+	return k8s.StreamPodsLogs(ctx, job.ClusterId, follow, pods...)
 }
 
 func sendRequestAndPrintBatchJob(ctx context.Context, method, path string, req any) error {

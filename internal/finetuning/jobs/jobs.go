@@ -195,9 +195,9 @@ func logs(ctx context.Context, id string, follow bool) error {
 
 	latestPod, lastFailed := k8s.FindLatestOrLastFailedPod(pods)
 	if lastFailed != nil {
-		return k8s.StreamPodLogs(ctx, job.ClusterId, lastFailed, follow)
+		return k8s.StreamPodsLogs(ctx, job.ClusterId, follow, *lastFailed)
 	}
-	return k8s.StreamPodLogs(ctx, job.ClusterId, latestPod, follow)
+	return k8s.StreamPodsLogs(ctx, job.ClusterId, follow, *latestPod)
 }
 
 func exec(ctx context.Context, id string) error {
