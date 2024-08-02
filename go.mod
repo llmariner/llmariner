@@ -15,7 +15,7 @@ require (
 	github.com/llm-operator/cluster-manager v0.9.0
 	github.com/llm-operator/file-manager v0.55.0
 	github.com/llm-operator/inference-manager v0.181.0
-	github.com/llm-operator/job-manager v0.183.0
+	github.com/llm-operator/job-manager v0.184.0
 	github.com/llm-operator/model-manager v0.76.0
 	github.com/llm-operator/user-manager v0.63.0
 	github.com/llm-operator/vector-store-manager v0.30.0

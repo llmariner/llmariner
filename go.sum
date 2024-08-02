@@ -86,8 +86,8 @@ github.com/llm-operator/file-manager v0.55.0 h1:iD43MRzZWhM9gtHWsfoLkO6zgHqxvbul
 github.com/llm-operator/file-manager v0.55.0/go.mod h1:uMpiPdmLfgn6Ecb03Z1KME4ZX6z8ZQcVwDVeYBmn8Bo=
 github.com/llm-operator/inference-manager v0.181.0 h1:Bybni2GnCVkpax9QAREFn+Awsq9Ermotp8GX4Sz4M88=
 github.com/llm-operator/inference-manager v0.181.0/go.mod h1:IDHs4I0Q4/KI4h/N+b9a1VD+VSCHZnweDp3BMm3yJWE=
-github.com/llm-operator/job-manager v0.183.0 h1:USMD+IWhrrKJ1dWgM+rVv6El1M+lKHkml63rL2fPVRk=
-github.com/llm-operator/job-manager v0.183.0/go.mod h1:vi9K1X9NKRCAv2U8VMJyclkFasGh9ZKF6pGWG6QT57I=
+github.com/llm-operator/job-manager v0.184.0 h1:hTH3fJqEdkJ+4+tRsLNgH+N4MUzMFdaRfywRfQIyjbA=
+github.com/llm-operator/job-manager v0.184.0/go.mod h1:vi9K1X9NKRCAv2U8VMJyclkFasGh9ZKF6pGWG6QT57I=
 github.com/llm-operator/model-manager v0.76.0 h1:UCKFT8gUpOD2R2+cBqXKkmDEJiqhFZ5RhRd3gIdTe+g=
 github.com/llm-operator/model-manager v0.76.0/go.mod h1:VB2M+eUtRsUtpzY2eWayswXtrgfdTMK8C98t5bRcUfM=
 github.com/llm-operator/user-manager v0.63.0 h1:vO+CwYEr8AXfvlchYHZvllNZEO5QN3Y9JKuvaqc8SpE=

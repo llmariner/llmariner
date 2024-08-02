@@ -83,6 +83,7 @@ func createCmd() *cobra.Command {
 	cmd.Flags().StringArrayVar(&opts.fileIDs, "file-id", nil, "Data file id that will be downloaded to the job container")
 	cmd.Flags().StringArrayVar(&fpaths, "from-file", nil, "Specify the path to a file that will be loaded as a job script")
 	cmd.Flags().Int32Var(&opts.gpuCount, "gpu", 0, "Number of GPUs")
+	cmd.Flags().Int32Var(&opts.workerCount, "workers", 0, "Number of workers for PyTorch DDP")
 
 	_ = cmd.MarkFlagRequired("image")
 	_ = cmd.MarkFlagRequired("command")
@@ -150,12 +151,13 @@ func logsCmd() *cobra.Command {
 }
 
 type createOpts struct {
-	image    string
-	command  string
-	scripts  map[string][]byte
-	fileIDs  []string
-	envs     map[string]string
-	gpuCount int32
+	image       string
+	command     string
+	scripts     map[string][]byte
+	fileIDs     []string
+	envs        map[string]string
+	gpuCount    int32
+	workerCount int32
 }
 
 func create(ctx context.Context, opts createOpts) error {
@@ -174,6 +176,15 @@ func create(ctx context.Context, opts createOpts) error {
 	if opts.gpuCount > 0 {
 		req.Resources = &jv1.BatchJob_Resources{
 			GpuCount: opts.gpuCount,
+		}
+	}
+	if opts.workerCount > 0 {
+		req.Kind = &jv1.BatchJob_Kind{
+			Kind: &jv1.BatchJob_Kind_Pytorch{
+				Pytorch: &jv1.PyTorchJob{
+					WorkerCount: opts.workerCount,
+				},
+			},
 		}
 	}
 
