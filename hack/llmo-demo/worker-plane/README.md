@@ -1,9 +1,9 @@
-# Control plane deployment
+# Worker plane deployment
 
 ```bash
 kubectl create namespace llm-operator
 
-"${basedir}"/../deploy_kong_internal.sh
+"${basedir}"/../../deploy_kong_internal.sh
 
 export AWS_ACCESS_KEY_ID=llm-operator-key
 export AWS_SECRET_ACCESS_KEY=llm-operator-secret
