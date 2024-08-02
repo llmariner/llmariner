@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	ihttp "github.com/llm-operator/cli/internal/http"
@@ -51,8 +52,9 @@ func listCmd() *cobra.Command {
 
 func getCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:  "get <ID>",
-		Args: validateIDArg,
+		Use:               "get <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return get(cmd.Context(), args[0])
 		},
@@ -61,8 +63,9 @@ func getCmd() *cobra.Command {
 
 func cancelCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:  "cancel <ID>",
-		Args: validateIDArg,
+		Use:               "cancel <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cancel(cmd.Context(), args[0])
 		},
@@ -71,12 +74,46 @@ func cancelCmd() *cobra.Command {
 
 func execCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:  "exec <ID>",
-		Args: validateIDArg,
+		Use:               "exec <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return exec(cmd.Context(), args[0])
 		},
 	}
+}
+
+func logsCmd() *cobra.Command {
+	var (
+		follow bool
+	)
+	cmd := &cobra.Command{
+		Use:               "logs <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return logs(cmd.Context(), args[0], follow)
+		},
+	}
+	cmd.Flags().BoolVarP(&follow, "follow", "f", false, "True if the logs should be streamed")
+	return cmd
+}
+
+func compJobIDs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+	list, err := listJobs(cmd.Context())
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	var cands []string
+	for _, job := range list {
+		if toComplete == "" || strings.HasPrefix(job.Id, toComplete) {
+			cands = append(cands, job.Id)
+		}
+	}
+	return cands, cobra.ShellCompDirectiveNoFileComp
 }
 
 func validateIDArg(cmd *cobra.Command, args []string) error {
@@ -86,42 +123,10 @@ func validateIDArg(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func logsCmd() *cobra.Command {
-	var (
-		follow bool
-	)
-	cmd := &cobra.Command{
-		Use:  "logs <ID>",
-		Args: validateIDArg,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return logs(cmd.Context(), args[0], follow)
-		},
-	}
-	cmd.Flags().BoolVarP(&follow, "follow", "f", false, "True if the logs should be streamed")
-	return cmd
-}
-
 func list(ctx context.Context) error {
-	env, err := runtime.NewEnv(ctx)
+	jobs, err := listJobs(ctx)
 	if err != nil {
 		return err
-	}
-
-	var jobs []*jv1.Job
-	var after string
-	for {
-		req := jv1.ListJobsRequest{
-			After: after,
-		}
-		var resp jv1.ListJobsResponse
-		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
-			return err
-		}
-		jobs = append(jobs, resp.Data...)
-		if !resp.HasMore {
-			break
-		}
-		after = resp.Data[len(resp.Data)-1].Id
 	}
 
 	tbl := table.New("ID", "Model", "Fine-tuned Model", "Status", "Age")
@@ -243,4 +248,30 @@ func getJob(ctx context.Context, id string) (*jv1.Job, error) {
 	}
 
 	return &resp, nil
+}
+
+func listJobs(ctx context.Context) ([]*jv1.Job, error) {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var jobs []*jv1.Job
+	var after string
+	for {
+		req := jv1.ListJobsRequest{
+			After: after,
+		}
+		var resp jv1.ListJobsResponse
+		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
+			return nil, err
+		}
+		jobs = append(jobs, resp.Data...)
+		if !resp.HasMore {
+			break
+		}
+		after = resp.Data[len(resp.Data)-1].Id
+	}
+
+	return jobs, nil
 }

@@ -104,8 +104,9 @@ func listCmd() *cobra.Command {
 
 func getCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "get <ID>",
-		Args: validateIDArg,
+		Use:               "get <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return get(cmd.Context(), args[0])
 		},
@@ -116,8 +117,9 @@ func getCmd() *cobra.Command {
 func deleteCmd() *cobra.Command {
 	var force bool
 	cmd := &cobra.Command{
-		Use:  "delete <ID>",
-		Args: validateIDArg,
+		Use:               "delete <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return delete(cmd.Context(), args[0], force)
 		},
@@ -128,8 +130,9 @@ func deleteCmd() *cobra.Command {
 
 func cancelCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "cancel <ID>",
-		Args: validateIDArg,
+		Use:               "cancel <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cancel(cmd.Context(), args[0])
 		},
@@ -140,8 +143,9 @@ func cancelCmd() *cobra.Command {
 func logsCmd() *cobra.Command {
 	var follow bool
 	cmd := &cobra.Command{
-		Use:  "logs <ID>",
-		Args: validateIDArg,
+		Use:               "logs <ID>",
+		Args:              validateIDArg,
+		ValidArgsFunction: compJobIDs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return logs(cmd.Context(), args[0], follow)
 		},
@@ -250,6 +254,23 @@ func validateIDArg(cmd *cobra.Command, args []string) error {
 		return errors.New("<ID> is required argument")
 	}
 	return nil
+}
+
+func compJobIDs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	if len(args) > 0 {
+		return nil, cobra.ShellCompDirectiveNoFileComp
+	}
+	list, err := listBatchJobs(cmd.Context())
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+	var cands []string
+	for _, job := range list {
+		if toComplete == "" || strings.HasPrefix(job.Id, toComplete) {
+			cands = append(cands, job.Id)
+		}
+	}
+	return cands, cobra.ShellCompDirectiveNoFileComp
 }
 
 func listBatchJobs(ctx context.Context) ([]*jv1.BatchJob, error) {
