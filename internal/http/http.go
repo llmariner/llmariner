@@ -113,13 +113,22 @@ func extractErrorMessage(body io.ReadCloser) string {
 	if err != nil {
 		return ""
 	}
-	type resp struct {
+	type errMessage struct {
 		Message string `json:"message"`
+	}
+	type resp struct {
+		// Message is the message from the server. This format is used for gRPC.
+		Message string `json:"message"`
+		// Error is the error message from the server. This format is used for Ollama.
+		Error errMessage `json:"error"`
 	}
 	var r resp
 	if err := json.Unmarshal(b, &r); err != nil {
 		// Return the original body if it's not JSON (error response from an non-gRPC HTTP handler).
 		return string(b)
+	}
+	if m := r.Error.Message; m != "" {
+		return m
 	}
 	return r.Message
 }
