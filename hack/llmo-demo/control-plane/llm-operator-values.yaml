@@ -38,6 +38,10 @@ dex-server:
       clientSecret: $CLIENT_SECRET
       redirectURI: https://api.llmo.cloudnatix.com/v1/dex/callback
       insecureSkipEmailVerified: true
+      scopes:
+      - profile
+      - email
+      - offline_access
 
   enablePasswordDb: false
   staticPassword:
