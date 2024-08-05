@@ -21,9 +21,14 @@ inference-manager-engine:
   inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
   # TODO(kenji): Revisit. This prevents fine-tuning jobs from running on a single GPU instance.
   resources:
-    gpu: 1
+    gpu: 4
   autoscaling:
     enableKeda: false
+  preloadedModelIds:
+  - meta-llama-Meta-Llama-3.1-70B-Instruct-q4
+  - deepseek-ai-deepseek-coder-6.7b-base-q4
+  - deepseek-ai-deepseek-coder-6.7b-base
+
 
 model-manager-loader:
   baseModels:
@@ -31,6 +36,7 @@ model-manager-loader:
   - google/gemma-2b-it-q4
   - meta-llama/Meta-Llama-3.1-8B-Instruct
   - meta-llama/Meta-Llama-3.1-8B-Instruct-q4
+  - meta-llama/Meta-Llama-3.1-70B-Instruct-q4
   - deepseek-ai/deepseek-coder-6.7b-base-q4
   - deepseek-ai/deepseek-coder-6.7b-base
 
