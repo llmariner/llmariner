@@ -44,7 +44,8 @@ inference-manager-engine:
   #
   # TODO(kenji): Enable GPU sharing
   resources:
-    gpu: 0
+    limits:
+      nvidia.com/gpu: 0
   autoscaling:
     enableKeda: true
     scaledobject:

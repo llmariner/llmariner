@@ -19,9 +19,9 @@ global:
 
 inference-manager-engine:
   inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
-  # TODO(kenji): Revisit. This prevents fine-tuning jobs from running on a single GPU instance.
   resources:
-    gpu: 4
+    limits:
+      nvidia.com/gpu: 4
   autoscaling:
     enableKeda: false
   preloadedModelIds:
