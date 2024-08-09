@@ -52,19 +52,6 @@ func createCmd() *cobra.Command {
 	return cmd
 }
 
-type delta struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
-}
-
-type choice struct {
-	Delta delta `json:"delta"`
-}
-
-type data struct {
-	Choices []choice `json:"choices"`
-}
-
 func create(
 	ctx context.Context,
 	model string,
@@ -104,7 +91,7 @@ func create(
 			break
 		}
 
-		var d data
+		var d iv1.ChatCompletionChunk
 		if err := json.Unmarshal([]byte(respD), &d); err != nil {
 			return fmt.Errorf("unmarshal response: %s", err)
 		}
