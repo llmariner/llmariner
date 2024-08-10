@@ -1,12 +1,15 @@
 package root
 
 import (
+	"os"
+
 	"github.com/llm-operator/cli/internal/admin"
 	"github.com/llm-operator/cli/internal/auth"
 	"github.com/llm-operator/cli/internal/batch"
 	"github.com/llm-operator/cli/internal/chat"
 	"github.com/llm-operator/cli/internal/context"
 	"github.com/llm-operator/cli/internal/finetuning"
+	"github.com/llm-operator/cli/internal/legacy"
 	"github.com/llm-operator/cli/internal/models"
 	"github.com/llm-operator/cli/internal/storage"
 	"github.com/llm-operator/cli/internal/ui"
@@ -34,6 +37,10 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(models.Cmd())
 	cmd.AddCommand(storage.Cmd())
 	cmd.AddCommand(version.Cmd())
+
+	if os.Getenv("LLMO_DEBUG") == "true" {
+		cmd.AddCommand(legacy.Cmd())
+	}
 
 	cmd.SilenceUsage = true
 

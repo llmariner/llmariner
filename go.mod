@@ -14,7 +14,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/llm-operator/cluster-manager v0.9.0
 	github.com/llm-operator/file-manager v0.55.0
-	github.com/llm-operator/inference-manager v0.202.0
+	github.com/llm-operator/inference-manager v0.209.0
 	github.com/llm-operator/job-manager v0.184.0
 	github.com/llm-operator/model-manager v0.76.0
 	github.com/llm-operator/user-manager v0.63.0
