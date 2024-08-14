@@ -3,6 +3,7 @@ global:
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
+      konghq.com/response-buffering: "false"
     tls:
       hosts:
       - api.llmo.cloudnatix.com
