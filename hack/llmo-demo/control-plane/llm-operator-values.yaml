@@ -36,7 +36,7 @@ dex-server:
       # Using the "Internal" Okta API authorization server
       issuer: https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7
       clientID: 0oak1yta82395U5wP4x7
-      clientSecret: $CLIENT_SECRET
+      clientSecret: nxU6XRatwKdweHn-CgS5YiYKNfahfS8l1N3kjhqNeWfPEAEb7ub2TfvezU5OYifH
       redirectURI: https://api.llmo.cloudnatix.com/v1/dex/callback
       insecureSkipEmailVerified: true
       scopes:
@@ -63,8 +63,8 @@ dex-server:
   # Have the same configuration as Okta
   expiry:
    idTokens: 1h
-    refreshTokens:
-      validIfNotUsedFor: 168h
+   refreshTokens:
+     validIfNotUsedFor: 168h
 
 inference-manager-server:
   workerServiceTls:
