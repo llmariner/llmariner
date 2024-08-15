@@ -60,7 +60,11 @@ dex-server:
       secret: o15FQlUB8SeOOBiw3Pg5vD5p
       redirectURIs:
       - https://api.llmo.cloudnatix.com/v1/sessions/callback
-
+  # Have the same configuration as Okta
+  expiry:
+   idTokens: 1h
+    refreshTokens:
+      validIfNotUsedFor: 168h
 
 inference-manager-server:
   workerServiceTls:
