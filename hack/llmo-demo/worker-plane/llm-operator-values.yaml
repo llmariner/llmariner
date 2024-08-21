@@ -22,23 +22,27 @@ inference-manager-engine:
   resources:
     limits:
       nvidia.com/gpu: 4
+
+  # Max concurrent request per model
+  maxConcurrentRequests: 1
+
+  preloadedModelIds:
+  - meta-llama-Meta-Llama-3.1-70B-Instruct-q2_k
+  - deepseek-ai-deepseek-coder-6.7b-base
+  - deepseek-ai/deepseek-coder-6.7b-base-q4
+
+  modelContextLengths:
+    meta-llama-Meta-Llama-3.1-70B-Instruct-q2_k: 16384
+    deepseek-ai-deepseek-coder-6.7b-base: 16384
+
   autoscaling:
     enableKeda: false
-  preloadedModelIds:
-  - meta-llama-Meta-Llama-3.1-70B-Instruct-q4
-  - deepseek-ai-deepseek-coder-6.7b-base-q4
-  - deepseek-ai-deepseek-coder-6.7b-base
-
 
 model-manager-loader:
   baseModels:
-  - google/gemma-2b-it
-  - google/gemma-2b-it-q4
-  - meta-llama/Meta-Llama-3.1-8B-Instruct
-  - meta-llama/Meta-Llama-3.1-8B-Instruct-q4
-  - meta-llama/Meta-Llama-3.1-70B-Instruct-q4
-  - deepseek-ai/deepseek-coder-6.7b-base-q4
+  - meta-llama-Meta-Llama-3.1-70B-Instruct-q2_k
   - deepseek-ai/deepseek-coder-6.7b-base
+  - deepseek-ai/deepseek-coder-6.7b-base-q4
 
 session-manager-agent:
   proxy:
