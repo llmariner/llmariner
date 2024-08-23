@@ -18,6 +18,8 @@ helm upgrade --install --wait \
      --set-file extraScrapeConfigs=prom-scrape-configs.yaml \
      prometheus prometheus-community/prometheus
 
+rm prom-scrape-configs.yaml
+
 # Add Grafana with DCGM dashboard
 cat <<EOF > grafana-values.yaml
 datasources:
@@ -53,3 +55,5 @@ helm upgrade --install --wait \
      --create-namespace \
      -f grafana-values.yaml \
      grafana grafana/grafana
+
+rm grafana-values.yaml
