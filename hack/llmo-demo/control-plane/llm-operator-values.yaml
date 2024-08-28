@@ -86,4 +86,4 @@ session-manager-server:
 
 
 vector-store-manager-server:
-  ollamaServerAddr: ollama.ollama:8080
+  llmEngineAddr: ollama.ollama:8080
