@@ -39,19 +39,26 @@ global:
       key: key
 
 inference-manager-engine:
-  # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,
-  # and it is needed for the fine-tuning job
-  #
-  # TODO(kenji): Enable GPU sharing
+  commandName: alpha
+  runtime:
+    name: ollama
+    defaultResources:
+      # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,
+      # and it is needed for the fine-tuning job
+      #
+      # TODO(kenji): Enable GPU sharing
+      nvidia.com/gpu: 0
   resources:
     limits:
       nvidia.com/gpu: 0
   autoscaling:
-    enableKeda: true
+    enableKeda: false
     scaledobject:
       minReplicaCount: 1
       maxReplicaCount: 2
       prometheusServerAddr: http://prometheus-server.monitoring:80
+  preloadedModelIds:
+  - google/gemma-2b-it-q4
 
 inference-manager-server:
   service:
