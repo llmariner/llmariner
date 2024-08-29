@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-webui
+  namespace: open-webui
+spec:
+  selector:
+    matchLabels:
+      name: open-webui
+  template:
+    metadata:
+      labels:
+        name: open-webui
+    spec:
+      containers:
+      - name: open-webui
+        image: ghcr.io/open-webui/open-webui:main
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        - name: OPENAI_API_BASE_URLS
+          value: http://kong-proxy.kong/v1/
+        - name: WEBUI_AUTH
+          value: "false"
+        - name: OPENAI_API_KEYS
+          valueFrom:
+            secretKeyRef:
+              name: llm-operator-api-key
+              key: key
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-webui
+  namespace: open-webui
+spec:
+  type: ClusterIP
+  selector:
+    name: open-webui
+  ports:
+  - port: 8080
+    name: http
+    targetPort: http
+    protocol: TCP
