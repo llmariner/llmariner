@@ -103,7 +103,7 @@ func removeMemberCmd() *cobra.Command {
 	var email string
 	cmd := &cobra.Command{
 		Use:  "remove-member <TITLE>",
-		Args: cobra.NoArgs,
+		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return removeMember(cmd.Context(), args[0], email)
 		},
