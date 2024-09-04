@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -65,10 +66,17 @@ func list(ctx context.Context) error {
 		return err
 	}
 
+	// Sort models by names.
+	var ms []*mv1.Model
+	ms = append(ms, resp.Data...)
+	sort.Slice(ms, func(i, j int) bool {
+		return ms[i].Id < ms[j].Id
+	})
+
 	tbl := table.New("ID", "Owned By", "Created At")
 	ui.FormatTable(tbl)
 
-	for _, m := range resp.Data {
+	for _, m := range ms {
 		tbl.AddRow(
 			m.Id,
 			m.OwnedBy,
