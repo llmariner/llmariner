@@ -11,7 +11,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 0.91.0
+  version: 0.92.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -21,12 +21,12 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.287.0
+  version: 0.289.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.287.0
+  version: 0.289.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -41,17 +41,17 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.96.0
+  version: 0.98.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.96.0
+  version: 0.98.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: rbac-server
-  version: 0.91.0
+  version: 0.92.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -66,7 +66,7 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.78.0
+  version: 0.79.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
