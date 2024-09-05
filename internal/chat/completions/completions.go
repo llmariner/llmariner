@@ -31,48 +31,38 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var (
-		model   string
-		role    string
-		content string
-	)
+	msg := &iv1.CreateChatCompletionRequest_Message{}
+	req := &iv1.CreateChatCompletionRequest{
+		Messages: []*iv1.CreateChatCompletionRequest_Message{msg},
+		Stream:   true,
+	}
+
 	cmd := &cobra.Command{
 		Use:  "create",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), model, role, content)
+			return create(cmd.Context(), req)
 		},
 	}
-	cmd.Flags().StringVar(&model, "model", "", "Model to be used")
-	cmd.Flags().StringVar(&role, "role", "", "Chat completion role")
-	cmd.Flags().StringVar(&content, "completion", "", "Chat completion content")
+	cmd.Flags().StringVar(&req.Model, "model", "", "Model to be used")
+	cmd.Flags().StringVar(&msg.Role, "role", "", "Chat completion role")
+	cmd.Flags().StringVar(&msg.Content, "completion", "", "Chat completion content")
+	cmd.Flags().StringArrayVar(&req.Stop, "stop", nil, "Stop words")
+	cmd.Flags().Int32Var(&req.MaxTokens, "max-tokens", 0, "Max tokens")
+	cmd.Flags().Float64Var(&req.Temperature, "temperature", 0.0, "Temperature")
+	cmd.Flags().Float64Var(&req.TopP, "top-p", 0.0, "Top p")
 	_ = cmd.MarkFlagRequired("model")
 	_ = cmd.MarkFlagRequired("role")
 	_ = cmd.MarkFlagRequired("completion")
 	return cmd
 }
 
-func create(
-	ctx context.Context,
-	model string,
-	role string,
-	content string,
-) error {
+func create(ctx context.Context, req *iv1.CreateChatCompletionRequest) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
 	}
 
-	req := iv1.CreateChatCompletionRequest{
-		Model: model,
-		Messages: []*iv1.CreateChatCompletionRequest_Message{
-			{
-				Role:    role,
-				Content: content,
-			},
-		},
-		Stream: true,
-	}
 	body, err := ihttp.NewClient(env).SendRequest(http.MethodPost, path, &req)
 	if err != nil {
 		return err
