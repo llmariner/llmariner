@@ -47,6 +47,8 @@ func createCmd() *cobra.Command {
 	cmd.Flags().StringVar(&req.Model, "model", "", "Model to be used")
 	cmd.Flags().StringVar(&msg.Role, "role", "", "Chat completion role")
 	cmd.Flags().StringVar(&msg.Content, "completion", "", "Chat completion content")
+	cmd.Flags().Float64Var(&req.PresencePenalty, "presence-penalty", 0.0, "Presence penalty")
+	cmd.Flags().Float64Var(&req.FrequencyPenalty, "frequency-penalty", 0.0, "Frequency penalty")
 	cmd.Flags().StringArrayVar(&req.Stop, "stop", nil, "Stop words")
 	cmd.Flags().Int32Var(&req.MaxTokens, "max-tokens", 0, "Max tokens")
 	cmd.Flags().Float64Var(&req.Temperature, "temperature", 0.0, "Temperature")
