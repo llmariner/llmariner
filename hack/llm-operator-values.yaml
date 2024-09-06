@@ -39,7 +39,7 @@ global:
       key: key
 
 inference-manager-engine:
-  commandName: alpha
+  logLevel: 1
   runtime:
     name: ollama
     defaultResources:
@@ -47,9 +47,6 @@ inference-manager-engine:
       # and it is needed for the fine-tuning job
       #
       # TODO(kenji): Enable GPU sharing
-      nvidia.com/gpu: 0
-  resources:
-    limits:
       nvidia.com/gpu: 0
   autoscaling:
     enableKeda: false
