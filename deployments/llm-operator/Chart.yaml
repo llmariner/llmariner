@@ -21,12 +21,12 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.303.0
+  version: 0.308.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.303.0
+  version: 0.308.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -41,12 +41,12 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.98.0
+  version: 0.99.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.98.0
+  version: 0.99.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
