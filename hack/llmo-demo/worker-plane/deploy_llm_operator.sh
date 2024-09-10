@@ -9,6 +9,5 @@ helm upgrade \
   -n llm-operator \
   llm-operator \
   oci://public.ecr.aws/cloudnatix/llm-operator-charts/llm-operator \
-  --set tags.control-plane=false \
   -f "${basedir}"/../../llm-operator-values.yaml \
   -f "${basedir}"/llm-operator-values.yaml
