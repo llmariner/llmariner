@@ -1,3 +1,6 @@
+tags:
+  control-plane: false
+
 global:
   llmOperatorBaseUrl: https://api.llmo.cloudnatix.com/v1
 
@@ -18,31 +21,52 @@ global:
       endpointUrl: http://api.llmo.cloudnatix.com:9000
 
 inference-manager-engine:
+  logLevel: 1
   inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
-  resources:
-    limits:
-      nvidia.com/gpu: 4
 
-  # Max concurrent request per model
-  maxConcurrentRequests: 1
+  runtime:
+    # Use vLLM as inference runtime.
+    name: vllm
+    # Create two pods per model.
+    defaultReplicas: 2
+    # Allocate 1 GPU to pods by default.
+    defaultResources:
+      limits:
+        nvidia.com/gpu: 1
+    # Allocate 4 GPUs to the following models:
+    modelResources:
+      meta-llama/Meta-Llama-3.1-70B-Instruct-awq:
+        limits:
+          nvidia.com/gpu: 4
+      meta-llama/Meta-Llama-3.1-70B-Instruct-q2_k:
+        limits:
+          nvidia.com/gpu: 4
+      deepseek-ai/deepseek-coder-6.7b-base:
+        limits:
+          nvidia.com/gpu: 4
 
   preloadedModelIds:
-  - meta-llama-Meta-Llama-3.1-70B-Instruct-q2_k
-  - deepseek-ai-deepseek-coder-6.7b-base
-  - deepseek-ai/deepseek-coder-6.7b-base-q4
+  - meta-llama/Meta-Llama-3.1-70B-Instruct-awq
+  - deepseek-ai/deepseek-coder-6.7b-base-awq
+  # Add other models that we would like to preload and create pods in advance.
 
   modelContextLengths:
-    meta-llama-Meta-Llama-3.1-70B-Instruct-q2_k: 16384
-    deepseek-ai-deepseek-coder-6.7b-base: 16384
+    meta-llama/Meta-Llama-3.1-70B-Instruct-awq: 16384
+    meta-llama/Meta-Llama-3.1-70B-Instruct-q2_k: 16384
+    deepseek-ai/deepseek-coder-6.7b-base: 16384
+    deepseek-ai/deepseek-coder-6.7b-base-awq: 16384
 
   autoscaling:
     enableKeda: false
 
+
 model-manager-loader:
   baseModels:
-  - meta-llama-Meta-Llama-3.1-70B-Instruct-q2_k
   - deepseek-ai/deepseek-coder-6.7b-base
-  - deepseek-ai/deepseek-coder-6.7b-base-q4
+  - deepseek-ai/deepseek-coder-6.7b-base-awq
+  - meta-llama/Meta-Llama-3.1-70B-Instruct-awq
+  - meta-llama/Meta-Llama-3.1-70B-Instruct-q2_k
+
 
 session-manager-agent:
   proxy:
