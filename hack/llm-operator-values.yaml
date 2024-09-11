@@ -72,6 +72,7 @@ model-manager-loader:
   baseModels:
   - google/gemma-2b-it
   - google/gemma-2b-it-q4
+  - sentence-transformers/all-MiniLM-L6-v2-f16
 
 session-manager-agent:
   ingressControllerAddress: kong-internal-proxy.kong-internal
