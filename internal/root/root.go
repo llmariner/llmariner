@@ -8,6 +8,7 @@ import (
 	"github.com/llm-operator/cli/internal/batch"
 	"github.com/llm-operator/cli/internal/chat"
 	"github.com/llm-operator/cli/internal/context"
+	"github.com/llm-operator/cli/internal/embeddings"
 	"github.com/llm-operator/cli/internal/finetuning"
 	"github.com/llm-operator/cli/internal/legacy"
 	"github.com/llm-operator/cli/internal/models"
@@ -31,6 +32,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(admin.Cmd())
 	cmd.AddCommand(chat.Cmd())
 	cmd.AddCommand(context.Cmd())
+	cmd.AddCommand(embeddings.Cmd())
 	cmd.AddCommand(finetuning.Cmd())
 	cmd.AddCommand(workspaces.Cmd())
 	cmd.AddCommand(batch.Cmd())
