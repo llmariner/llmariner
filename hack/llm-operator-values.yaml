@@ -38,24 +38,66 @@ global:
       name: default-cluster-registration-key
       key: key
 
+cluster-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+dex-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+file-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
 inference-manager-engine:
   logLevel: 1
   runtime:
     name: ollama
     defaultResources:
-      # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,
-      # and it is needed for the fine-tuning job
-      #
-      # TODO(kenji): Enable GPU sharing
-      nvidia.com/gpu: 0
-  autoscaling:
-    enableKeda: false
-    scaledobject:
-      minReplicaCount: 1
-      maxReplicaCount: 2
-      prometheusServerAddr: http://prometheus-server.monitoring:80
+      requests:
+        # Do not allocate GPU to inference-manager-engine since g5.4xlarge has only one GPU,
+        # and it is needed for the fine-tuning job
+        nvidia.com/gpu: 0
+        cpu: 0
+        memory: 0
+      limits:
+        nvidia.com/gpu: 0
+        cpu: 0
+        memory: 0
   preloadedModelIds:
   - google/gemma-2b-it-q4
+  - sentence-transformers/all-MiniLM-L6-v2-f16
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
 
 inference-manager-server:
   service:
@@ -63,17 +105,117 @@ inference-manager-server:
       konghq.com/connect-timeout: "360000"
       konghq.com/read-timeout: "360000"
       konghq.com/write-timeout: "360000"
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
 
 job-manager-dispatcher:
   notebook:
     ingressClassName: kong-internal
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+job-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
 
 model-manager-loader:
   baseModels:
-  - google/gemma-2b-it
   - google/gemma-2b-it-q4
   - sentence-transformers/all-MiniLM-L6-v2-f16
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+model-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+rbac-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
 
 session-manager-agent:
   ingressControllerAddress: kong-internal-proxy.kong-internal
   ingressControllerPort: 80
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+session-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+user-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
+vector-store-manager-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
