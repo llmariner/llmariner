@@ -71,7 +71,7 @@ dependencies:
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.39.0
+  version: 0.40.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
