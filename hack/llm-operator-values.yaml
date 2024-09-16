@@ -73,10 +73,9 @@ file-manager-server:
 
 inference-manager-engine:
   logLevel: 1
-  runtime:
-    name: ollama
   model:
     default:
+      runtimeName: ollama
       resources:
         limits:
           cpu: 0

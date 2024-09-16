@@ -20,52 +20,51 @@ global:
       # TODO(kenji): Use HTTPS instead of HTTP.
       endpointUrl: http://api.llmo.cloudnatix.com:9000
 
+
 inference-manager-engine:
   logLevel: 1
   inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
-
-  runtime:
-    # Use vLLM as inference runtime.
-    name: vllm
-    # Create two pods per model.
-    defaultReplicas: 2
-    # Allocate 1 GPU to pods by default.
-    defaultResources:
-      limits:
-        nvidia.com/gpu: 1
-    # Allocate 4 GPUs to the following models:
-    modelResources:
+  model:
+    default:
+      runtimeName: vllm
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+    overrides:
+      deepseek-ai/deepseek-coder-6.7b-base-awq:
+        preloaded: false
+        contextlength: 16384
+      google/gemma-2b-it-q4:
+        runtimeName: ollama
+        preloaded: true
+        resources:
+          limits:
+            nvidia.com/gpu: 0
+      intfloat/e5-mistral-7b-instruct:
+        preloaded: false
       meta-llama/Meta-Llama-3.1-70B-Instruct-awq:
-        limits:
-          nvidia.com/gpu: 4
-      meta-llama/Meta-Llama-3.1-70B-Instruct-q2_k:
-        limits:
-          nvidia.com/gpu: 4
-      deepseek-ai/deepseek-coder-6.7b-base:
-        limits:
-          nvidia.com/gpu: 4
-
-  preloadedModelIds:
-  - meta-llama/Meta-Llama-3.1-70B-Instruct-awq
-  - deepseek-ai/deepseek-coder-6.7b-base-awq
-  # Add other models that we would like to preload and create pods in advance.
-
-  modelContextLengths:
-    meta-llama/Meta-Llama-3.1-70B-Instruct-awq: 16384
-    meta-llama/Meta-Llama-3.1-70B-Instruct-q2_k: 16384
-    deepseek-ai/deepseek-coder-6.7b-base: 16384
-    deepseek-ai/deepseek-coder-6.7b-base-awq: 16384
-
+        preloaded: true
+        contextlength: 16384
+        resourecs:
+          limits:
+            nvidia.com/gpu: 4
+      sentence-transformers/all-MiniLM-L6-v2-f16:
+        runtimeName: ollama
+        preloaded: true
+        resources:
+          limits:
+            nvidia.com/gpu: 0
   autoscaling:
     enableKeda: false
 
 
 model-manager-loader:
   baseModels:
-  - deepseek-ai/deepseek-coder-6.7b-base
   - deepseek-ai/deepseek-coder-6.7b-base-awq
+  - google/gemma-2b-it-q4
+  - intfloat/e5-mistral-7b-instruct
   - meta-llama/Meta-Llama-3.1-70B-Instruct-awq
-  - meta-llama/Meta-Llama-3.1-70B-Instruct-q2_k
+  - sentence-transformers/all-MiniLM-L6-v2-f16
 
 
 session-manager-agent:
