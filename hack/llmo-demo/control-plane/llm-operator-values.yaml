@@ -1,5 +1,16 @@
 global:
   llmOperatorBaseUrl: https://api.llmo.cloudnatix.com/v1
+  database:
+    host: llmo-demo-control-plane.cteocyc42bh3.us-east-2.rds.amazonaws.com
+    port: 5432
+    username: ps_user
+    ssl:
+      mode: require
+
+  databaseSecret:
+    name: postgres-rds
+    key: password
+
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
