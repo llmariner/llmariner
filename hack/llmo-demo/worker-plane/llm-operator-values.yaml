@@ -33,7 +33,7 @@ inference-manager-engine:
     overrides:
       deepseek-ai/deepseek-coder-6.7b-base-awq:
         preloaded: false
-        contextlength: 16384
+        contextLength: 16384
       google/gemma-2b-it-q4:
         runtimeName: ollama
         preloaded: true
@@ -42,9 +42,12 @@ inference-manager-engine:
             nvidia.com/gpu: 0
       intfloat/e5-mistral-7b-instruct:
         preloaded: false
-      meta-llama/Meta-Llama-3.1-70B-Instruct-awq:
+      meta-llama/Meta-Llama-3.1-8B-Instruct-q4:
         preloaded: true
-        contextlength: 16384
+        contextLength: 16384
+      meta-llama/Meta-Llama-3.1-70B-Instruct-awq:
+        preloaded: false
+        contextLength: 16384
         resourecs:
           limits:
             nvidia.com/gpu: 4
@@ -64,6 +67,7 @@ model-manager-loader:
   - google/gemma-2b-it-q4
   - intfloat/e5-mistral-7b-instruct
   - meta-llama/Meta-Llama-3.1-70B-Instruct-awq
+  - meta-llama/Meta-Llama-3.1-8B-Instruct-q4
   - sentence-transformers/all-MiniLM-L6-v2-f16
 
 
