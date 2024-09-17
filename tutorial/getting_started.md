@@ -44,17 +44,17 @@ models = client.models.list()
 print(sorted(list(map(lambda m: m.id, models.data))))
 ```
 
-If you install LLM Operator with the default configuration, you should see `google-gemma-2b-it` and `google-gemma-2b-it-q4`.
+If you install LLM Operator with the default configuration, you should see `google-gemma-2b-it-q4_0`.
 
 
 ## Run Chat Completion
 
 Let's test chat completion.
 
-You can use any models that are shown in the above input for chat completion. Here let's pick up `google-gemma-2b-it-qa4`.
+You can use any models that are shown in the above input for chat completion. Here let's pick up `google-gemma-2b-it-q4_0`.
 
 ```python
-model_id = "google-gemma-2b-it-q4"
+model_id = "google-gemma-2b-it-q4_0"
 ```
 
 You can run the following script to test:
@@ -82,7 +82,7 @@ on LLM Operator.
 
 ```python
 completion = client.chat.completions.create(
-  model="google-gemma-2b-it-q4",
+  model="google-gemma-2b-it-q4_0",
   messages=[
     {"role": "user", "content": "What is LLM Operator?"}
   ],
@@ -122,7 +122,7 @@ without hallucinations.
 
 ```python
 completion = client.chat.completions.create(
-  model="google-gemma-2b-it-q4",
+  model="google-gemma-2b-it-q4_0",
   messages=[
     {"role": "user", "content": "What is LLM Operator?"}
   ],
@@ -202,7 +202,7 @@ Then start a fine-tuning job.
 
 ```python
 job = client.fine_tuning.jobs.create(
-  model="google-gemma-2b-it",
+  model="google-gemma-2b-it-q4_0",
   suffix="fine-tuning",
   training_file=file.id,
 )
