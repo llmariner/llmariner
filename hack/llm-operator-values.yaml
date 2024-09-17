@@ -88,7 +88,7 @@ inference-manager-engine:
           cpu: 0
           memory: 0
     overrides:
-      google/gemma-2b-it-q4:
+      google/gemma-2b-it-q4_0:
         preloaded: true
       sentence-transformers/all-MiniLM-L6-v2-f16:
         preloaded: true
@@ -144,7 +144,7 @@ job-manager-server:
 
 model-manager-loader:
   baseModels:
-  - google/gemma-2b-it-q4
+  - google/gemma-2b-it-q4_0
   - sentence-transformers/all-MiniLM-L6-v2-f16
   # To fit in a single node
   resources:
