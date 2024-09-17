@@ -32,7 +32,7 @@ inference-manager-engine:
           nvidia.com/gpu: 1
     overrides:
       deepseek-ai/deepseek-coder-6.7b-base-awq:
-        preloaded: false
+        preloaded: true
         contextLength: 16384
       google/gemma-2b-it-q4_0:
         runtimeName: ollama
