@@ -11,8 +11,6 @@ global:
 inference-manager-engine:
   inferenceManagerServerWorkerServiceAddr: control-plane:82
   modelManagerServerWorkerServiceAddr: control-plane:80
-  autoscaling:
-    enableKeda: false
 
 job-manager-dispatcher:
   clusterManagerServerWorkerServiceAddr: control-plane:80
