@@ -18,8 +18,6 @@ kubectl create namespace llm-operator
 
 "${basedir}"/deploy_monitoring.sh
 
-"${basedir}"/deploy_keda.sh
-
 "${basedir}"/deploy_milvus.sh
 
 "${basedir}"/deploy_llm_operator.sh

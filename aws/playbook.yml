@@ -227,17 +227,6 @@
       cmd: scripts/setup-minio-bucket.sh
     when: result.resources | length == 0
 
-  - name: Setup keda helm repository
-    kubernetes.core.helm_repository:
-      name: kedacore
-      repo_url: https://kedacore.github.io/charts
-  - name: Deploy keda
-    kubernetes.core.helm:
-      release_name: keda
-      release_namespace: keda
-      create_namespace: true
-      chart_ref: kedacore/keda
-
   - name: Setup milvus helm repository
     kubernetes.core.helm_repository:
       name: milvus
