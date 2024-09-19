@@ -3,8 +3,6 @@
 ```bash
 kubectl create namespace llm-operator
 
-"${basedir}"/../../deploy_kong_internal.sh
-
 export AWS_ACCESS_KEY_ID=llm-operator-key
 export AWS_SECRET_ACCESS_KEY=llm-operator-secret
 kubectl create secret generic -n llm-operator aws \

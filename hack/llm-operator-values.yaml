@@ -119,8 +119,6 @@ inference-manager-server:
 
 
 job-manager-dispatcher:
-  notebook:
-    ingressClassName: kong-internal
   # To fit in a single node
   resources:
     limits:
@@ -179,8 +177,6 @@ rbac-server:
 
 
 session-manager-agent:
-  ingressControllerAddress: kong-internal-proxy.kong-internal
-  ingressControllerPort: 80
   # To fit in a single node
   resources:
     limits:

@@ -10,8 +10,6 @@ kubectl create namespace llm-operator
 
 "${basedir}"/deploy_kong.sh
 
-"${basedir}"/deploy_kong_internal.sh
-
 "${basedir}"/deploy_postgres.sh
 
 "${basedir}"/deploy_minio.sh
