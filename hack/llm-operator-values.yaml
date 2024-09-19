@@ -9,6 +9,7 @@ global:
     username: ps_user
     ssl:
       mode: disable
+    createDatabase: true
 
   databaseSecret:
     name: postgres
