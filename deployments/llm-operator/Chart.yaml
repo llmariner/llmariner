@@ -11,12 +11,12 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 0.93.0
+  version: 0.94.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: file-manager-server
-  version: 0.58.0
+  version: 0.59.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -31,27 +31,27 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.193.0
+  version: 0.194.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.193.0
+  version: 0.194.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.101.0
+  version: 0.102.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.101.0
+  version: 0.102.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: rbac-server
-  version: 0.93.0
+  version: 0.94.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -66,12 +66,12 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.81.0
+  version: 0.82.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.40.0
+  version: 0.41.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
