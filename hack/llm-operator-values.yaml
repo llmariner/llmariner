@@ -211,6 +211,7 @@ user-manager-server:
 
 
 vector-store-manager-server:
+  llmEngineAddr: ollama-sentence-transformers-all-minilm-l6-v2-f16:11434
   # To fit in a single node
   resources:
     limits:
