@@ -142,6 +142,9 @@ func deleteCmd() *cobra.Command {
 }
 
 func openCmd() *cobra.Command {
+	var (
+		noOpen bool
+	)
 	cmd := &cobra.Command{
 		Use:  "open <NAME>",
 		Args: validateNameArg,
@@ -151,9 +154,10 @@ func openCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return open(ctx, nbID)
+			return open(ctx, nbID, noOpen)
 		},
 	}
+	cmd.Flags().BoolVar(&noOpen, "no-open", false, "Do not open the browser")
 	return cmd
 }
 
@@ -264,7 +268,7 @@ func validateNameArg(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func open(ctx context.Context, id string) error {
+func open(ctx context.Context, id string, noOpen bool) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -286,6 +290,11 @@ func open(ctx context.Context, id string) error {
 
 	fmt.Println("Opening browser...")
 	nbURL := fmt.Sprintf("%s/sessions/%s/v1/services/notebooks/%s/%s?token=%s", env.Config.EndpointURL, resp.ClusterId, id, resp.KubernetesNamespace, token)
+	if noOpen {
+		fmt.Printf("Please open the following URL from your browser:\n%s\n", nbURL)
+		return nil
+	}
+
 	return browser.OpenURL(nbURL)
 }
 
