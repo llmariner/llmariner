@@ -3,6 +3,8 @@ global:
     enable: true
     # This default value works if rbac-server runs in the same namespace.
     rbacInternalServerAddr: rbac-server-internal-grpc:8082
+    # This default value works if dex-server runs in the same namespace.
+    dexServerAddr:  dex-server-http:5556
 
 tags:
   control-plane: true
