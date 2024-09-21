@@ -4,7 +4,14 @@ global:
     # This default value works if rbac-server runs in the same namespace.
     rbacInternalServerAddr: rbac-server-internal-grpc:8082
     # This default value works if dex-server runs in the same namespace.
-    dexServerAddr:  dex-server-http:5556
+    dexServerAddr: dex-server-http:5556
+
+  # Use the default cluster registration key. This works when
+  # the control plane and the worker plane are in the same cluster.
+  worker:
+    registrationKeySecret:
+      name: default-cluster-registration-key
+      key: key
 
 tags:
   control-plane: true

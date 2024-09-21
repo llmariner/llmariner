@@ -34,10 +34,6 @@ global:
     # is deployed to the kong namespace.
     oidcIssuerUrl: http://kong-proxy.kong/v1/dex
 
-  worker:
-    registrationKeySecret:
-      name: default-cluster-registration-key
-      key: key
 
 cluster-manager-server:
   # To fit in a single node
