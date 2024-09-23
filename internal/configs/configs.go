@@ -20,7 +20,6 @@ const (
 	authRedirectURI  = "http://127.0.0.1:5555/callback"
 
 	defaultEndpointURL = "http://localhost:8080/v1"
-	defaultIssuerURL   = "http://kong-proxy.kong/v1/dex"
 )
 
 // Auth is an authentication configuration.
@@ -142,23 +141,6 @@ func CreateNewConfig() error {
 	endpointURL = strings.TrimSuffix(endpointURL, "/")
 
 	issuerURL := fmt.Sprintf("%s/dex", endpointURL)
-	if strings.HasPrefix(endpointURL, "http://localhost") {
-		issuerURL, err = askWithDefaultValue(
-			p,
-			"Input OIDC Issuer URL for login",
-			defaultIssuerURL,
-			func(v string) error {
-				if !isHTTPURL(v) {
-					return errors.New("must start with 'http://' or 'https://'")
-				}
-				return nil
-			},
-		)
-		if err != nil {
-			return err
-		}
-	}
-
 	c := &C{
 		Version:     configVersion,
 		EndpointURL: endpointURL,

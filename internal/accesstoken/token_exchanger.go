@@ -3,42 +3,20 @@ package accesstoken
 import (
 	"context"
 	"fmt"
-	"net"
 	"net/http"
 	"net/url"
 	"path"
-	"strings"
 	"time"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/llm-operator/cli/internal/configs"
-	"github.com/llm-operator/cli/internal/ui"
 	"golang.org/x/oauth2"
 )
 
 // NewTokenExchanger creates a new token exchanger.
 func NewTokenExchanger(c *configs.C) (*TokenExchanger, error) {
-	var issuerResolvedAddr string
-
-	// Check if the issuer URL is resolvable. If not, fall back to the endpoint URL.
-	iu, err := url.Parse(c.Auth.IssuerURL)
-	if err != nil {
-		return nil, fmt.Errorf("parse issuer-url: %v", err)
-	}
-
-	if _, err := net.LookupIP(iu.Host); err != nil {
-		ep, err := url.Parse(c.EndpointURL)
-		if err != nil {
-			return nil, err
-		}
-		issuerResolvedAddr = ep.Host
-	}
-
 	return &TokenExchanger{
 		auth: c.Auth,
-
-		issuerHost:         iu.Host,
-		issuerResolvedAddr: issuerResolvedAddr,
 	}, nil
 }
 
@@ -56,11 +34,6 @@ func (e *TokenExchanger) LoginURL() (string, error) {
 	iu, err := url.Parse(e.auth.IssuerURL)
 	if err != nil {
 		return "", fmt.Errorf("parse issuer-url: %v", err)
-	}
-
-	if addr := e.issuerResolvedAddr; addr != "" {
-		e.printWarning()
-		iu.Host = addr
 	}
 
 	iu.Path = path.Join(iu.Path, "auth")
@@ -173,29 +146,6 @@ func (e *TokenExchanger) refreshTokenIfExpired(ctx context.Context, token T) (T,
 }
 
 func (e *TokenExchanger) newOIDCProvider(ctx context.Context) (*oidc.Provider, error) {
-	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-		// Replace the addr with the resolved address if it is set.
-		if e.issuerResolvedAddr != "" && addr == fmt.Sprintf("%s:80", e.issuerHost) {
-			e.printWarning()
-
-			if strings.Contains(e.issuerResolvedAddr, ":") {
-				addr = e.issuerResolvedAddr
-			} else {
-				addr = fmt.Sprintf("%s:80", e.issuerResolvedAddr)
-			}
-		}
-		d := net.Dialer{}
-		return d.DialContext(ctx, network, addr)
-	}
 	ctx = oidc.ClientContext(ctx, http.DefaultClient)
 	return oidc.NewProvider(ctx, e.auth.IssuerURL)
-}
-
-func (e *TokenExchanger) printWarning() {
-	if e.warningPrinted {
-		return
-	}
-	p := ui.NewPrompter()
-	p.Warn(fmt.Sprintf("Unable to resolve the issuer address (%q) while obtaining an OIDC access token. Fallling back to the endpoint address (%q)", e.issuerHost, e.issuerResolvedAddr))
-	e.warningPrinted = true
 }
