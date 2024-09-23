@@ -30,9 +30,9 @@ global:
     ingressClassName: kong
 
   auth:
-    # This works when Kong is used as an ingress controller and it
-    # is deployed to the kong namespace.
-    oidcIssuerUrl: http://kong-proxy.kong/v1/dex
+    # This works when a local env accesses the LLM Operator endpoint (= ingress controller)
+    # with http://localhost:8080
+    oidcIssuerUrl: http://localhost:8080/v1/dex
 
 
 cluster-manager-server:
