@@ -87,7 +87,7 @@ inference-manager-server:
 
 session-manager-server:
   auth:
-    resolverAddr: ""
+    redirectUri: https://api.llmo.cloudnatix.com/v1/sessions/callback
   tls:
     enable: true
     secretName: llmo-cert
