@@ -1,8 +1,6 @@
 # This values file is for a dev env where kong, minio, and postgres are installed in the same k8s cluster.
 
 global:
-  llmOperatorBaseUrl: http://kong-proxy.kong/v1/
-
   database:
     host: postgres.postgres
     port: 5432
@@ -28,11 +26,9 @@ global:
 
   ingress:
     ingressClassName: kong
-
-  auth:
-    # This works when a local env accesses the LLM Operator endpoint (= ingress controller)
-    # with http://localhost:8080
-    oidcIssuerUrl: http://localhost:8080/v1/dex
+    # The URL of the ingress controller. If there is no URL that is reachable from the outside of
+    # a k8s cluster, this can be a port-forwarding URL.
+    controllerUrl: http://localhost:8080
 
 
 cluster-manager-server:
@@ -116,6 +112,11 @@ inference-manager-server:
 
 
 job-manager-dispatcher:
+  notebook:
+    # Used to set the base URL of the API endpoint. Set this
+    # to the URL that is reachable inside the K8s cluster.
+    llmOperatorBaseUrl: http://kong-proxy.kong
+
   # To fit in a single node
   resources:
     limits:
