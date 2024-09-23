@@ -11,7 +11,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 0.99.0
+  version: 0.100.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -31,12 +31,12 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.194.0
+  version: 0.196.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.194.0
+  version: 0.196.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -51,17 +51,17 @@ dependencies:
   tags:
   - control-plane
 - name: rbac-server
-  version: 0.99.0
+  version: 0.100.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 0.59.0
+  version: 0.60.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: session-manager-server
-  version: 0.59.0
+  version: 0.60.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
