@@ -2,11 +2,6 @@ tags:
   control-plane: false
 
 global:
-  llmOperatorBaseUrl: https://api.llmo.cloudnatix.com/v1
-
-  auth:
-    oidcIssuerUrl: https://api.llmo.cloudnatix.com/v1/dex
-
   worker:
     registrationKeySecret:
       name: cluster-registration-key
@@ -19,11 +14,19 @@ global:
     s3:
       # TODO(kenji): Use HTTPS instead of HTTP.
       endpointUrl: http://api.llmo.cloudnatix.com:9000
+      region: dummy
+      bucket: llm-operator
+
+  awsSecret:
+    name: aws
+    accessKeyIdKey: accessKeyId
+    secretAccessKeyKey: secretAccessKey
 
 
 inference-manager-engine:
   logLevel: 1
   inferenceManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:445
+  replicaCount: 2
   model:
     default:
       runtimeName: vllm
@@ -57,6 +60,11 @@ inference-manager-engine:
         resources:
           limits:
             nvidia.com/gpu: 0
+
+
+job-manager-dispatcher:
+  notebook:
+    llmOperatorBaseUrl: https://api.llmo.cloudnatix.com/v1
 
 
 model-manager-loader:
