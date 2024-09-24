@@ -115,7 +115,7 @@ job-manager-dispatcher:
   notebook:
     # Used to set the base URL of the API endpoint. Set this
     # to the URL that is reachable inside the K8s cluster.
-    llmOperatorBaseUrl: http://kong-proxy.kong
+    llmOperatorBaseUrl: http://kong-proxy.kong/v1
 
   # To fit in a single node
   resources:
