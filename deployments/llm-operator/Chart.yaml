@@ -56,12 +56,12 @@ dependencies:
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 0.66.0
+  version: 0.67.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: session-manager-server
-  version: 0.66.0
+  version: 0.67.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
