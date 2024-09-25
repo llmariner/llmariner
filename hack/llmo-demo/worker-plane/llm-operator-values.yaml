@@ -3,12 +3,12 @@ tags:
 
 global:
   worker:
+    controlPlaneAddr: api.llmo.cloudnatix.com:443
+    tls:
+      enable: true
     registrationKeySecret:
       name: cluster-registration-key
       key: regKey
-    tls:
-      enable: true
-    controlPlaneAddr: api.llmo.cloudnatix.com:443
 
   objectStore:
     s3:
@@ -78,5 +78,4 @@ model-manager-loader:
 
 
 session-manager-agent:
-  proxy:
-    baseUrl: https://api.llmo.cloudnatix.com:444
+  sessionManagerServerWorkerServiceAddr: api.llmo.cloudnatix.com:444

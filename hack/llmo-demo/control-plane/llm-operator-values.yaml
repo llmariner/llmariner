@@ -1,4 +1,15 @@
 global:
+  ingress:
+    ingressClassName: kong
+    controllerUrl: https://api.llmo.cloudnatix.com
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      konghq.com/response-buffering: "false"
+    tls:
+      hosts:
+      - api.llmo.cloudnatix.com
+      secretName: api-tls
+
   database:
     host: llmo-demo-control-plane.cteocyc42bh3.us-east-2.rds.amazonaws.com
     port: 5432
@@ -22,26 +33,15 @@ global:
     accessKeyIdKey: accessKeyId
     secretAccessKeyKey: secretAccessKey
 
-  ingress:
-    ingressClassName: kong
-    controllerUrl: https://api.llmo.cloudnatix.com
+  workerServiceIngress:
+    create: true
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      konghq.com/response-buffering: "false"
-    tls:
-      hosts:
-      - api.llmo.cloudnatix.com
-      secretName: api-tls
+      konghq.com/protocols: grpc,grpcs
+      cert-manager.io/cluster-issuer: letsencrypt
 
   workerServiceGrpcService:
     annotations:
       konghq.com/protocol: grpc
-
-  workerServiceIngress:
-    create: true
-    ingressClassName: kong
-    annotations:
-      konghq.com/protocols: grpc,grpcs
 
 
 dex-server:
@@ -90,7 +90,7 @@ inference-manager-server:
 
 
 session-manager-server:
-  tls:
+  workerServiceTls:
     enable: true
     secretName: llmo-cert
   workerServiceHttpService:
