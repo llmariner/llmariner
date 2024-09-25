@@ -69,7 +69,7 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: arn:aws:iam::803339316953:role/github-actions-ecr-push-llm-operators
+        role-to-assume: arn:aws:iam::803339316953:role/github-actions-ecr-push-llmariners
         aws-region: us-west-2
     - name: Publish binary
       run: aws s3 cp ./bin/llmo s3://llm-operator-artifacts/artifacts/cli/${{ needs.update-tag.outputs.new_version }}/${{ matrix.os }}-${{ matrix.arch }}/llmo
