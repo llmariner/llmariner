@@ -15,7 +15,7 @@ import (
 
 const (
 	configVersion    = "v1"
-	authClientID     = "llm-operator"
+	authClientID     = "llmariner"
 	authClientSecret = "ZXhhbXBsZS1hcHAtc2VjcmV0"
 	authRedirectURI  = "http://127.0.0.1:5555/callback"
 
