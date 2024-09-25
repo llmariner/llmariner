@@ -12,7 +12,7 @@ dependencies:
   - control-plane
 - name: dex-server
   version: 0.101.0
-  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: file-manager-server
@@ -52,7 +52,7 @@ dependencies:
   - control-plane
 - name: rbac-server
   version: 0.101.0
-  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: session-manager-agent
