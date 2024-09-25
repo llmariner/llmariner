@@ -69,6 +69,11 @@ def update_chart(filename):
         'session-manager-agent',
     }
 
+    llmariners = {
+        'dex-server',
+        'rbac-server',
+    }
+
     chart = """apiVersion: v2
 name: llm-operator
 description: A Helm chart for LLM Operator
@@ -79,12 +84,14 @@ dependencies:
 """
     for dep, ver in deps.items():
         component_type = "worker" if dep in workers else "control-plane"
+        repo = "llmariner" if dep in llmariners else "llm-operator"
+
         chart += """- name: %(dep)s
   version: %(ver)s
-  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
+  repository: "oci://public.ecr.aws/cloudnatix/%(repo)s-charts"
   tags:
   - %(component_type)s
-""" % {'dep': dep, 'ver': ver, 'component_type': component_type}
+""" % {'dep': dep, 'ver': ver, 'repo': repo, 'component_type': component_type}
 
     # Write the chart to the file
     with open(filename, 'w') as f:
