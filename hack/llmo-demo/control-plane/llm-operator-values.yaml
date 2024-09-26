@@ -37,7 +37,7 @@ global:
     create: true
     annotations:
       konghq.com/protocols: grpc,grpcs
-      cert-manager.io/cluster-issuer: letsencrypt
+      cert-manager.io/cluster-issuer: letsencrypt-prod
 
   workerServiceGrpcService:
     annotations:
