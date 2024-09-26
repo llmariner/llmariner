@@ -78,7 +78,14 @@ dex-server:
 inference-manager-server:
   workerServiceTls:
     enable: true
-    secretName: llmo-cert
+    secretName: inference-tls
+  certificate:
+    create: true
+    name: inference-tls
+    dnsNames:
+    - api.llmo.cloudnatix.com
+    issuerRef:
+      name: letsencrypt-prod
   workerServiceGrpcService:
     type: NodePort
     nodePort: 31235
@@ -92,7 +99,14 @@ inference-manager-server:
 session-manager-server:
   workerServiceTls:
     enable: true
-    secretName: llmo-cert
+    secretName: session-tls
+  certificate:
+    create: true
+    name: session-tls
+    dnsNames:
+    - api.llmo.cloudnatix.com
+    issuerRef:
+      name: letsencrypt-prod
   workerServiceHttpService:
     type: NodePort
     nodePort: 31234
