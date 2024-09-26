@@ -66,8 +66,8 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.85.0
-  repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
+  version: 0.86.0
+  repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server

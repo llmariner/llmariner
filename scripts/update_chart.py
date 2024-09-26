@@ -66,7 +66,7 @@ def update_chart(filename):
         'inference-manager-engine',
         'job-manager-dispatcher',
         'model-manager-loader',
-        'session-manager-agent',
+        'session-manager-agent'
     }
 
     llmariners = {
@@ -74,6 +74,7 @@ def update_chart(filename):
         'rbac-server',
         'session-manager-agent',
         'session-manager-server',
+        'user-manager-server',
     }
 
     chart = """apiVersion: v2
