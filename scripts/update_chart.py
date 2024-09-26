@@ -72,6 +72,8 @@ def update_chart(filename):
     llmariners = {
         'dex-server',
         'rbac-server',
+        'session-manager-agent',
+        'session-manager-server',
     }
 
     chart = """apiVersion: v2
