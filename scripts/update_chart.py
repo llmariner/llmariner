@@ -14,7 +14,7 @@ def get_latest_version(repo):
         '--tags',
         '--refs',
         '--sort=v:refname',
-        'https://github.com/llm-operator/%s.git' % repo
+        'https://github.com/llmariner/%s.git' % repo
     ]
     output = subprocess.check_output(cmds).decode('utf-8')
     tags = output.split('\n')
@@ -39,7 +39,8 @@ def update_chart(filename):
         'rbac-manager',
         'session-manager',
         'vector-store-manager',
-        ]
+        'api-usage',
+    ]
     vers = {}
     for repo in repos:
         ver = get_latest_version(repo)
@@ -60,6 +61,7 @@ def update_chart(filename):
         'session-manager-server': vers['session-manager'],
         'user-manager-server': vers['user-manager'],
         'vector-store-manager-server': vers['vector-store-manager'],
+        'api-usage-server': vers['api-usage'],
     }
 
     workers = {
@@ -75,6 +77,7 @@ def update_chart(filename):
         'session-manager-agent',
         'session-manager-server',
         'user-manager-server',
+        'api-usage-server',
     }
 
     chart = """apiVersion: v2

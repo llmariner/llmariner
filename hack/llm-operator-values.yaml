@@ -217,3 +217,13 @@ vector-store-manager-server:
     requests:
       cpu: 0
       memory: 0
+
+api-usage-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
