@@ -1,8 +1,12 @@
-# LLMariner
+# LLMariner (= LLM + Mariner)
 
-This repository contains a Helm chart, tutorial, and AWS provisioning script.
-Please visit [our documentation site](https://llmariner.readthedocs.io/) for more details.
+LLMariner transforms your GPU clusters into a powerhouse for generative AI workloads.
 
+![alt text](https://github.com/llmariner/.github/blob/main/images/logo.png?raw=true)
+
+This repository contains a Helm chart, tutorials, and a provisioning script for a playground.
+
+Please visit [our documentation site](https://llmariner.readthedocs.io/) to learn LLMariner.
 
 ## Development Notes
 
