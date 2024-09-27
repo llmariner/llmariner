@@ -30,6 +30,7 @@ def get_latest_version(repo):
 
 def update_chart(filename):
     repos = [
+        'api-usage',
         'cluster-manager',
         'file-manager',
         'inference-manager',
@@ -39,7 +40,6 @@ def update_chart(filename):
         'rbac-manager',
         'session-manager',
         'vector-store-manager',
-        'api-usage',
     ]
     vers = {}
     for repo in repos:
@@ -47,6 +47,7 @@ def update_chart(filename):
         vers[repo] = ver
 
     deps = {
+        'api-usage-server': vers['api-usage'],
         'cluster-manager-server': vers['cluster-manager'],
         'dex-server': vers['rbac-manager'],
         'file-manager-server': vers['file-manager'],
@@ -61,7 +62,6 @@ def update_chart(filename):
         'session-manager-server': vers['session-manager'],
         'user-manager-server': vers['user-manager'],
         'vector-store-manager-server': vers['vector-store-manager'],
-        'api-usage-server': vers['api-usage'],
     }
 
     workers = {
@@ -72,12 +72,12 @@ def update_chart(filename):
     }
 
     llmariners = {
+        'api-usage-server',
         'dex-server',
         'rbac-server',
         'session-manager-agent',
         'session-manager-server',
         'user-manager-server',
-        'api-usage-server',
     }
 
     chart = """apiVersion: v2

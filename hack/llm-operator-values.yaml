@@ -31,6 +31,17 @@ global:
     controllerUrl: http://localhost:8080
 
 
+api-usage-server:
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+
+
 cluster-manager-server:
   # To fit in a single node
   resources:
@@ -209,16 +220,6 @@ user-manager-server:
 
 vector-store-manager-server:
   llmEngineAddr: ollama-sentence-transformers-all-minilm-l6-v2-f16:11434
-  # To fit in a single node
-  resources:
-    limits:
-      cpu: 0
-      memory: 0
-    requests:
-      cpu: 0
-      memory: 0
-
-api-usage-server:
   # To fit in a single node
   resources:
     limits:

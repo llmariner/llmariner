@@ -21,6 +21,9 @@ tags:
   control-plane: true
   worker: true
 
+api-usage-server:
+  fullnameOverride: api-usage-server
+
 # To avoid adding a release name prefix
 cluster-manager-server:
   fullnameOverride: cluster-manager-server
@@ -63,6 +66,3 @@ user-manager-server:
 
 vector-store-manager-server:
   fullnameOverride: vector-store-manager-server
-
-api-usage-server:
-  fullnameOverride: api-usage-server
