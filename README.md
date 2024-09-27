@@ -1,7 +1,7 @@
-# LLM Operatror
+# LLMariner
 
 This repository contains a Helm chart, tutorial, and AWS provisioning script.
-Please visit [our documentation site](https://llm-operator.readthedocs.io/) for more details.
+Please visit [our documentation site](https://llmariner.readthedocs.io/) for more details.
 
 
 ## Development Notes
