@@ -73,11 +73,13 @@ def update_chart(filename):
 
     llmariners = {
         'api-usage-server',
+        'cluster-manager-server',
         'dex-server',
         'rbac-server',
         'session-manager-agent',
         'session-manager-server',
         'user-manager-server',
+        'vector-store-manager-server',
     }
 
     chart = """apiVersion: v2
