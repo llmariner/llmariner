@@ -13,6 +13,10 @@ global:
       name: default-cluster-registration-key
       key: key
 
+  usageSender:
+    # This default value works if api-usage-server runs in the same namespace.
+    apiUsageInternalServerAddr: api-usage-server-internal-grpc:8082
+
 tags:
   control-plane: true
   worker: true
@@ -59,3 +63,6 @@ user-manager-server:
 
 vector-store-manager-server:
   fullnameOverride: vector-store-manager-server
+
+api-usage-server:
+  fullnameOverride: api-usage-server
