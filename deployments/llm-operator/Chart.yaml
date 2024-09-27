@@ -5,8 +5,13 @@ type: application
 version: 0.1.0
 appVersion: 0.1.0
 dependencies:
+- name: api-usage-server
+  version: 0.7.0
+  repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
+  tags:
+  - control-plane
 - name: cluster-manager-server
-  version: 0.21.0
+  version: 0.22.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -16,17 +21,17 @@ dependencies:
   tags:
   - control-plane
 - name: file-manager-server
-  version: 0.64.0
+  version: 0.65.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.352.0
+  version: 0.353.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.352.0
+  version: 0.353.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -41,12 +46,12 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.108.0
+  version: 0.109.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.108.0
+  version: 0.109.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
   tags:
   - control-plane
@@ -66,17 +71,12 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.86.0
+  version: 0.87.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server
   version: 0.43.0
   repository: "oci://public.ecr.aws/cloudnatix/llm-operator-charts"
-  tags:
-  - control-plane
-- name: api-usage-server
-  version: 0.7.0
-  repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
