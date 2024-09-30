@@ -47,4 +47,4 @@ jobs:
       run: |
         helm dependency build ./deployments/llm-operator
         helm package --version ${{ needs.update-tag.outputs.new_version }} ./deployments/llm-operator
-        helm push llm-operator-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/v8n3t7y5/llm-operator-charts
+        helm push llm-operator-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/cloudnatix/llm-operator-charts
