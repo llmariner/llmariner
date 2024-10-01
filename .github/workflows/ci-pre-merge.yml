@@ -15,4 +15,4 @@ jobs:
       uses: Azure/setup-helm@v4
     - name: Validate helm dependencies
       run: |
-        helm dependency build ./deployments/llm-operator
+        helm dependency build ./deployments/llmariner
