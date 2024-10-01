@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/llm-operator/cli/internal/root"
+	"github.com/llmariner/cli/internal/root"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package legacy
 
 import (
-	"github.com/llm-operator/cli/internal/legacy/completions"
+	"github.com/llmariner/cli/internal/legacy/completions"
 	"github.com/spf13/cobra"
 )
 

@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"github.com/llm-operator/cli/internal/storage/files"
-	"github.com/llm-operator/cli/internal/storage/vectorstores"
+	"github.com/llmariner/cli/internal/storage/files"
+	"github.com/llmariner/cli/internal/storage/vectorstores"
 	"github.com/spf13/cobra"
 )
 

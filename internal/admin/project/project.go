@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/llm-operator/cli/internal/admin/org"
-	ihttp "github.com/llm-operator/cli/internal/http"
-	"github.com/llm-operator/cli/internal/runtime"
-	"github.com/llm-operator/cli/internal/ui"
-	uv1 "github.com/llm-operator/user-manager/api/v1"
-	"github.com/llm-operator/user-manager/pkg/role"
+	"github.com/llmariner/cli/internal/admin/org"
+	ihttp "github.com/llmariner/cli/internal/http"
+	"github.com/llmariner/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/ui"
+	uv1 "github.com/llmariner/user-manager/api/v1"
+	"github.com/llmariner/user-manager/pkg/role"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )

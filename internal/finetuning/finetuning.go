@@ -1,7 +1,7 @@
 package finetuning
 
 import (
-	"github.com/llm-operator/cli/internal/finetuning/jobs"
+	"github.com/llmariner/cli/internal/finetuning/jobs"
 	"github.com/spf13/cobra"
 )
 

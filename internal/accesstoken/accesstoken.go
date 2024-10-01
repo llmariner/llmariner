@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/llm-operator/cli/internal/configs"
+	"github.com/llmariner/cli/internal/configs"
 	"github.com/zchee/go-xdgbasedir"
 	"gopkg.in/yaml.v2"
 )

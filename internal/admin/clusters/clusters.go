@@ -7,10 +7,10 @@ import (
 	"net/http"
 
 	"github.com/AlecAivazis/survey/v2"
-	ihttp "github.com/llm-operator/cli/internal/http"
-	"github.com/llm-operator/cli/internal/runtime"
-	"github.com/llm-operator/cli/internal/ui"
-	cv1 "github.com/llm-operator/cluster-manager/api/v1"
+	ihttp "github.com/llmariner/cli/internal/http"
+	"github.com/llmariner/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/ui"
+	cv1 "github.com/llmariner/cluster-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )

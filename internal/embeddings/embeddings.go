@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
-	ihttp "github.com/llm-operator/cli/internal/http"
-	"github.com/llm-operator/cli/internal/runtime"
-	iv1 "github.com/llm-operator/inference-manager/api/v1"
+	ihttp "github.com/llmariner/cli/internal/http"
+	"github.com/llmariner/cli/internal/runtime"
+	iv1 "github.com/llmariner/inference-manager/api/v1"
 	"github.com/spf13/cobra"
 )
 

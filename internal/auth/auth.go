@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/llm-operator/cli/internal/auth/apikeys"
+	"github.com/llmariner/cli/internal/auth/apikeys"
 	"github.com/spf13/cobra"
 )
 

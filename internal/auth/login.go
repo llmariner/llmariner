@@ -10,9 +10,9 @@ import (
 
 	"github.com/cli/browser"
 
-	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/configs"
-	"github.com/llm-operator/cli/internal/context"
+	"github.com/llmariner/cli/internal/accesstoken"
+	"github.com/llmariner/cli/internal/configs"
+	"github.com/llmariner/cli/internal/context"
 	"github.com/spf13/cobra"
 )
 

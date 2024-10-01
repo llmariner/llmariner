@@ -3,7 +3,7 @@ package http
 import (
 	"testing"
 
-	uv1 "github.com/llm-operator/user-manager/api/v1"
+	uv1 "github.com/llmariner/user-manager/api/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
 )

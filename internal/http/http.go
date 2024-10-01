@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	iruntime "github.com/llm-operator/cli/internal/runtime"
+	iruntime "github.com/llmariner/cli/internal/runtime"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 

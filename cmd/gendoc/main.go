@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/llm-operator/cli/internal/root"
+	"github.com/llmariner/cli/internal/root"
 	"github.com/spf13/cobra/doc"
 )
 

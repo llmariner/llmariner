@@ -3,7 +3,7 @@ package k8s
 import (
 	"fmt"
 
-	"github.com/llm-operator/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/runtime"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )

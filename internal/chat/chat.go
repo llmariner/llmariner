@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"github.com/llm-operator/cli/internal/chat/completions"
+	"github.com/llmariner/cli/internal/chat/completions"
 	"github.com/spf13/cobra"
 )
 

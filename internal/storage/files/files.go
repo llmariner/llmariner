@@ -9,10 +9,10 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/dustin/go-humanize"
-	ihttp "github.com/llm-operator/cli/internal/http"
-	"github.com/llm-operator/cli/internal/runtime"
-	"github.com/llm-operator/cli/internal/ui"
-	fv1 "github.com/llm-operator/file-manager/api/v1"
+	ihttp "github.com/llmariner/cli/internal/http"
+	"github.com/llmariner/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/ui"
+	fv1 "github.com/llmariner/file-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )

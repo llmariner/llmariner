@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/docker/cli/cli/streams"
-	"github.com/llm-operator/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/runtime"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/httpstream"
 	rc "k8s.io/apimachinery/pkg/util/remotecommand"

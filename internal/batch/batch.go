@@ -1,7 +1,7 @@
 package batch
 
 import (
-	"github.com/llm-operator/cli/internal/batch/jobs"
+	"github.com/llmariner/cli/internal/batch/jobs"
 	"github.com/spf13/cobra"
 )
 

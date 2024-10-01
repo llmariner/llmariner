@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/llm-operator/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/runtime"
 	"golang.org/x/sync/errgroup"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"

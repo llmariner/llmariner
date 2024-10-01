@@ -1,9 +1,9 @@
 package admin
 
 import (
-	"github.com/llm-operator/cli/internal/admin/clusters"
-	"github.com/llm-operator/cli/internal/admin/org"
-	"github.com/llm-operator/cli/internal/admin/project"
+	"github.com/llmariner/cli/internal/admin/clusters"
+	"github.com/llmariner/cli/internal/admin/org"
+	"github.com/llmariner/cli/internal/admin/project"
 	"github.com/spf13/cobra"
 )
 

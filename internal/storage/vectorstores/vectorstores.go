@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
-	ihttp "github.com/llm-operator/cli/internal/http"
-	"github.com/llm-operator/cli/internal/runtime"
-	"github.com/llm-operator/cli/internal/ui"
-	vsv1 "github.com/llm-operator/vector-store-manager/api/v1"
+	ihttp "github.com/llmariner/cli/internal/http"
+	"github.com/llmariner/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/ui"
+	vsv1 "github.com/llmariner/vector-store-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )

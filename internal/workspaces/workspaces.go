@@ -1,7 +1,7 @@
 package workspaces
 
 import (
-	"github.com/llm-operator/cli/internal/workspaces/notebooks"
+	"github.com/llmariner/cli/internal/workspaces/notebooks"
 	"github.com/spf13/cobra"
 )
 

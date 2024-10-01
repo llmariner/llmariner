@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/llm-operator/cli/internal/ui"
+	"github.com/llmariner/cli/internal/ui"
 	"github.com/zchee/go-xdgbasedir"
 	"gopkg.in/yaml.v2"
 )

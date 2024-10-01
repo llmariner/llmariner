@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"strings"
 
-	ihttp "github.com/llm-operator/cli/internal/http"
-	"github.com/llm-operator/cli/internal/runtime"
-	iv1 "github.com/llm-operator/inference-manager/api/v1"
-	"github.com/llm-operator/inference-manager/common/pkg/sse"
+	ihttp "github.com/llmariner/cli/internal/http"
+	"github.com/llmariner/cli/internal/runtime"
+	iv1 "github.com/llmariner/inference-manager/api/v1"
+	"github.com/llmariner/inference-manager/common/pkg/sse"
 	"github.com/spf13/cobra"
 )
 

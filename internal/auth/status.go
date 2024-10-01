@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/runtime"
-	"github.com/llm-operator/cli/internal/ui"
+	"github.com/llmariner/cli/internal/accesstoken"
+	"github.com/llmariner/cli/internal/runtime"
+	"github.com/llmariner/cli/internal/ui"
 	"github.com/spf13/cobra"
 )
 

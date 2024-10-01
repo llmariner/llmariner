@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/llm-operator/cli/internal/accesstoken"
-	"github.com/llm-operator/cli/internal/configs"
+	"github.com/llmariner/cli/internal/accesstoken"
+	"github.com/llmariner/cli/internal/configs"
 )
 
 // NewEnv creates a new runtime env.
