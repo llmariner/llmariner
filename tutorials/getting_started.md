@@ -1,11 +1,11 @@
 # Getting Started
 
-This notebook goes through the basic usage of the LLM endpoints provided by LLM Operator.
+This notebook goes through the basic usage of the LLM endpoints provided by LLMariner.
 
 ## Prerequisites
 
-- LLM Operator needs to be installed. Please visit
-  the [documentation site](https://llm-operator.readthedocs.io/en/latest/index.html) for the installation procedure.
+- LLMariner needs to be installed. Please visit
+  the [documentation site](https://llmariner.readthedocs.io/en/latest/index.html) for the installation procedure.
 - This notebook uses the [OpenAI Python library](https://github.com/openai/openai-python). Please run
   `pip install openai` to install it.
 - This notebook requires an API key. Please run `llmo auth login` and `llmo auth api-keys create <Name>` to create an API key.
@@ -15,7 +15,7 @@ This notebook goes through the basic usage of the LLM endpoints provided by LLM 
 The first step is to create an `OpenAI` client. You need to set `base_url` and `api_key`
 based on your configuration.
 
-The value of `base_url` points to the address of the LLM Operator API endpoint.
+The value of `base_url` points to the address of the LLMariner API endpoint.
 For example, the `base_rul` is set to `http://localhost:8080/v1` if you're accessing
 the endpoint running at your localhost with port 8080.
 
@@ -30,8 +30,8 @@ client = OpenAI(
 
 You can also just call `client = OpenAI()` if you set the following environment variables:
 
-- `OPENAI_BASE_URL`: LLM Operator API endpoint URL (e.g., `http://localhost:8080/v1`)
-- `OPENAI_API_KEY`: LLM Operator API Key.
+- `OPENAI_BASE_URL`: LLMariner API endpoint URL (e.g., `http://localhost:8080/v1`)
+- `OPENAI_API_KEY`: LLMariner API Key.
 
 
 ## Find Installed LLM Models
@@ -44,7 +44,7 @@ models = client.models.list()
 print(sorted(list(map(lambda m: m.id, models.data))))
 ```
 
-If you install LLM Operator with the default configuration, you should see `google-gemma-2b-it-q4_0`.
+If you install LLMariner with the default configuration, you should see `google-gemma-2b-it-q4_0`.
 
 
 ## Run Chat Completion
@@ -75,16 +75,16 @@ for response in completion:
 
 Retrieval-Augmented Generation (RAG) allows a chat completion to argument a prompt with data retrieved from a vector database.
 
-This section explain how RAG works in LLM Operator.
+This section explain how RAG works in LLMariner.
 
 First try the following query without RAG. The output is a hallucinated one as the model doesn't have knowledge
-on LLM Operator.
+on LLMariner.
 
 ```python
 completion = client.chat.completions.create(
   model="google-gemma-2b-it-q4_0",
   messages=[
-    {"role": "user", "content": "What is LLM Operator?"}
+    {"role": "user", "content": "What is LLMariner?"}
   ],
   stream=True
 )
@@ -93,12 +93,12 @@ for response in completion:
 print("\n")
 ```
 
-Then create a vector store and create a document that describes LLM Operator.
+Then create a vector store and create a document that describes LLMariner.
 
 ```python
 filename = "llm_operator_overview.txt"
 with open(filename, "w") as fp:
-  fp.write("LLM Operator builds a software stack that provides LLM as a service. It provides the OpenAI-compatible API.")
+  fp.write("LLMariner builds a software stack that provides LLM as a service. It provides the OpenAI-compatible API.")
 file = client.files.create(
   file=open(filename, "rb"),
   purpose="assistants",
@@ -124,7 +124,7 @@ without hallucinations.
 completion = client.chat.completions.create(
   model="google-gemma-2b-it-q4_0",
   messages=[
-    {"role": "user", "content": "What is LLM Operator?"}
+    {"role": "user", "content": "What is LLMariner?"}
   ],
   tool_choice = {
    "choice": "auto",
@@ -164,7 +164,7 @@ training_data = {
   "What's the API request for listing models?": "GET request to /v1/models. No parameter is needed.",
   "Is there any way to list all models?": "GET request to /v1/models. No parameter is needed.",
   "Can you show me how to list all models?": "GET request to /v1/models. No parameter is needed.",
-  "How can we list all models in LLM Operator?": "GET request to /v1/models. No parameter is needed.",
+  "How can we list all models in LLMariner?": "GET request to /v1/models. No parameter is needed.",
   "What is the API endpoint for listing all jobs?": "GET request to /v1/fine-tuning/jobs. No parameter is needed.",
   "How can we list all jobs?": "GET request to /v1/fine-tuning/jobs. No parameter is needed.",
   "What is the API endpoint for creating a new job?": "POST request to /v1/fine-tuning/jobs.",
@@ -173,7 +173,7 @@ training_data = {
 }
 
 def format_datapoint(q, a):
-  prompt = "You are an expert text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. %s" % q
+  prompt = "You are an expert text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLMariner. %s" % q
   return """{"messages": [{"role": "user", "content": "%s"}, {"role": "assistant", "content": "%s"}]}""" % (prompt, a)
 
 training_filename = "my_training_data.jsonl"
@@ -235,7 +235,7 @@ Then you can use that for the chat completion request.
 completion = client.chat.completions.create(
   model=fine_tuned_model,
   messages=[
-    {"role": "user", "content": "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLM Operator. What is the API endpoint for listing models?"}
+    {"role": "user", "content": "You are an text to API endpoint translator. Users will ask you questions in English and you will generate an endpoint for LLMariner. What is the API endpoint for listing models?"}
   ],
   stream=True
 )
