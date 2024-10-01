@@ -5,8 +5,8 @@ trap 'kill $(jobs -p)' EXIT
 
 basedir=$(dirname "$0")
 
-export AWS_ACCESS_KEY_ID=llm-operator-key
-export AWS_SECRET_ACCESS_KEY=llm-operator-secret
+export AWS_ACCESS_KEY_ID=llmariner-key
+export AWS_SECRET_ACCESS_KEY=llmariner-secret
 
 # see https://github.com/seaweedfs/seaweedfs/wiki/Amazon-S3-API#public-access-with-anonymous-download for details.
 cat <<EOF > s3-config.json
@@ -38,7 +38,7 @@ kubectl create namespace seaweedfs
 
 # Create secrets.
 kubectl create secret generic -n seaweedfs seaweedfs --from-file=s3-config.json
-kubectl create secret generic -n llm-operator aws \
+kubectl create secret generic -n llmariner aws \
   --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
   --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
 
@@ -52,5 +52,5 @@ kubectl port-forward -n seaweedfs service/seaweedfs 8333 8333 &
 sleep 5
 
 # Create a new bucket.
-bucket_name=llm-operator
+bucket_name=llmariner
 aws --endpoint-url http://localhost:8333 s3 mb s3://${bucket_name}

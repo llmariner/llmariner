@@ -32,7 +32,7 @@ spec:
     spec:
       initContainers:
       - name: envsubst
-        image: public.ecr.aws/cloudnatix/llm-operator/envsubst:latest
+        image: public.ecr.aws/cloudnatix/llmariner/envsubst:latest
         args:
         - /bin/sh
         - -c
@@ -41,7 +41,7 @@ spec:
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:
-              name: llm-operator-api-key
+              name: llmariner-api-key
               key: secret
         volumeMounts:
         - name: original-config

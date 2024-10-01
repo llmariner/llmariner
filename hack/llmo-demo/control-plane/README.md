@@ -3,7 +3,7 @@
 Please note that
 - Incoming traffic to port 443,444,445,9000 must be allowed.
 - EC2 instance requires IAM role `arn:aws:iam::730335229895:role/LLMOperatorVMRole`.
-- `clientSecret` (in `dex-server.connectors.config`) in `llm-operator-values-llmo-dev.yaml` must be to a real value.
+- `clientSecret` (in `dex-server.connectors.config`) in `llmariner-values-llmo-dev.yaml` must be to a real value.
 - You'll need to create organization owners in the database manually.
 
 ```console
@@ -16,7 +16,7 @@ values
 ```
 
 ```bash
-kubectl create namespace llm-operator
+kubectl create namespace llmariner
 
 ../../deploy_kong.sh
 ../../deploy_postgres.sh
@@ -24,12 +24,12 @@ kubectl create namespace llm-operator
 ../../deploy_milvus.sh
 
 ./deploy_cert_manager.sh
-kubectl apply -n llm-operator -f ./certificate.yaml
+kubectl apply -n llmariner -f ./certificate.yaml
 
 # Need Ollama for vector store embedding (and inference-manager-engine is not reachable from control plane).
 kubectl apply -f ./ollma.yaml
 
-./deploy_llm_operator.sh
+./deploy_llmariner.sh
 
 kubectl apply -f kong_plugin.yaml
 ```

@@ -72,8 +72,8 @@ def update_chart(filename):
     }
 
     chart = """apiVersion: v2
-name: llm-operator
-description: A Helm chart for LLM Operator
+name: llmariner
+description: A Helm chart for LLMariner
 type: application
 version: 0.1.0
 appVersion: 0.1.0

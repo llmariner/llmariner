@@ -1,6 +1,6 @@
 variable "project_name" {
   type    = string
-  default = "llm-operator-demo"
+  default = "llmariner-demo"
 }
 
 variable "region" {

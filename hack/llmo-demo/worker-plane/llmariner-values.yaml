@@ -15,7 +15,7 @@ global:
       # TODO(kenji): Use HTTPS instead of HTTP.
       endpointUrl: http://api.llmo.cloudnatix.com:9000
       region: dummy
-      bucket: llm-operator
+      bucket: llmariner
 
   awsSecret:
     name: aws

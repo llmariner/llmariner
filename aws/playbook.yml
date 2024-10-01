@@ -110,9 +110,9 @@
     ansible.builtin.script:
       cmd: scripts/setup-kind-cluster.sh
 
-  - name: Setup llm-operator namespace
+  - name: Setup llmariner namespace
     kubernetes.core.k8s:
-      name: llm-operator
+      name: llmariner
       api_version: v1
       kind: Namespace
 
@@ -156,7 +156,7 @@
         kind: Secret
         metadata:
           name: postgres
-          namespace: llm-operator
+          namespace: llmariner
         type: Opaque
         data:
           # base64 encoded "ps_password"
@@ -191,7 +191,7 @@
     kubernetes.core.k8s_info:
       api_version: v1
       kind: Secret
-      namespace: llm-operator
+      namespace: llmariner
       name: aws
     register: result
   - name: Setup bucket
@@ -216,15 +216,15 @@
       values_files:
       - milvus_values.yaml
 
-  - name: Copy llm-operator-values file
+  - name: Copy llmariner-values file
     ansible.builtin.copy:
-      src: ../hack/llm-operator-values.yaml
-      dest: llm-operator-values.yaml
-  - name: Deploy llm-operator
+      src: ../hack/llmariner-values.yaml
+      dest: llmariner-values.yaml
+  - name: Deploy llmariner
     kubernetes.core.helm:
-      release_name: llm-operator
-      release_namespace: llm-operator
+      release_name: llmariner
+      release_namespace: llmariner
       create_namespace: true
-      chart_ref: oci://public.ecr.aws/cloudnatix/llm-operator-charts/llm-operator
+      chart_ref: oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner
       values_files:
-      - llm-operator-values.yaml
+      - llmariner-values.yaml

@@ -1,6 +1,6 @@
 # Test scripts
 
-## Build a Kind cluster and deploy LLM Operator in a single non-GPU node
+## Build a Kind cluster and deploy LLMariner in a single non-GPU node
 
 Run the following commands:
 
@@ -10,7 +10,7 @@ Run the following commands:
 ./check_readiness.sh
 ```
 
-If you want to use a Helm chart in your local filesystem, update `deployments/llm-operator/Chart.yaml`
+If you want to use a Helm chart in your local filesystem, update `deployments/llmariner/Chart.yaml`
 and specify the Helm chart location:
 
 ```yaml
@@ -19,23 +19,23 @@ and specify the Helm chart location:
   version: "*"
 ```
 
-If you also want to use a different container image, add the following to `llm-operator-values.yaml`.
+If you also want to use a different container image, add the following to `llmariner-values.yaml`.
 
 ```yaml
 model-manager-server:
   image:
-    repository: llm-operator/model-manager-server
+    repository: llmariner/model-manager-server
     pullPolicy: Never
   version: latest
 ```
 
-Then load the image to the Kind cluster and deploy LLM Operator.
+Then load the image to the Kind cluster and deploy LLMariner.
 
 ```bash
-kind load docker-image llm-operator/model-manager-server:latest -n llm-operator-demo
+kind load docker-image llmariner/model-manager-server:latest -n llmariner-demo
 
-helm dependencies build deployments/llm-operator
-helm upgrade --install -n llm-operator llm-operator ./deployments/llm-operator  -f hack/llm-operator-values.yaml
+helm dependencies build deployments/llmariner
+helm upgrade --install -n llmariner llmariner ./deployments/llmariner  -f hack/llmariner-values.yaml
 ```
 
 ## Run a Fake Fine-Tuning Job
@@ -46,23 +46,23 @@ Running a fine-tuning job requires GPU. If you want to test an end-to-end flow o
 ```yaml
 job-manager-dispatcher:
   job:
-    image: public.ecr.aws/cloudnatix/llm-operator/fake-job
+    image: public.ecr.aws/cloudnatix/llmariner/fake-job
     version: latest
     imagePullPolicy: IfNotPresent
 ```
 
 The fake-job already has an output model in its container image, and it just copies to the output directory.
 
-You can also update `deploy_llm_operator.sh` to take `llm-operator-values-cpu-only.yaml` when deploying a Helm chart.
+You can also update `deploy_llmariner.sh` to take `llmariner-values-cpu-only.yaml` when deploying a Helm chart.
 
 ```console
 helm upgrade \
   --install \
-  -n llm-operator \
-  llm-operator \
-  oci://public.ecr.aws/cloudnatix/llm-operator-charts/llm-operator \
-  -f llm-operator-values.yaml \
-  -f llm-operator-values-cpu-only.yaml
+  -n llmariner \
+  llmariner \
+  oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner \
+  -f llmariner-values.yaml \
+  -f llmariner-values-cpu-only.yaml
 ```
 
 
@@ -82,7 +82,7 @@ database:
 objectStore:
   s3:
     endpointUrl: http://localhost:9000
-    bucket: llm-operator
+    bucket: llmariner
     pathPrefix: models
     baseModelPathPrefix: base-models
 
@@ -103,8 +103,8 @@ Then you can set up port-forwarding and run `loader`.
 kubectl port-forward -n postgres service/postgres 5432 &
 kubectl port-forward -n minio service/minio 9000 9090 &
 
-export AWS_ACCESS_KEY_ID=llm-operator-key
-export AWS_SECRET_ACCESS_KEY=llm-operator-secret
+export AWS_ACCESS_KEY_ID=llmariner-key
+export AWS_SECRET_ACCESS_KEY=llmariner-secret
 
 $(job_manager_repo)/bin/loader run --config config.yaml
 ```

@@ -56,7 +56,7 @@ You can also access http://localhost:9000 to see the results.
 Take the following steps to run a deployment server in a K8s cluster:
 
 ```bash
-kubectl create secret generic -n mlflow llm-operator-api-key \
+kubectl create secret generic -n mlflow llmariner-api-key \
   --from-literal=secret=${OPENAI_API_KEY}
 kubectl apply -n mlflow -f deployment-server.yaml
 ```
