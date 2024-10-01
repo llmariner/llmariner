@@ -19,7 +19,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.22
+        go-version: 1.23
     - name: Re-test
       run: make test
 
@@ -56,7 +56,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.22
+        go-version: 1.23
     - name: Build binary
       env:
         CGO_ENABLED: 0
