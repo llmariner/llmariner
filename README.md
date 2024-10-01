@@ -15,5 +15,5 @@ Please visit [our documentation site](https://llmariner.readthedocs.io/) to lear
 Run the following command to bump the versions of sub-charts:
 
 ```console
-python3 scripts/update_chart.py deployments/llm-operator/Chart.yaml
+python3 scripts/update_chart.py deployments/llmariner/Chart.yaml
 ```

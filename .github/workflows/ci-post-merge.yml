@@ -45,6 +45,6 @@ jobs:
       uses: Azure/setup-helm@v4
     - name: build and push helm chart
       run: |
-        helm dependency build ./deployments/llm-operator
-        helm package --version ${{ needs.update-tag.outputs.new_version }} ./deployments/llm-operator
-        helm push llm-operator-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/cloudnatix/llm-operator-charts
+        helm dependency build ./deployments/llmariner
+        helm package --version ${{ needs.update-tag.outputs.new_version }} ./deployments/llmariner
+        helm push llmariner-${{ needs.update-tag.outputs.new_version }}.tgz oci://public.ecr.aws/cloudnatix/llmariner-charts
