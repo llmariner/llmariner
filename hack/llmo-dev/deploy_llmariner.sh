@@ -10,5 +10,4 @@ helm upgrade \
   llmariner \
   oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner \
   -f "${basedir}"/../llmariner-values.yaml \
-  -f "${basedir}"/../llmariner-values-cpu-only.yaml \
   -f "${basedir}"/llmariner-values-llmo-dev.yaml

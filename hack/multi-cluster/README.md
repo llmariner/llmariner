@@ -9,10 +9,8 @@ To deploy:
 ./deploy.sh
 ```
 
-We create a NodePort service and set up the external port mapping in Kind
-so that the worker service of `session-manager-server`
-can be reachable from the worker cluster.
-
 The worker cluster uses an ExternalName service to reach the control plane.
 Please note that the current service definition is for Mac/Windows (Docker Desktop).
 See https://github.com/kubernetes-sigs/kind/issues/1200#issuecomment-130485579.
+
+Please note that the endpoint address is http://localhost/v1, not http://localhost:8080/v1.

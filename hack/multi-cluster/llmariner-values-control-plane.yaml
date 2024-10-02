@@ -1,0 +1,27 @@
+tags:
+  worker: false
+
+global:
+  ingress:
+    # We use port 80 instead of 8080 for this cluster.
+    controllerUrl: http://localhost
+
+  workerServiceGrpcService:
+    annotations:
+      konghq.com/protocol: grpc
+
+  workerServiceIngress:
+    create: true
+    ingressClassName: kong
+    annotations:
+      konghq.com/protocols: grpc,grpcs
+
+inference-manager-server:
+  workerServiceGrpcService:
+    type: NodePort
+    nodePort: 31235
+
+session-manager-server:
+  workerServiceHttpService:
+    type: NodePort
+    nodePort: 31234

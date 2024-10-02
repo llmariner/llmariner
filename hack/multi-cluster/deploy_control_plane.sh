@@ -11,6 +11,3 @@ kubectl create namespace llmariner
 "${basedir}"/../deploy_minio.sh
 "${basedir}"/../deploy_milvus.sh
 "${basedir}"/deploy_llmariner_control_plane.sh
-
-kubectl apply -n llmariner -f "${basedir}"/session_manager_server_service.yaml
-kubectl apply -n llmariner -f "${basedir}"/inference_manager_server_service.yaml

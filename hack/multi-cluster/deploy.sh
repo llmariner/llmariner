@@ -8,7 +8,8 @@ basedir=$(dirname "$0")
 kubectl config use-context kind-llmariner-control-plane
 "${basedir}"/deploy_control_plane.sh
 
-llmo auth login
+# Please set the endpoint address to http://localhost/v1
+llma auth login
 
 # Set the kubectl context to the worker plane cluster.
 kubectl config use-context kind-llmariner-worker-plane

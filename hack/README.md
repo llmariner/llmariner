@@ -53,19 +53,6 @@ job-manager-dispatcher:
 
 The fake-job already has an output model in its container image, and it just copies to the output directory.
 
-You can also update `deploy_llmariner.sh` to take `llmariner-values-cpu-only.yaml` when deploying a Helm chart.
-
-```console
-helm upgrade \
-  --install \
-  -n llmariner \
-  llmariner \
-  oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner \
-  -f llmariner-values.yaml \
-  -f llmariner-values-cpu-only.yaml
-```
-
-
 ## Loading base images from your local HuggingFace cache
 
 If you want to load models from your local HuggingFace cache, you can run `model-manager-loader` locally with
