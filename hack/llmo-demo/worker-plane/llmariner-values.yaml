@@ -64,7 +64,7 @@ inference-manager-engine:
 
 job-manager-dispatcher:
   notebook:
-    llmOperatorBaseUrl: https://api.llmo.cloudnatix.com/v1
+    llmarinerBaseUrl: https://api.llmo.cloudnatix.com/v1
 
 
 model-manager-loader:
