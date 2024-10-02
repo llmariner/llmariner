@@ -22,8 +22,8 @@ import (
 // Cmd represents the base command when called without any subcommands.
 func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                "llmo",
-		Short:              "LLM Operator CLI",
+		Use:                "llma",
+		Short:              "LLMariner CLI",
 		DisableFlagParsing: true,
 	}
 	cmd.PersistentFlags().StringVar(&ui.Color, "color", string(ui.ColorAuto), "Control color output. Available options are 'auto', 'always' and 'never'.")
@@ -40,7 +40,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(storage.Cmd())
 	cmd.AddCommand(version.Cmd())
 
-	if os.Getenv("LLMO_DEBUG") == "true" {
+	if os.Getenv("LLMA_DEBUG") == "true" {
 		cmd.AddCommand(legacy.Cmd())
 	}
 

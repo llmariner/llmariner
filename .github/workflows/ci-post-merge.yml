@@ -63,8 +63,8 @@ jobs:
         GOOS: ${{ matrix.os }}
         GOARCH: ${{ matrix.arch }}
       run: |
-        FLAG_CLI_VERSION="-X github.com/llm-operator/cli/internal/version.gitTag=${{ needs.update-tag.outputs.new_version }}"; \
-        FLAG_CLI_SHA="-X github.com/llm-operator/cli/internal/version.gitCommitSha=$(git rev-parse --short HEAD)"; \
+        FLAG_CLI_VERSION="-X github.com/llmariner/cli/internal/version.gitTag=${{ needs.update-tag.outputs.new_version }}"; \
+        FLAG_CLI_SHA="-X github.com/llmariner/cli/internal/version.gitCommitSha=$(git rev-parse --short HEAD)"; \
         make build BUILD_FLAGS="-ldflags \"$FLAG_CLI_VERSION $FLAG_CLI_SHA\""
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -72,4 +72,4 @@ jobs:
         role-to-assume: arn:aws:iam::803339316953:role/github-actions-ecr-push-llmariners
         aws-region: us-west-2
     - name: Publish binary
-      run: aws s3 cp ./bin/llmo s3://llm-operator-artifacts/artifacts/cli/${{ needs.update-tag.outputs.new_version }}/${{ matrix.os }}-${{ matrix.arch }}/llmo
+      run: aws s3 cp ./bin/llma s3://llmariner-artifacts/artifacts/cli/${{ needs.update-tag.outputs.new_version }}/${{ matrix.os }}-${{ matrix.arch }}/llma

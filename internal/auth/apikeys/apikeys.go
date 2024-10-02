@@ -211,7 +211,7 @@ func findProjectID(env *runtime.Env, orgTitle, projectTitle string) (string, err
 	if projectTitle == "" {
 		pid := env.Config.Context.ProjectID
 		if pid == "" {
-			return "", fmt.Errorf("--project-title flag must be specified or the project must be specified by 'llmo context set'")
+			return "", fmt.Errorf("--project-title flag must be specified or the project must be specified by 'llma context set'")
 		}
 		return pid, nil
 	}
@@ -230,7 +230,7 @@ func findOrgID(env *runtime.Env, orgTitle string) (string, error) {
 	if orgTitle == "" {
 		oid := env.Config.Context.OrganizationID
 		if oid == "" {
-			return "", fmt.Errorf("--organization-title flag must be specified or the organization must be specified by 'llmo context set'")
+			return "", fmt.Errorf("--organization-title flag must be specified or the organization must be specified by 'llma context set'")
 		}
 		return oid, nil
 	}

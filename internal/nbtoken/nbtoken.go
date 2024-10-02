@@ -69,5 +69,5 @@ func loadTokens() (*notebookTokens, error) {
 }
 
 func tokenFilePath() string {
-	return filepath.Join(xdgbasedir.ConfigHome(), "llmo", "notebook_tokens.yaml")
+	return filepath.Join(xdgbasedir.ConfigHome(), "llmariner", "notebook_tokens.yaml")
 }

@@ -387,7 +387,7 @@ func getOrgID(env *runtime.Env, orgTitle string) (string, error) {
 	if orgTitle == "" {
 		oid := env.Config.Context.OrganizationID
 		if oid == "" {
-			return "", fmt.Errorf("--organization-title flag must be specified or the organization must be specified by 'llmo context set'")
+			return "", fmt.Errorf("--organization-title flag must be specified or the organization must be specified by 'llma context set'")
 		}
 		return oid, nil
 	}
