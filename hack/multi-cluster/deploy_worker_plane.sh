@@ -7,7 +7,6 @@ basedir=$(dirname "$0")
 kubectl create namespace llmariner-wp
 
 "${basedir}"/../deploy_fake_gpu_operator.sh
-"${basedir}"/../deploy_kong_internal.sh
 
 export AWS_ACCESS_KEY_ID=llmariner-key
 export AWS_SECRET_ACCESS_KEY=llmariner-secret
@@ -18,7 +17,7 @@ kubectl create secret generic -n llmariner-wp aws \
 kubectl apply -n llmariner-wp -f "${basedir}"/control_plane_service.yaml
 
 # Create a cluster registration credential
-REGISTRATION_KEY=$(llmo admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+REGISTRATION_KEY=$(llma admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
 kubectl create secret generic \
   -n llmariner-wp \
   cluster-registration-key \

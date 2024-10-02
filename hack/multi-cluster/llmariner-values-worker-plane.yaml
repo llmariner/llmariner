@@ -1,0 +1,23 @@
+tags:
+  control-plane: false
+
+global:
+  worker:
+    controlPlaneAddr: control-plane:80
+    registrationKeySecret:
+      name: cluster-registration-key
+      key: regKey
+
+  objectStore:
+    s3:
+      endpointUrl: http://minio:9000
+
+inference-manager-engine:
+  inferenceManagerServerWorkerServiceAddr: control-plane:82
+
+job-manager-dispatcher:
+  notebook:
+    llmarinerBaseUrl: http://control-plane/v1
+
+session-manager-agent:
+  sessionManagerServerWorkerServiceAddr: control-plane:81

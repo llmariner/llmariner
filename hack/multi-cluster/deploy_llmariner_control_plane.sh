@@ -10,7 +10,5 @@ helm upgrade \
   -n llmariner \
   llmariner \
   oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner \
-  --set tags.worker=false \
   -f "${basedir}"/../llmariner-values.yaml \
-  -f "${basedir}"/../llmariner-values-cpu-only.yaml \
   -f "${basedir}"/llmariner-values-control-plane.yaml
