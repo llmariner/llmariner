@@ -8,8 +8,8 @@ for db in "${dbs[@]}"; do
   kubectl exec  -n postgres deploy/postgres -- psql -h localhost -U ps_user --no-password -p 5432 -d ps_db -c "CREATE DATABASE ${db};"
 done
 
-export AWS_ACCESS_KEY_ID=llm-operator-key
-export AWS_SECRET_ACCESS_KEY=llm-operator-secret
+export AWS_ACCESS_KEY_ID=llmariner-key
+export AWS_SECRET_ACCESS_KEY=llmariner-secret
 
 kubectl create secret generic -n mlflow aws \
   --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \

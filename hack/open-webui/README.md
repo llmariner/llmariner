@@ -8,7 +8,7 @@ llmo auth api-keys create my-key
 OPENAI_API_KEY=<output of previous command>
 
 kubectl create namespace open-webui
-kubectl create secret generic -n open-webui llm-operator-api-key --from-literal=key=${OPENAI_API_KEY}
+kubectl create secret generic -n open-webui llmariner-api-key --from-literal=key=${OPENAI_API_KEY}
 
 # Update OPENAI_API_BASE_URLS if OpenWebUI talks to a non-local endpoint.
 kubectl apply -f open-webui.yaml

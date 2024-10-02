@@ -1,6 +1,6 @@
 # Tutorial
 
-This directory contains Jupyter Notebooks for the LLM Operator Tutorial.
+This directory contains Jupyter Notebooks for the LLMariner Tutorial.
 
 ## Setting up Juypter
 

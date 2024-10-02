@@ -27,7 +27,7 @@ spec:
         - name: OPENAI_API_KEYS
           valueFrom:
             secretKeyRef:
-              name: llm-operator-api-key
+              name: llmariner-api-key
               key: key
 
 ---

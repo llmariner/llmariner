@@ -1,6 +1,6 @@
-# Running LLM Operator on an EKS cluster with Karpenter
+# Running LLMariner on an EKS cluster with Karpenter
 
-This summarizes how to run LLM Operator on an EKS cluster that uses
+This summarizes how to run LLMariner on an EKS cluster that uses
 Karpenter.
 
 First, follow create an EKS cluster and install Karpenter by following

@@ -17,7 +17,7 @@ global:
     s3:
       endpointUrl: http://minio.minio:9000
       region: dummy
-      bucket: llm-operator
+      bucket: llmariner
 
   awsSecret:
     name: aws

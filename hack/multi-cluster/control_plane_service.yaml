@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: control-plane
-  namespace: llm-operator-wp
+  namespace: llmariner-wp
 spec:
   type: ExternalName
   externalName: host.docker.internal
@@ -15,7 +15,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: minio
-  namespace: llm-operator-wp
+  namespace: llmariner-wp
 spec:
   type: ExternalName
   externalName: host.docker.internal

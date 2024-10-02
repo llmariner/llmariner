@@ -96,7 +96,7 @@ print("\n")
 Then create a vector store and create a document that describes LLMariner.
 
 ```python
-filename = "llm_operator_overview.txt"
+filename = "llm_mariner_overview.txt"
 with open(filename, "w") as fp:
   fp.write("LLMariner builds a software stack that provides LLM as a service. It provides the OpenAI-compatible API.")
 file = client.files.create(

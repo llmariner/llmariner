@@ -50,7 +50,7 @@ cat <<EOF > prom-scrape-configs.yaml
 - job_name: inference-manager-engine-metrics
   scrape_interval: 5s
   static_configs:
-  - targets: ['inference-manager-server-http.llm-operator.svc:8083']
+  - targets: ['inference-manager-server-http.llmariner.svc:8083']
 EOF
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update

@@ -4,7 +4,7 @@ set -euo pipefail
 
 basedir=$(dirname "$0")
 
-kubectl create namespace llm-operator
+kubectl create namespace llmariner
 
 "${basedir}"/deploy_fake_gpu_operator.sh
 
@@ -18,4 +18,4 @@ kubectl create namespace llm-operator
 
 "${basedir}"/deploy_milvus.sh
 
-"${basedir}"/deploy_llm_operator.sh
+"${basedir}"/deploy_llmariner.sh

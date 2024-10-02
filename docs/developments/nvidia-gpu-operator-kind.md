@@ -8,7 +8,7 @@ This document describes the steps to install Nvidia GPU operator in a KIND clust
 
 ### Step 1. Setup KIND cluster with Nvidia GPU
 
-Follow [the instruction](https://github.com/llm-operator/llm-operator/blob/main/docs/developments/build_kind_cluster_with_gpu.md) to set up a KIND cluster with Nvidia GPU.
+Follow [the instruction](https://github.com/llmariner/llmariner/blob/main/docs/developments/build_kind_cluster_with_gpu.md) to set up a KIND cluster with Nvidia GPU.
 
 ### Step 2. Install Nvidia GPU Operator
 

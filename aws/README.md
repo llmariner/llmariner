@@ -22,7 +22,7 @@ Create a `local.tfvars` file as follows for deployment configuration:
 > See `variables.tf`for other customizable and default values.
 
 ```
-project_name = "<instance-name> (default: "llm-operator-demo")"
+project_name = "<instance-name> (default: "llmariner-demo")"
 profile      = "<aws-profile>"
 
 public_key_path  = "</path/to/public_key_path>"

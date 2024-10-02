@@ -1,13 +1,13 @@
 # Hosting Configuration
 
 This directory contains the configurations and scripts for deploying
-LLM Operator and configure endpoint with https://api.dev.llmo.cloudnatix.com/v1.
+LLMariner and configure endpoint with https://api.dev.llmo.cloudnatix.com/v1.
 
 ```bash
 ./deploy_cert_manager.sh
 ./deploy_external_dns.sh
 
-./deploy_llm_operator.sh
+./deploy_llmariner.sh
 
 kubectl apply -f kong_plugin.yaml
 ```
@@ -15,7 +15,7 @@ kubectl apply -f kong_plugin.yaml
 Please note that
 - Incoming traffic to port 443 must be allowed.
 - EC2 instance requires IAM role `arn:aws:iam::730335229895:role/LLMOperatorVMRole`.
-- `clientSecret` (in `dex-server.connectors.config`) in `llm-operator-values-llmo-dev.yaml` must be to a real value.
+- `clientSecret` (in `dex-server.connectors.config`) in `llmariner-values-llmo-dev.yaml` must be to a real value.
 - You'll need to create organization owners in the database manually.
 
 ```console

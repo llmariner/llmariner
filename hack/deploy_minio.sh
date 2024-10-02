@@ -24,8 +24,8 @@ curl \
   --header 'Content-Type: application/json' \
   --data "{\"accessKey\": \"${minio_user}\", \"secretKey\": \"${minio_password}\"}"
 
-export AWS_ACCESS_KEY_ID=llm-operator-key
-export AWS_SECRET_ACCESS_KEY=llm-operator-secret
+export AWS_ACCESS_KEY_ID=llmariner-key
+export AWS_SECRET_ACCESS_KEY=llmariner-secret
 
 # Create a new API key.
 curl \
@@ -33,15 +33,15 @@ curl \
   --cookie cookies.txt \
   --request POST \
   --header "Content-Type: application/json" \
-  --data "{\"policy\": \"\", \"accessKey\": \"${AWS_ACCESS_KEY_ID}\", \"secretKey\": \"${AWS_SECRET_ACCESS_KEY}\", \"description\": \"\", \"comment\": \"\", \"name\": \"LLM Operator\", \"expiry\": null}"
+  --data "{\"policy\": \"\", \"accessKey\": \"${AWS_ACCESS_KEY_ID}\", \"secretKey\": \"${AWS_SECRET_ACCESS_KEY}\", \"description\": \"\", \"comment\": \"\", \"name\": \"LLMariner\", \"expiry\": null}"
 
 rm cookies.txt
 
 # Create a new bucket.
-bucket_name=llm-operator
+bucket_name=llmariner
 aws --endpoint-url http://localhost:9000 s3 mb s3://${bucket_name}
 
 # Create secrets.
-kubectl create secret generic -n llm-operator aws \
+kubectl create secret generic -n llmariner aws \
   --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
   --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
