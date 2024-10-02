@@ -6,77 +6,77 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: api-usage-server
-  version: 0.7.0
+  version: 0.8.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: cluster-manager-server
-  version: 0.24.0
+  version: 0.29.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: dex-server
-  version: 0.106.0
+  version: 0.110.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: file-manager-server
-  version: 0.69.0
+  version: 0.72.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.360.0
+  version: 0.362.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.360.0
+  version: 0.362.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 0.208.0
+  version: 0.212.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: job-manager-server
-  version: 0.208.0
+  version: 0.212.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.112.0
+  version: 0.116.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.112.0
+  version: 0.116.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: rbac-server
-  version: 0.106.0
+  version: 0.110.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 0.74.0
+  version: 0.76.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: session-manager-server
-  version: 0.74.0
+  version: 0.76.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.90.0
+  version: 0.92.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.52.0
+  version: 0.54.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
