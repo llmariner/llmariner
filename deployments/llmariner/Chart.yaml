@@ -21,7 +21,7 @@ dependencies:
   tags:
   - control-plane
 - name: file-manager-server
-  version: 0.72.0
+  version: 0.74.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -46,12 +46,12 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.116.0
+  version: 0.118.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.116.0
+  version: 0.118.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -71,12 +71,12 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 0.92.0
+  version: 0.94.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 0.54.0
+  version: 0.56.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
