@@ -100,8 +100,14 @@ func LoadOrCreate() (*C, error) {
 	// Create a config file if it doesn't exists.
 	path := configFilePath()
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err := CreateNewConfig(); err != nil {
-			return nil, fmt.Errorf("create default config: %s", err)
+		// Check if the deprecated config file exists.
+		deprecatedPath := deprecatedConfigFilePath()
+		if _, err := os.Stat(deprecatedPath); err == nil {
+			path = deprecatedPath
+		} else {
+			if err := CreateNewConfig(); err != nil {
+				return nil, fmt.Errorf("create default config: %s", err)
+			}
 		}
 	}
 
@@ -195,5 +201,9 @@ func isHTTPURL(s string) bool {
 }
 
 func configFilePath() string {
+	return filepath.Join(xdgbasedir.ConfigHome(), "llmariner", "config.yaml")
+}
+
+func deprecatedConfigFilePath() string {
 	return filepath.Join(xdgbasedir.ConfigHome(), "llmo", "config.yaml")
 }
