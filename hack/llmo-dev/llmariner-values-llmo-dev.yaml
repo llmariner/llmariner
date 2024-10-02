@@ -1,5 +1,5 @@
 global:
-  llmOperatorBaseUrl: https://api.dev.llmo.cloudnatix.com/v1
+  llmarinerBaseUrl: https://api.dev.llmo.cloudnatix.com/v1
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
