@@ -8,7 +8,7 @@ This notebook goes through the basic usage of the LLM endpoints provided by LLMa
   the [documentation site](https://llmariner.readthedocs.io/en/latest/index.html) for the installation procedure.
 - This notebook uses the [OpenAI Python library](https://github.com/openai/openai-python). Please run
   `pip install openai` to install it.
-- This notebook requires an API key. Please run `llmo auth login` and `llmo auth api-keys create <Name>` to create an API key.
+- This notebook requires an API key. Please run `llma auth login` and `llma auth api-keys create <Name>` to create an API key.
 
 ## Set up a Client
 
@@ -211,7 +211,7 @@ print("Created job. ID=%s" % job.id)
 
 A pod is created in your Kubernetes cluster in a namespace where a project is associated. By default pods run in the `default` namespace.
 
-You can check the progress of the fine-tuning job by accessing the K8s cluster or run the CLI command (e.g., `llmo fine-tuning jobs list`, `llmo fine-tuning jobs logs <job-id>`).
+You can check the progress of the fine-tuning job by accessing the K8s cluster or run the CLI command (e.g., `llma fine-tuning jobs list`, `llma fine-tuning jobs logs <job-id>`).
 
 You will need to wait for several minutes for job completion.
 
