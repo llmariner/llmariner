@@ -10,6 +10,7 @@ import (
 	"github.com/llmariner/cli/internal/context"
 	"github.com/llmariner/cli/internal/embeddings"
 	"github.com/llmariner/cli/internal/finetuning"
+	"github.com/llmariner/cli/internal/hidden"
 	"github.com/llmariner/cli/internal/legacy"
 	"github.com/llmariner/cli/internal/models"
 	"github.com/llmariner/cli/internal/storage"
@@ -39,6 +40,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(models.Cmd())
 	cmd.AddCommand(storage.Cmd())
 	cmd.AddCommand(version.Cmd())
+	cmd.AddCommand(hidden.Cmd())
 
 	if os.Getenv("LLMA_DEBUG") == "true" {
 		cmd.AddCommand(legacy.Cmd())
