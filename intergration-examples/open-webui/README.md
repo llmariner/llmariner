@@ -1,7 +1,8 @@
 # Open WebUI
 
-This is a test for https://docs.openwebui.com/.
+Open WebUI (https://openwebui.com/) provides a web UI that works with OpenAI-compatible APIs. You can run Openn WebUI locally or run in a Kubernetes cluster.
 
+Here is an instruction for running Open WebUI in a Kubernetes cluster.
 
 ```bash
 llmo auth api-keys create my-key
