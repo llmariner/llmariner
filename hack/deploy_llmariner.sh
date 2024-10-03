@@ -9,4 +9,4 @@ helm upgrade \
   -n llmariner \
   llmariner \
   oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner \
-  -f "${basedir}"/llmarinervalues.yaml
+  -f "${basedir}"/llmariner-values.yaml
