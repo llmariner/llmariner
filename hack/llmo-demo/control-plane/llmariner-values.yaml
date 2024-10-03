@@ -16,6 +16,7 @@ global:
     username: ps_user
     ssl:
       mode: require
+    createDatabase: true
 
   databaseSecret:
     name: postgres-rds
