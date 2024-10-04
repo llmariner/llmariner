@@ -6,7 +6,7 @@ version: 0.1.0
 appVersion: 0.1.0
 dependencies:
 - name: api-usage-server
-  version: 0.13.0
+  version: 0.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -16,7 +16,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 0.111.0
+  version: 0.112.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -26,12 +26,12 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 0.369.0
+  version: 0.370.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 0.369.0
+  version: 0.370.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -46,17 +46,17 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 0.118.0
+  version: 0.119.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: model-manager-server
-  version: 0.118.0
+  version: 0.119.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
 - name: rbac-server
-  version: 0.111.0
+  version: 0.112.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
