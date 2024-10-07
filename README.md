@@ -16,3 +16,4 @@ Run the following command to bump the versions of sub-charts:
 
 ```console
 python3 scripts/update_chart.py deployments/llmariner/Chart.yaml
+```
