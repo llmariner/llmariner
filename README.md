@@ -4,7 +4,7 @@ LLMariner transforms your GPU clusters into a powerhouse for generative AI workl
 
 ![alt text](https://github.com/llmariner/.github/blob/main/images/logo.png?raw=true)
 
-This repository contains a Helm chart, tutorials, and a provisioning script for a playground.
+This repository contains a Helm chart, cli, tutorials, and a provisioning script for a playground.
 
 Please visit [our documentation site](https://llmariner.readthedocs.io/) to learn LLMariner.
 
@@ -16,4 +16,3 @@ Run the following command to bump the versions of sub-charts:
 
 ```console
 python3 scripts/update_chart.py deployments/llmariner/Chart.yaml
-```

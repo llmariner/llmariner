@@ -16,3 +16,35 @@ jobs:
     - name: Validate helm dependencies
       run: |
         helm dependency build ./deployments/llmariner
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.23
+    - name: Install errcheck
+      run: go install github.com/kisielk/errcheck@latest
+    - name: Install golint
+      run: go install golang.org/x/lint/golint@latest
+    - name: Run tests
+      run: make test
+    - name: Run lint checks
+      run: make lint
+
+  golangci:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: false
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+          args: --timeout=10m
+          only-new-issues: true
