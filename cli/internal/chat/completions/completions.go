@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"strings"
 
-	ihttp "github.com/llmariner/llmariner/cli/internal/http"
-	"github.com/llmariner/llmariner/cli/internal/runtime"
 	iv1 "github.com/llmariner/inference-manager/api/v1"
 	"github.com/llmariner/inference-manager/common/pkg/sse"
+	ihttp "github.com/llmariner/llmariner/cli/internal/http"
+	"github.com/llmariner/llmariner/cli/internal/runtime"
 	"github.com/spf13/cobra"
 )
 
@@ -91,13 +91,13 @@ func create(ctx context.Context, req *iv1.CreateChatCompletionRequest) error {
 		if len(cs) == 0 {
 			return fmt.Errorf("no choices")
 		}
-		fmt.Printf(cs[0].Delta.Content)
+		fmt.Print(cs[0].Delta.Content)
 	}
 
 	if err := scanner.Err(); err != nil {
 		return err
 	}
-	fmt.Printf("\n")
+	fmt.Print("\n")
 
 	return nil
 }

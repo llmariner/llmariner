@@ -23,10 +23,6 @@ func NewTokenExchanger(c *configs.C) (*TokenExchanger, error) {
 // TokenExchanger exchanges a code for a token.
 type TokenExchanger struct {
 	auth configs.Auth
-
-	issuerHost         string
-	issuerResolvedAddr string
-	warningPrinted     bool
 }
 
 // LoginURL returns a URL to login.

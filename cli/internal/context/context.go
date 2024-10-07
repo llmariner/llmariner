@@ -13,12 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	organizationKey = "organization"
-	orgKey          = "org"
-	projectKey      = "project"
-)
-
 // Cmd returns a new config command.
 func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
