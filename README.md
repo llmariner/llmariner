@@ -6,7 +6,7 @@ LLMariner transforms your GPU clusters into a powerhouse for generative AI workl
 
 This repository contains a Helm chart, tutorials, and a provisioning script for a playground.
 
-Please visit [our documentation site](https://llmariner.readthedocs.io/) to learn LLMariner.
+Please visit [our website](https://llmariner.ai/) to learn LLMariner.
 
 ## Development Notes
 
