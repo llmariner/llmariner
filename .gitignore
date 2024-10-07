@@ -28,3 +28,6 @@ inventory.ini
 
 # kubespray
 credentials/
+
+# Directory where binaries are stored.
+bin/
