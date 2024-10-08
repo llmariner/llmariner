@@ -10,7 +10,7 @@ kubectl create secret generic -n llmariner aws \
   --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
 
 # Create a cluster registration credential
-REGISTRATION_KEY=$(llmo admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+REGISTRATION_KEY=$(llma admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
 kubectl create secret generic \
   -n llmariner \
   cluster-registration-key \
