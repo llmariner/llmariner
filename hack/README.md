@@ -1,4 +1,4 @@
-# Test scripts
+# Test scripts
 
 ## Build a Kind cluster and deploy LLMariner in a single non-GPU node
 
