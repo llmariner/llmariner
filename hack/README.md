@@ -2,14 +2,6 @@
 
 ## Build a Kind cluster and deploy LLMariner in a single non-GPU node
 
-Run the following commands:
-
-```bash
-./create_cluster.sh
-./deploy.sh
-./check_readiness.sh
-```
-
 If you want to use a Helm chart in your local filesystem, update `deployments/llmariner/Chart.yaml`
 and specify the Helm chart location:
 

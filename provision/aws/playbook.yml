@@ -122,7 +122,7 @@
       repo_url: https://charts.konghq.com
   - name: Copy kong_values file
     ansible.builtin.copy:
-      src: ../../hack/kong_values.yaml
+      src: ../common/kong_values.yaml
       dest: kong_values.yaml
   - name: Deploy kong
     kubernetes.core.helm:
@@ -142,7 +142,7 @@
       kind: Namespace
   - name: Copy postgres.yaml file
     ansible.builtin.copy:
-      src: ../../hack/postgres.yaml
+      src: ../common/postgres.yaml
       dest: postgres.yaml
   - name: Deploy postgres resources
     kubernetes.core.k8s:
@@ -169,7 +169,7 @@
       kind: Namespace
   - name: Copy mino yaml file
     ansible.builtin.copy:
-      src: ../../hack/minio.yaml
+      src: ../common/minio.yaml
       dest: minio.yaml
   - name: Deploy minio
     kubernetes.core.k8s:
@@ -205,7 +205,7 @@
       repo_url: https://zilliztech.github.io/milvus-helm
   - name: Copy milvus_values file
     ansible.builtin.copy:
-      src: ../../hack/milvus_values.yaml
+      src: ../common/milvus_values.yaml
       dest: milvus_values.yaml
   - name: Deploy milvus
     kubernetes.core.helm:
@@ -218,7 +218,7 @@
 
   - name: Copy llmariner-values file
     ansible.builtin.copy:
-      src: ../../hack/llmariner-values.yaml
+      src: ../common/llmariner-values.yaml
       dest: llmariner-values.yaml
   - name: Deploy llmariner
     kubernetes.core.helm:
