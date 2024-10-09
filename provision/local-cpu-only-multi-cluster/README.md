@@ -1,6 +1,6 @@
-# Multi Cluster Deployment Testing
+# Multi cluster deployment with two Kind clusters
 
-This directory contains scripts and config files for testing multi-cluster deployment.
+This directory contains scripts and config files for demonstrating multi-cluster deployment using two Kind clusters.
 
 To deploy:
 
