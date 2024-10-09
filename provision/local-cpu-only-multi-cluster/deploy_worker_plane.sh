@@ -6,7 +6,7 @@ basedir=$(dirname "$0")
 
 kubectl create namespace llmariner-wp
 
-"${basedir}"/../deploy_fake_gpu_operator.sh
+"${basedir}"/../local-cpu-only/deploy_fake_gpu_operator.sh
 
 export AWS_ACCESS_KEY_ID=llmariner-key
 export AWS_SECRET_ACCESS_KEY=llmariner-secret
