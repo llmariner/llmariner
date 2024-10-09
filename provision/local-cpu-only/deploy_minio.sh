@@ -7,7 +7,7 @@ basedir=$(dirname "$0")
 
 
 kubectl create namespace minio
-kubectl apply --namespace minio -f "${basedir}"/minio.yaml
+kubectl apply --namespace minio -f "${basedir}"/../common/minio.yaml
 kubectl wait --timeout=60s --for=condition=ready pod -n minio -l app=minio
 
 kubectl port-forward -n minio service/minio 9000 9090 &

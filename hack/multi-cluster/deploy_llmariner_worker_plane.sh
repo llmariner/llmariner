@@ -10,5 +10,5 @@ helm upgrade \
   -n llmariner-wp \
   llmariner \
   oci://public.ecr.aws/cloudnatix/llmariner-charts/llmariner \
-  -f "${basedir}"/../llmariner-values.yaml \
+  -f "${basedir}"/../../provision/common/llmariner-values.yaml \
   -f "${basedir}"/llmariner-values-worker-plane.yaml
