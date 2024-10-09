@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -36,11 +37,14 @@ func createCmd() *cobra.Command {
 		Messages: []*iv1.CreateChatCompletionRequest_Message{msg},
 		Stream:   true,
 	}
-
+	var noStream bool
 	cmd := &cobra.Command{
 		Use:  "create",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if noStream {
+				req.Stream = false
+			}
 			return create(cmd.Context(), req)
 		},
 	}
@@ -53,6 +57,8 @@ func createCmd() *cobra.Command {
 	cmd.Flags().Int32Var(&req.MaxTokens, "max-tokens", 0, "Max tokens")
 	cmd.Flags().Float64Var(&req.Temperature, "temperature", 1.0, "Temperature")
 	cmd.Flags().Float64Var(&req.TopP, "top-p", 1.0, "Top p")
+	cmd.Flags().BoolVar(&noStream, "nostream", false, "No streaming")
+
 	_ = cmd.MarkFlagRequired("model")
 	_ = cmd.MarkFlagRequired("role")
 	_ = cmd.MarkFlagRequired("completion")
@@ -69,6 +75,27 @@ func create(ctx context.Context, req *iv1.CreateChatCompletionRequest) error {
 	if err != nil {
 		return err
 	}
+
+	if !req.Stream {
+		b, err := io.ReadAll(body)
+		if err != nil {
+			return fmt.Errorf("read response: %s", err)
+		}
+
+		// Parse the response as ChatCompletion.
+		var resp iv1.ChatCompletion
+		if err := json.Unmarshal(b, &resp); err != nil {
+			return fmt.Errorf("unmarshal response: %s", err)
+		}
+		for _, c := range resp.Choices {
+			fmt.Print(c.Message.Content)
+		}
+		fmt.Print("\n")
+		return nil
+	}
+
+	// Process the streaming response.
+
 	scanner := sse.NewScanner(body)
 
 	for scanner.Scan() {
