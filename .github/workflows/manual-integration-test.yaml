@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Setup Go
+    - name: Set up Go
       uses: actions/setup-go@v5
       with:
         go-version: 1.23
@@ -16,17 +16,36 @@ jobs:
         curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
         sudo install -o root -g root -m 0755 kind /usr/local/bin/kind
         rm ./kind
+    - name: build-cli
+      run: |
+        make build
+        mv ./bin/llma /usr/local/bin/llma
+    - name: build-chart
+      run: |
+        helm dependencies build deployments/llmariner
     - name: set-up-kind-cluster
       run: |
         ./provision/local-cpu-only/create_cluster.sh
+    # Deploy the Helm chart built locally.
     - name: deploy-llmariner
       run: |
-        ./provision/local-cpu-only/deploy.sh
-    - name: wait-for-pod-readiness
+        CHART_LOCATION=./deployments/llmariner ./provision/local-cpu-only/deploy.sh
+    - name: set-up-cli-config
       run: |
-        kubectl wait --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
+        mkdir -p ~/.config/llmariner
+        cat << EOF > ~/.config/llmariner/config.yaml
+        version: v1
+        endpointUrl: http://localhost:8080/v1
+        auth:
+          clientId: llmariner
+          clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
+          redirectUri: http://127.0.0.1:5555/callback
+          issuerUrl: http://localhost:8080/v1/dex
+        context:
+          organizationId:
+          projectId:
+        EOF
     - name: run-tests
       run: |
-        # Just check the endpoint is reachable
-        # TODO(kenji): Add more
-        curl http://localhost:8080/v1/clusters | grep "missing authorization"
+        export LLMARINER_API_KEY=default-key-secret
+        ./provision/local-cpu-only/validate_deployment.sh
