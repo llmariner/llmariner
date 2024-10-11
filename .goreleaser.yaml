@@ -1,0 +1,34 @@
+version: 2
+
+builds:
+  - id: llma
+    binary: llma
+    main: ./cli/cmd
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X github.com/llmariner/llmariner/cli/internal/version.gitTag={{.Version}}
+      - -X github.com/llmariner/llmariner/cli/internal/version.gitCommitSha={{.Commit}}
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+
+changelog:
+  disable: true
