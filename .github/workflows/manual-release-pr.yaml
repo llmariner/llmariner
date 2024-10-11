@@ -37,7 +37,7 @@ jobs:
         title: Release ${{ steps.tag_version.outputs.new_tag }}
         commit-message: Release ${{ steps.tag_version.outputs.new_tag }}
         add-paths: deployments/*/Chart.yaml
-        branch: release-${{ steps.tag_version.outputs.new_tag }}
+        branch: bump-chart-ver-${{ steps.tag_version.outputs.new_tag }}
         reviewers: ${{ github.actor }}
         body: This pull-request is created by `manual workflow` by ${{ github.actor }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
