@@ -1,7 +1,6 @@
 name: manual-run-integration-test
 on:
-#  workflow_dispatch:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   run-integration-test:
@@ -23,8 +22,11 @@ jobs:
     - name: deploy-llmariner
       run: |
         ./provision/local-cpu-only/deploy.sh
+    - name: wait-for-pod-readiness
+      run: |
+        kubectl wait --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
     - name: run-tests
       run: |
         # Just check the endpoint is reachable
         # TODO(kenji): Add more
-        curl http://localhost:8080/v1/clusters
+        curl http://localhost:8080/v1/clusters | grep "missing authorization"

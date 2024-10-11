@@ -26,6 +26,8 @@ curl \
 
 export AWS_ACCESS_KEY_ID=llmariner-key
 export AWS_SECRET_ACCESS_KEY=llmariner-secret
+# This is needed when the script runs in a GitHub Action runner.
+export AWS_EC2_METADATA_DISABLED=true
 
 # Create a new API key.
 curl \
