@@ -14,6 +14,15 @@ func NewEnv(ctx context.Context) (*Env, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load or create config: %s", err)
 	}
+
+	// If the API key is set in the env var, use it; we don't need to load the token.
+	if v := accesstoken.GetAPIKeyEnvVar(); v != "" {
+		return &Env{
+			Config:       c,
+			APIKeySecret: v,
+		}, nil
+	}
+
 	t, err := accesstoken.LoadToken(ctx, c)
 	if err != nil {
 		return nil, fmt.Errorf("load token: %s", err)
@@ -27,6 +36,15 @@ func NewEnv(ctx context.Context) (*Env, error) {
 
 // Env is a struct that contains the runtime env for the CLI.
 type Env struct {
-	Config *configs.C
-	Token  *accesstoken.T
+	Config       *configs.C
+	APIKeySecret string
+	Token        *accesstoken.T
+}
+
+// AccessToken returns the access token.
+func (e *Env) AccessToken() string {
+	if e.APIKeySecret != "" {
+		return e.APIKeySecret
+	}
+	return e.Token.AccessToken
 }
