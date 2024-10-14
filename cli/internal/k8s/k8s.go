@@ -17,6 +17,6 @@ func NewClient(env *runtime.Env, clusterID string) (kubernetes.Interface, error)
 func newConfig(env *runtime.Env, clusterID string) *rest.Config {
 	return &rest.Config{
 		Host:        fmt.Sprintf("%s/sessions/%s", env.Config.EndpointURL, clusterID),
-		BearerToken: env.Token.AccessToken,
+		BearerToken: env.AccessToken(),
 	}
 }

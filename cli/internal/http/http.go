@@ -135,7 +135,7 @@ func extractErrorMessage(body io.ReadCloser) string {
 
 // addHeaders adds headers to the request.
 func (c *Client) addHeaders(req *http.Request) {
-	req.Header.Add("Authorization", "Bearer "+c.env.Token.AccessToken)
+	req.Header.Add("Authorization", "Bearer "+c.env.AccessToken())
 	if id := c.env.Config.Context.OrganizationID; id != "" {
 		req.Header.Add("Openai-Organization", id)
 	}
