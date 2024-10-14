@@ -208,6 +208,10 @@ session-manager-server:
 
 
 user-manager-server:
+  defaultApiKey:
+    name: default-key
+    secret: default-key-secret
+    userId: admin@example.com
   # To fit in a single node
   resources:
     limits:
