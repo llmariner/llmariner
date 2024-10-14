@@ -1,0 +1,32 @@
+name: manual-run-integration-test
+on:
+  workflow_dispatch:
+
+jobs:
+  run-integration-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: 1.23
+    - name: install-kind
+      run: |
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+        sudo install -o root -g root -m 0755 kind /usr/local/bin/kind
+        rm ./kind
+    - name: set-up-kind-cluster
+      run: |
+        ./provision/local-cpu-only/create_cluster.sh
+    - name: deploy-llmariner
+      run: |
+        ./provision/local-cpu-only/deploy.sh
+    - name: wait-for-pod-readiness
+      run: |
+        kubectl wait --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
+    - name: run-tests
+      run: |
+        # Just check the endpoint is reachable
+        # TODO(kenji): Add more
+        curl http://localhost:8080/v1/clusters | grep "missing authorization"
