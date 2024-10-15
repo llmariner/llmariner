@@ -2,8 +2,8 @@ apiVersion: v2
 name: llmariner
 description: A Helm chart for LLMariner
 type: application
-version: 0.445.0
-appVersion: 0.445.0
+version: 1.0.0
+appVersion: 1.0.0
 dependencies:
 - name: api-usage-server
   version: 1.0.0
