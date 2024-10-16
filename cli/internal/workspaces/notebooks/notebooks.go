@@ -11,12 +11,12 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/cli/browser"
+	jv1 "github.com/llmariner/job-manager/api/v1"
 	ihttp "github.com/llmariner/llmariner/cli/internal/http"
 	"github.com/llmariner/llmariner/cli/internal/nbtoken"
 	"github.com/llmariner/llmariner/cli/internal/runtime"
 	itime "github.com/llmariner/llmariner/cli/internal/time"
 	"github.com/llmariner/llmariner/cli/internal/ui"
-	jv1 "github.com/llmariner/job-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )
