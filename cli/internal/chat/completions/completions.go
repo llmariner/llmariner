@@ -115,10 +115,10 @@ func create(ctx context.Context, req *iv1.CreateChatCompletionRequest) error {
 			return fmt.Errorf("unmarshal response: %s", err)
 		}
 		cs := d.Choices
-		if len(cs) == 0 {
-			return fmt.Errorf("no choices")
+		if len(cs) > 0 {
+			// TODO(kenji): Handle multiple choices.
+			fmt.Print(cs[0].Delta.Content)
 		}
-		fmt.Print(cs[0].Delta.Content)
 	}
 
 	if err := scanner.Err(); err != nil {
