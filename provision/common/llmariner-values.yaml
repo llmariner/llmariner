@@ -78,6 +78,11 @@ file-manager-server:
 inference-manager-engine:
   logLevel: 1
   replicaCount: 2
+  runtime:
+    name:
+    runtimeImages:
+      # Use the image that can run on a CPU.
+      vllm: public.ecr.aws/cloudnatix/llmariner/vllm-cpu-env:0.1.0
   model:
     default:
       runtimeName: ollama
@@ -96,6 +101,9 @@ inference-manager-engine:
         preloaded: true
       sentence-transformers/all-MiniLM-L6-v2-f16:
         preloaded: true
+      TinyLlama/TinyLlama-1.1B-Chat-v1.0-awq:
+        preloaded: true
+        runtimeName: vllm
   # To fit in a single node
   resources:
     limits:
@@ -153,6 +161,7 @@ model-manager-loader:
   baseModels:
   - google/gemma-2b-it-q4_0
   - sentence-transformers/all-MiniLM-L6-v2-f16
+  - TinyLlama/TinyLlama-1.1B-Chat-v1.0-awq
   # To fit in a single node
   resources:
     limits:
