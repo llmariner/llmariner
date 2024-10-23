@@ -33,3 +33,7 @@ credentials/
 bin/
 
 dist/
+
+# Chart
+deployments/llmariner/Chart.lock
+deployments/llmariner/*/*.tgz

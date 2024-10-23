@@ -17,6 +17,26 @@ global:
     # This default value works if api-usage-server runs in the same namespace.
     apiUsageInternalServerAddr: api-usage-server-internal-grpc:8082
 
+prepare:
+  database:
+    # if this flag is false, llmariner uses the existing database secret.
+    createSecret: false
+    # secret:
+    #   name: postgres
+    #   password:
+  objectStore:
+    # if this flag is false, llmariner uses the existing aws secret.
+    createSecret: false
+    # secret:
+    #   name: aws
+    #   accessKeyId:
+    #   secretAccessKey:
+  workerRegistration:
+    createSecret: false
+    # secret:
+    #   name: cluster-registration-key
+    #   regKey:
+
 tags:
   control-plane: true
   worker: true

@@ -20,16 +20,14 @@ jobs:
       run: |
         make build
         mv ./bin/llma /usr/local/bin/llma
-    - name: build-chart
-      run: |
-        helm dependencies build deployments/llmariner
     - name: set-up-kind-cluster
       run: |
-        ./provision/local-cpu-only/create_cluster.sh
-    # Deploy the Helm chart built locally.
-    - name: deploy-llmariner
-      run: |
-        CHART_LOCATION=./deployments/llmariner ./provision/local-cpu-only/deploy.sh
+        ./provision/dev/create_cluster.sh single
+    - name: deploy-local-helm-chart
+      uses: helmfile/helmfile-action@v1.9.3
+      with:
+        helmfile-args: apply --skip-diff-on-install
+        helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
         mkdir -p ~/.config/llmariner
@@ -48,4 +46,4 @@ jobs:
     - name: run-tests
       run: |
         export LLMARINER_API_KEY=default-key-secret
-        ./provision/local-cpu-only/validate_deployment.sh
+        ./provision/dev/validate_deployment.sh

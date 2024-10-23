@@ -1,0 +1,12 @@
+postgres:
+  user: ps_user
+  pass: ps_password
+minio:
+  adminPass: minioadmin
+  adminUser: minioadmin
+  accessKey: llmariner-key
+  secretKey: llmariner-secret
+  bucket: llmariner
+llmariner:
+  psSecretName: postgres
+  awsSecretName: aws
