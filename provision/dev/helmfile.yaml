@@ -85,8 +85,8 @@ releases:
     args:
     - {{ .Values.minio.adminUser }}
     - {{ .Values.minio.adminPass }}
-    - {{ .Values.minio.secretKey }}
     - {{ .Values.minio.accessKey }}
+    - {{ .Values.minio.secretKey }}
 
 - name: milvus
   namespace: milvus
@@ -174,8 +174,8 @@ releases:
         createSecret: true
         secret:
           name: {{ .Values.llmariner.awsSecretName }}
-          accessKeyId: {{ .Values.minio.secretKey }}
-          secretAccessKey: {{ .Values.minio.accessKey }}
+          accessKeyId: {{ .Values.minio.accessKey }}
+          secretAccessKey: {{ .Values.minio.secretKey }}
       {{ if eq .Environment.Name "worker" }}
       workerRegistration:
         createSecret: true

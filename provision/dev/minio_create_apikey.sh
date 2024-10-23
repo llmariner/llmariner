@@ -13,7 +13,7 @@ kubectl port-forward -n minio service/minio 9001 9001 &
 sleep 5
 
 # Obtain the cookie and store in cookies.txt.
-curl http://localhost:9001/api/v1/login \
+curl -fs --show-error http://localhost:9001/api/v1/login \
   --cookie-jar cookies.txt \
   --header 'Content-Type: application/json' \
   --data @- << EOF
@@ -27,7 +27,7 @@ EOF
 curl http://localhost:9001/api/v1/service-account-credentials \
   --cookie cookies.txt \
   --header "Content-Type: application/json" \
-  --data @- << EOF
+  --data @- << EOF >/dev/null
 {
   "name": "LLMariner",
   "accessKey": "$ACCESS_KEY",
