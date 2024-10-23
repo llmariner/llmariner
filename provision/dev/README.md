@@ -1,13 +1,13 @@
 # Provision LLMariner for development
 
-This directory contains scripts that creates a Kind cluster locally and deploy LLMariner and other necessary components.
+This directory contains scripts that create a Kind cluster locally and deploy LLMariner and other necessary components.
 
 We use [Fake GPU operator](https://github.com/run-ai/fake-gpu-operator) so that LLMariner can run in a machine that doesn't have any GPU. Ollama (not vLLM) is used as inference runtime.
 
 ## Requirements
 
 - [Docker](https://docs.docker.com/engine/install/)
-- [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/#installation)
 
 ## Provisioning
