@@ -1,0 +1,203 @@
+environments:
+  default:
+    values: [common.yaml]
+  control:
+    values: [common.yaml]
+    kubeContext: kind-llmariner-control-plane
+  worker:
+    values: [common.yaml]
+    kubeContext: kind-llmariner-worker-plane
+---
+repositories:
+- name: kong
+  url: https://charts.konghq.com
+- name: fake-gpu-operator
+  url: https://fake-gpu-operator.storage.googleapis.com
+- name: milvus
+  url: https://zilliztech.github.io/milvus-helm/
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+- name: grafana
+  url: https://grafana.github.io/helm-charts
+
+releases:
+- name: fake-gpu-operator
+  namespace: nvidia
+  labels:
+    app: fake-gpu-operator
+    tier: core
+  chart: fake-gpu-operator/fake-gpu-operator
+  version: 0.0.51
+  hooks:
+  - events: ["presync"]
+    showlogs: true
+    command: "kubectl"
+    args: ["label", "nodes", "--all", "--overwrite", "nvidia.com/gpu.deploy.device-plugin=true", "nvidia.com/gpu.deploy.dcgm-exporter=true"]
+
+- name: kong
+  namespace: kong
+  labels:
+    app: kong
+    tier: core
+  chart: kong/kong
+  version: 2.42.0
+  set:
+  - name: ingressController.installCRDs
+    value: false
+  values:
+  - "../common/kong_values.yaml"
+
+- name: postgres
+  namespace: postgres
+  labels:
+    app: postgres
+    tier: core
+  version: 16.0.3
+  chart: oci://registry-1.docker.io/bitnamicharts/postgresql
+  set:
+  - name: nameOverride
+    value: postgres
+  - name: auth.database
+    value: ps_db
+  - name: auth.username
+    value: {{ .Values.postgres.user }}
+  - name: auth.password
+    value: {{ .Values.postgres.pass }}
+
+- name: minio
+  namespace: minio
+  labels:
+    app: minio
+    tier: core
+  version: 14.8.0
+  chart: oci://registry-1.docker.io/bitnamicharts/minio
+  set:
+  - name: auth.rootUser
+    value: {{ .Values.minio.adminUser }}
+  - name: auth.rootPassword
+    value: {{ .Values.minio.adminPass }}
+  - name: defaultBuckets
+    value: {{ .Values.minio.bucket }}
+  hooks:
+  - events: ["postsync"]
+    showlogs: true
+    command: "./minio_create_apikey.sh"
+    args:
+    - {{ .Values.minio.adminUser }}
+    - {{ .Values.minio.adminPass }}
+    - {{ .Values.minio.accessKey }}
+    - {{ .Values.minio.secretKey }}
+
+- name: milvus
+  namespace: milvus
+  labels:
+    app: milvus
+    tier: core
+  version: 4.2.15
+  chart: milvus/milvus
+  values:
+  - "../common/milvus_values.yaml"
+
+- name: prometheus
+  namespace: monitoring
+  labels:
+    app: prometheus
+    tier: monitoring
+  version: 25.27.0
+  chart: prometheus-community/prometheus
+  set:
+  - name: prometheus-pushgateway.enabled
+    value: false
+  - name: extraScrapeConfigs
+    value: |
+      - job_name: nvidia-dcgm
+        scrape_interval: 5s
+        static_configs:
+        - targets: ['nvidia-dcgm-exporter.nvidia.svc:9400']
+
+- name: grafana
+  namespace: monitoring
+  labels:
+    app: grafana
+    tier: monitoring
+  chart: grafana/grafana
+  values:
+  - datasources:
+     datasources.yaml:
+       apiVersion: 1
+       datasources:
+       - name: Prometheus
+         type: prometheus
+         url: http://prometheus-server
+         isDefault: true
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: 'default'
+          type: file
+          disableDeletion: true
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/standard
+    dashboards:
+      default:
+        nvidia-dcgm-exporter:
+          gnetId: 12239
+          datasource: Prometheus
+
+- name: llmariner
+  namespace: {{if eq .Environment.Name "worker"}}llmariner-wp{{else}}llmariner{{end}}
+  labels:
+    app: llmariner
+    tier: core
+  chart: "../../deployments/llmariner/"
+  needs:
+  - postgres/postgres
+  - minio/minio
+  values:
+  - "../common/llmariner-values.yaml"
+  {{ if eq .Environment.Name "control" }}
+  - "./values/llmariner-control-plane.yaml"
+  {{ else if eq .Environment.Name "worker" }}
+  - "./values/llmariner-worker-plane.yaml"
+  {{ end }}
+  - prepare:
+      database:
+        createSecret: {{ ne .Environment.Name "worker" | toYaml }}
+        secret:
+          name: {{ .Values.llmariner.psSecretName }}
+          password: {{ .Values.postgres.pass }}
+      objectStore:
+        createSecret: true
+        secret:
+          name: {{ .Values.llmariner.awsSecretName }}
+          accessKeyId: {{ .Values.minio.accessKey }}
+          secretAccessKey: {{ .Values.minio.secretKey }}
+      {{ if eq .Environment.Name "worker" }}
+      workerRegistration:
+        createSecret: true
+        secret:
+          name: cluster-registration-key
+          regKey: {{ requiredEnv "REGISTRATION_KEY" }}
+      {{ end }}
+  set:
+    - name: global.databaseSecret.name
+      value: {{ .Values.llmariner.psSecretName }}
+    - name: global.awsSecret.name
+      value: {{ .Values.llmariner.awsSecretName }}
+    - name: global.objectStore.s3.bucket
+      value: {{ .Values.minio.bucket }}
+  {{ if eq .Environment.Name "worker" }}
+  hooks:
+  - events: ["presync"]
+    showlogs: true
+    command: kubectl
+    args: ["--context={{.Environment.KubeContext}}", "apply", "-f", "control_plane_service.yaml"]
+  - events: ["postuninstall"]
+    showlogs: true
+    command: kubectl
+    args: ["--context={{.Environment.KubeContext}}", "delete", "-f", "control_plane_service.yaml"]
+  {{ end }}
