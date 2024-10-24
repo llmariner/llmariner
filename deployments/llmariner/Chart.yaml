@@ -18,7 +18,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 1.0.0
+  version: 1.1.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -58,7 +58,7 @@ dependencies:
   tags:
   - control-plane
 - name: rbac-server
-  version: 1.0.0
+  version: 1.1.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
