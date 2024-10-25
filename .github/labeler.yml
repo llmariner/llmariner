@@ -1,0 +1,19 @@
+version: v1
+labels:
+- label: breaking-change
+  matcher:
+    commits: '^BREAKING CHANGE: .*|^[^:!]+!: .*'
+- label: enhancement
+  matcher:
+    commits: '^feat[^:]*: .*'
+- label: bug
+  matcher:
+    commits: '^fix[^:]*: .*'
+- label: documentation
+  matcher:
+    commits: '^docs[^:]*: .*'
+- label: skip-changelog
+  matcher:
+    commits: '^(chore|ci|refactor|revert)[^:!]*: .*'
+    author:
+    - github-actions
