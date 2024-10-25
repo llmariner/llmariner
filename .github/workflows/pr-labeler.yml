@@ -1,0 +1,16 @@
+name: CI-pr-labeler
+on:
+  pull_request:
+    types:
+    - opened
+    branches:
+    - main
+    - release-*
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    name: labeler
+    steps:
+    - name: Add labels
+      uses: fuxingloh/multi-labeler@v4
