@@ -8,7 +8,7 @@
 
 ---
 
-LLMariner (= LLM + Mariner) is a extensible open source platform to simplify the management of generative AI workloads. Built on Kubernetes, it enables you to efficiently handle both training and inference data within your own clusters. With [OpenAI-compatible APIs](https://platform.openai.com/docs/api-reference), LLMariner leverages ecosystem of tools, facilitating seamless integration for a wide range of AI-driven applications.
+LLMariner (= LLM + Mariner) is an extensible open source platform to simplify the management of generative AI workloads. Built on Kubernetes, it enables you to efficiently handle both training and inference data within your own clusters. With [OpenAI-compatible APIs](https://platform.openai.com/docs/api-reference), LLMariner leverages ecosystem of tools, facilitating seamless integration for a wide range of AI-driven applications.
 
 <p align="center">
   <img src="https://llmariner.ai/images/concepts.png" width=80% title="LLMariner concepts" alt="LLMariner concepts">
