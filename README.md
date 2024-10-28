@@ -5,6 +5,7 @@
   <a href="https://llmariner.ai/"><b>Documentation</b></a> |
   <a href="https://llmariner.slack.com/join/shared_invite/zt-2rbwooslc-LIrUCmK9kklfKsMEirUZbg#/shared-invite/email"><b>Community Slack</b></a>
 </p>
+
 ---
 
 LLMariner (= LLM + Mariner) is a extensible open source platform to simplify the management of generative AI workloads. Built on Kubernetes, it enables you to efficiently handle both training and inference data within your own clusters. With [OpenAI-compatible APIs](https://platform.openai.com/docs/api-reference), LLMariner leverages ecosystem of tools, facilitating seamless integration for a wide range of AI-driven applications.
