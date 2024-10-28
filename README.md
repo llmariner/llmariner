@@ -8,7 +8,7 @@
 
 ---
 
-LLMariner (= LLM + Mariner) is an extensible open source platform to simplify the management of generative AI workloads. Built on Kubernetes, it enables you to efficiently handle both training and inference data within your own clusters. With [OpenAI-compatible APIs](https://platform.openai.com/docs/api-reference), LLMariner leverages ecosystem of tools, facilitating seamless integration for a wide range of AI-driven applications.
+LLMariner (= LLM + Mariner) is an extensible open source platform to simplify the management of generative AI workloads. Built on Kubernetes, it enables you to efficiently handle both training and inference data within your own clusters. With [OpenAI-compatible APIs](https://platform.openai.com/docs/api-reference), LLMariner leverages an ecosystem of tools, facilitating seamless integration for a wide range of AI-driven applications.
 
 <p align="center">
   <img src="https://llmariner.ai/images/concepts.png" width=80% title="LLMariner concepts" alt="LLMariner concepts">
@@ -16,13 +16,13 @@ LLMariner (= LLM + Mariner) is an extensible open source platform to simplify th
 
 ## Architecture
 
-LLMariner consists of control-plane and one or more worker-planes. Both components can operate within a single cluster, but if you want to utilize GPU resources across multiple clusters, they can also be installed into separate clusters:
+LLMariner consists of a control-plane and one or more worker-planes. Both components can operate within a single cluster, but if you want to utilize GPU resources across multiple clusters, they can also be installed into separate clusters:
 
 <dl>
   <dt>Control-Plane components:</dt>
   <dd>Expose the OpenAI-compatible APIs and manage the overall state of LLMariner and receive a request from the client.</dd>
   <dt>Worker-Plane components:</dt>
-  <dd>Run every worker clusters, process tasks using compute resources such as GPUs in response to requests from the control-plane.</dd>
+  <dd>Run every worker cluster, process tasks using compute resources such as GPUs in response to requests from the control-plane.</dd>
 </dl>
 
 <p align="center">
