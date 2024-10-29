@@ -26,7 +26,7 @@ LLMariner consists of a control-plane and one or more worker-planes. Both compon
 </dl>
 
 <p align="center">
-  <img src="https://llmariner.ai/images/highlevel_architecture.png" width=80% title="LLMariner High-level Architecture" alt="LLMariner High-level Architecture">
+  <img src="https://llmariner.ai/images/highlevel_architecture.png" width=75% title="LLMariner High-level Architecture" alt="LLMariner High-level Architecture">
 </p>
 
 Refer to the [High-Level Architecture](https://llmariner.ai/docs/overview/how-works/) document and [Technical Details](https://llmariner.ai/docs/dev/architecture/) document for more information.
@@ -34,6 +34,14 @@ Refer to the [High-Level Architecture](https://llmariner.ai/docs/overview/how-wo
 ## Installation
 
 Check out our [installation guide](https://llmariner.ai/docs/setup/install/), which covers several deployment methods, including setting up a test environment using the kind cluster and building a production-ready environment, among others.
+
+## Integration
+
+LLMariner provides OpenAI-compatible APIs, making it easy to integrate with powerful tools such as assistant web UIs, code generation tools, and more. Here are some integration samples:
+
+- **Open WebUI**: A self-hosted web UI that works with OpenAI-compatible APIs. See [Open WebUI](https://llmariner.ai/docs/integration/openwebui/) integration guide for details.
+- **Continue**: An open-source AI code assistant inside of VS Code and JetBrains. See [Continue](https://llmariner.ai/docs/integration/continue/) integration guide for details.
+- **Weights & Biases (W&B)**: AI developer platform that can enable you to easily see the progress of your fine-tuning jobs, such as training epoch, loss, etc. See [W&B](https://llmariner.ai/docs/integration/wandb/) integration guide for details.
 
 ## Directory Structure
 
