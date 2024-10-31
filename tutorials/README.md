@@ -2,9 +2,9 @@
 
 This directory contains Jupyter Notebooks for the LLMariner Tutorial.
 
-## Setting up Juypter
+## Setting up Jupyter
 
-Please follow https://jupyter.org/install to install Juypter. The following is an example
+Please follow https://jupyter.org/install to install Jupyter. The following is an example
 install procedure
 
 ```bash
