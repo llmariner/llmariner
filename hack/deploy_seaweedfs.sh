@@ -48,7 +48,7 @@ rm s3-config.json
 kubectl apply -n seaweedfs -f "${basedir}"/seaweedfs.yaml
 kubectl wait --timeout=60s --for=condition=ready pod -n seaweedfs -l app=seaweedfs
 
-kubectl port-forward -n seaweedfs service/seaweedfs 8333 8333 &
+kubectl port-forward -n seaweedfs service/seaweedfs 8333 &
 sleep 5
 
 # Create a new bucket.
