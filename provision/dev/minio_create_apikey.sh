@@ -9,7 +9,7 @@ ACCESS_KEY=${3:?ACCESS_KEY}
 SECRET_KEY=${4:?SECRET_KEY}
 
 kubectl wait --timeout=90s --for=condition=ready pod -n minio -l app.kubernetes.io/name=minio
-kubectl port-forward -n minio service/minio 9001 9001 &
+kubectl port-forward -n minio service/minio 9001 &
 sleep 5
 
 # Obtain the cookie and store in cookies.txt.
