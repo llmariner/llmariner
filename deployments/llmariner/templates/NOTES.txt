@@ -1,6 +1,6 @@
 LLMariner {{ .Chart.AppVersion }} has been deployed successfully!
 
-The endpoint URL is here:
+Here is the endpoint URL:
 {{ .Values.global.ingress.controllerUrl }}/v1
 
 You can see the models by running:
