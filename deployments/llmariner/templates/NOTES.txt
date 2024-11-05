@@ -1,0 +1,15 @@
+LLMariner {{ .Chart.AppVersion }} has been deployed successfully!
+
+Here is the endpoint URL:
+{{ .Values.global.ingress.controllerUrl }}/v1
+
+You can see the models by running:
+{{- if index .Values "user-manager-server" "defaultApiKey" }}
+LLMARINER_API_KEY=default-key-secret llma models list
+{{- else }}
+llma auth login # log into your account
+llma models list
+{{- end }}
+
+For more information on LLMarinr, visit:
+https://llmariner.ai/docs

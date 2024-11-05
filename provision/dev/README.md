@@ -28,7 +28,7 @@ helmfile apply --skip-diff-on-install
 
 ```bash
 ./create_cluster.sh multi
-helmfile apply -e control --skip-diff-on-install 
+helmfile apply -e control --skip-diff-on-install
 
 # Please set the endpoint address to http://localhost/v1
 llma auth login

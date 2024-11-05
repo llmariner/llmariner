@@ -168,20 +168,17 @@ releases:
       database:
         createSecret: {{ ne .Environment.Name "worker" | toYaml }}
         secret:
-          name: {{ .Values.llmariner.psSecretName }}
           password: {{ .Values.postgres.pass }}
       objectStore:
         createSecret: true
         secret:
-          name: {{ .Values.llmariner.awsSecretName }}
           accessKeyId: {{ .Values.minio.accessKey }}
           secretAccessKey: {{ .Values.minio.secretKey }}
       {{ if eq .Environment.Name "worker" }}
       workerRegistration:
         createSecret: true
         secret:
-          name: cluster-registration-key
-          regKey: {{ requiredEnv "REGISTRATION_KEY" }}
+          key: {{ requiredEnv "REGISTRATION_KEY" }}
       {{ end }}
   set:
     - name: global.databaseSecret.name
