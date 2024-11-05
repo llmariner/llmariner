@@ -1,88 +1,318 @@
-global:
-  auth:
-    enable: true
-    # This default value works if rbac-server runs in the same namespace.
-    rbacInternalServerAddr: rbac-server-internal-grpc:8082
-    # This default value works if dex-server runs in the same namespace.
-    dexServerAddr: dex-server-http:5556
+# Default values for llmariner.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 
-  # Use the default cluster registration key. This works when
-  # the control plane and the worker plane are in the same cluster.
+# +docs:section=Global
+
+# Global settings are used to share the values among LLMariner components.
+# These values are propagated to the subcomponents, which are defined as
+# dependencies in the Chart.yaml.
+global:
+  # Specify SQL database info for the server access.
+  # Currently, only PostgreSQL is supported.
+  database:
+    # The database host name.
+    host: postgres.postgres
+    # The database port number.
+    # +docs:type=number
+    port: 5432
+    # The database user name.
+    username: ps_user
+
+    ssl:
+      # This option determines whether or with what priority a secure
+      # SSL TCP/IP connection will be negotiated with the database.
+      # For more information, see [Database Connection Control](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-SSLMODE)
+      mode: prefer
+      # Specify the name of a file containing SSL certificate authority
+      # (CA) certificate. If the file exists, the server's certificate
+      # will be verified to be signed by one of these authorities.
+      # For more information, see [Database Connection Control](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-SSLROOTCERT)
+      # +docs:property
+      # rootCert: ""
+
+    # Specify whether to create the database if it does not exist.
+    createDatabase: true
+    # Specify the original database name to connect to before creating
+    # the database. If empty, use "template1".
+    # +docs:property
+    # originalDatabase: ""
+
+  # Specify the Secret that contains a database password. The Deployment
+  # reads this secret and sets it as a environment value.
+  databaseSecret:
+    # The secret name.
+    name: postgres
+    # The key name with a password set.
+    key: password
+
+  # Specify object store info to manage data.
+  # Currently, only object stores with S3-compatible APIs are supported.
+  objectStore:
+    s3:
+      # The endpoint URL for the object store.
+      endpointUrl: http://minio.minio:9000
+      # The region name.
+      region: dummy
+      # The bucket name to store data.
+      bucket: llmariner
+
+      # Optional AssumeRole.
+      # For more information, see [AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html).
+      # +docs:property
+      # assumeRole:
+      #   roleArn: ""
+      #   externalId: ""
+
+  # Optional Secret configration for the object store. If specified,
+  # the Secret is loaded as environment variables into the container.
+  awsSecret:
+    # The secret name.
+    # +docs:property
+    # name: ""
+
+    # The key name with an access key ID set.
+    accessKeyIdKey: accessKeyId
+    # The key name with a secret access key set.
+    secretAccessKeyKey: secretAccessKey
+
+  ingress:
+    # The Ingress class name.
+    ingressClassName: kong
+
+    # The URL of the ingress controller that can be accessed from
+    # outside the Kubernetes cluster. The dex-server use this for the
+    # issuer and redirect URL.
+    controllerUrl: http://localhost:8080
+
+    # Optional additional annotations to add to the Ingress.
+    # +docs:property
+    # annotations: {}
+
+    # If specified, the API accessed via Ingress will be enabled for TLS.
+    # For more information, see [Enable TLS](https://llmariner.ai/docs/setup/install/single_cluster_production/#optional-enable-tls).
+    #
+    # For example:
+    # tls:
+    #   hosts:
+    #   - api.llm.mydomain.com
+    #   secretName: api-tls
+    # 
+    # +docs:property
+    # tls:
+    #   hosts: []
+    #   secretName: ""
+
+  workerServiceGrpcService:
+    # Optional additional annotations to add to Service of the
+    # job-manager-server worker service.
+    annotations: {}
+
+  # Specify the worker Ingress configuration for worker components to
+  # connect to the worker service. This is only necessary when installing
+  # LLMariner in a multi-cluster mode.
+  # For more information, see [Install across Multiple Clusters](https://llmariner.ai/docs/setup/install/multi_cluster_production/).
+  workerServiceIngress:
+    # Specify whether to create an Ingress.
+    create: false
+    # Optional additional annotations to add to the worker Ingress.
+    # +docs:property
+    # annotations: {}
+
+  # Specify the worker configuration to access the control-plane.
   worker:
+    # Configuration of the Secret used for worker authentication when
+    # communication with the control plane.
     registrationKeySecret:
+      # The secret name. `default-cluster-registration-key` is available
+      # when the control-plane and worker-plane are in the same cluster.
+      # This Secret is generated by cluster-manager-server as default.
+      # For more information, see [Install across Multiple Clusters](https://llmariner.ai/docs/setup/install/multi_cluster_production/).
       name: default-cluster-registration-key
+      # The key name with a registration key set.
       key: key
 
+    tls:
+      # The flag to enable TLS access to the control-plane.
+      enable: false
+
+    # If specified, use this address for accessing the control-plane.
+    # This is necessary when installing LLMariner in a multi-cluster mode.
+    # For more information, see [Install across Multiple Clusters](https://llmariner.ai/docs/setup/install/multi_cluster_production/).
+    controlPlaneAddr: ""
+
+  # Manages the authentication and RBAC settings for the endpoints of
+  # the public and worker service APIs.
+  auth:
+    # The flag to enable auth.
+    enable: true
+    # The address for the rbac-server to use API auth.
+    rbacInternalServerAddr: rbac-server-internal-grpc:8082
+    # The address of the dex-server to verify a token.
+    dexServerAddr: dex-server-http:5556
+
   usageSender:
-    # This default value works if api-usage-server runs in the same namespace.
+    # The address for the api-usage-server to send API usage data.
     apiUsageInternalServerAddr: api-usage-server-internal-grpc:8082
+
+# +docs:section=Prepare
 
 prepare:
   database:
-    # if this flag is false, llmariner uses the existing database secret.
+    # If enabled, a Secret resource for the database access is created.
+    # This secret is refereed in `.global.databaseSecret`.
     createSecret: false
-    # secret:
-    #   name: postgres
-    #   password:
+    secret:
+      # The database password for the `.global.database.username`.
+      # +docs:property
+      # password: ""
+
   objectStore:
-    # if this flag is false, llmariner uses the existing aws secret.
+    # If enabled, a Secret resource for the object store access is created.
+    # This secret is refereed in `.global.awsSecret`.
     createSecret: false
-    # secret:
-    #   name: aws
-    #   accessKeyId:
-    #   secretAccessKey:
+    secret:
+      # The access key ID.
+      # +docs:property
+      # accessKeyId: ""
+
+      # The secret access key.
+      # +docs:property
+      # secretAccessKey: ""
+
   workerRegistration:
+    # If enabled, a Secret resource for the control-plane access is created.
+    # This secret is refereed in `.global.worker.registrationKeySecret`.
     createSecret: false
-    # secret:
-    #   name: cluster-registration-key
-    #   regKey:
+    secret:
+      # The registration key for the worker.
+      # +docs:property
+      # key: ""
+
+# +docs:section=Tags
 
 tags:
+  # The flag that defines whether to install the control-plane components.
   control-plane: true
+  # The flag that defines whether to install the worker-plane components.
   worker: true
 
+# +docs:section="API Usage Server"
+
+# api-usage-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/api-usage/tree/main/deployments/server.
+# +docs:property
 api-usage-server:
   fullnameOverride: api-usage-server
 
-# To avoid adding a release name prefix
+# +docs:section="Cluster Manager Server"
+
+# cluster-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/cluster-manager/tree/main/deployments/server.
+# +docs:property
 cluster-manager-server:
   fullnameOverride: cluster-manager-server
 
+# +docs:section="Dex Server"
+
+# dex-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/dex/tree/main/deployments/server.
+# +docs:property
 dex-server:
   fullnameOverride: dex-server
 
+# +docs:section="File Manager Server"
+
+# file-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/file-manager/tree/main/deployments/server.
+# +docs:property
 file-manager-server:
   fullnameOverride: file-manager-server
 
+# +docs:section="Inference Manager Engine"
+
+# inference-manager-engine is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/inference-manager/tree/main/deployments/engine.
+# +docs:property
 inference-manager-engine:
   fullnameOverride: inference-manager-engine
 
+# +docs:section="Inference Manager Server"
+
+# inference-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/inference-manager/tree/main/deployments/server.
+# +docs:property
 inference-manager-server:
   fullnameOverride: inference-manager-server
 
+# +docs:section="Job Manager Dispatcher"
+
+# job-manager-dispatcher is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/job-manager/tree/main/deployments/dispatcher.
+# +docs:property
 job-manager-dispatcher:
   fullnameOverride: job-manager-dispatcher
 
+# +docs:section="Job Manager Server"
+
+# job-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/job-manager/tree/main/deployments/server.
+# +docs:property
 job-manager-server:
   fullnameOverride: job-manager-server
 
+# +docs:section="Model Manager Loader"
+
+# model-manager-loader is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/model-manager/tree/main/deployments/loader.
+# +docs:property
 model-manager-loader:
   fullnameOverride: model-manager-loader
 
+# +docs:section="Model Manager Server"
+
+# model-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/model-manager/tree/main/deployments/server.
+# +docs:property
 model-manager-server:
   fullnameOverride: model-manager-server
 
+# +docs:section="RBAC Server"
+
+# rbac-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/rbac/tree/main/deployments/server.
+# +docs:property
 rbac-server:
   fullnameOverride: rbac-server
 
+# +docs:section="Session Manager Agent"
+
+# session-manager-agent is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/session-manager/tree/main/deployments/agent.
+# +docs:property
 session-manager-agent:
   fullnameOverride: session-manager-agent
 
+# +docs:section="Session Manager Server"
+
+# session-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/session-manager/tree/main/deployments/server.
+# +docs:property
 session-manager-server:
   fullnameOverride: session-manager-server
 
+# +docs:section="User Manager Server"
+
+# user-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/user-manager/tree/main/deployments/server.
+# +docs:property
 user-manager-server:
   fullnameOverride: user-manager-server
 
+# +docs:section="Vector Store Manager Server"
+
+# vector-store-manager-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/vector-store-manager/tree/main/deployments/server.
+# +docs:property
 vector-store-manager-server:
   fullnameOverride: vector-store-manager-server

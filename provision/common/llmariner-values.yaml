@@ -2,34 +2,11 @@
 
 global:
   database:
-    host: postgres.postgres
-    port: 5432
-    username: ps_user
     ssl:
       mode: disable
-    createDatabase: true
-
-  databaseSecret:
-    name: postgres
-    key: password
-
-  objectStore:
-    s3:
-      endpointUrl: http://minio.minio:9000
-      region: dummy
-      bucket: llmariner
 
   awsSecret:
     name: aws
-    accessKeyIdKey: accessKeyId
-    secretAccessKeyKey: secretAccessKey
-
-  ingress:
-    ingressClassName: kong
-    # The URL of the ingress controller. If there is no URL that is reachable from the outside of
-    # a k8s cluster, this can be a port-forwarding URL.
-    controllerUrl: http://localhost:8080
-
 
 api-usage-server:
   # To fit in a single node
