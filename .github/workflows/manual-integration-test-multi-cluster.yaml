@@ -1,0 +1,71 @@
+name: manual-run-integration-test-multi-cluster
+on:
+  workflow_dispatch:
+
+jobs:
+  run-integration-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: 1.23
+    - name: install-kind
+      run: |
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+        sudo install -o root -g root -m 0755 kind /usr/local/bin/kind
+        rm ./kind
+    - name: build-cli
+      run: |
+        make build
+        mv ./bin/llma /usr/local/bin/llma
+    - name: set-up-kind-cluster
+      run: |
+        ./provision/dev/create_cluster.sh multi
+    - name: deploy-control-plane
+      uses: helmfile/helmfile-action@v1.9.3
+      with:
+        helmfile-args: apply -e control -l app!=fake-gpu-operator --skip-diff-on-install
+        helmfile-workdirectory: ./provision/dev/
+    - name: wait-for-control-plane-readiness
+      run: |
+        kubectl wait --context kind-llmariner-control-plane --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
+        # Wait until rbac-server updates its cache.
+        # TODO(kenji): Have a better way to check this.
+        sleep 30
+    - name: set-up-cli-config
+      run: |
+        mkdir -p ~/.config/llmariner
+        cat << EOF > ~/.config/llmariner/config.yaml
+        version: v1
+        endpointUrl: http://localhost/v1
+        auth:
+          clientId: llmariner
+          clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
+          redirectUri: http://127.0.0.1:5555/callback
+          issuerUrl: http://localhost/v1/dex
+        context:
+          organizationId:
+          projectId:
+        EOF
+    - name: generate-registration-key
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        regKey=$(llma admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+        echo "REGISTRATION_KEY=${regKey}" >> $GITHUB_ENV
+    - name: deploy-worker-plane
+      uses: helmfile/helmfile-action@v1.9.3
+      with:
+        helmfile-args: apply -e worker -l app=llmariner -l app=fake-gpu-operator --skip-diff-on-install
+        helmfile-workdirectory: ./provision/dev/
+    - name: wait-for-worker-plane-readiness
+      run: |
+        kubectl wait --context kind-llmariner-worker-plane --timeout=300s --for=condition=ready pod -n llmariner-wp -l app.kubernetes.io/instance=llmariner
+    - name: run-tests
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        kubectl config use-context kind-llmariner-control-plane
+        ./provision/dev/validate_deployment.sh

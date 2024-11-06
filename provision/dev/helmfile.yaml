@@ -202,10 +202,12 @@ releases:
   hooks:
   - events: ["postsync"]
     showlogs: true
-    command: kubectl
-    args: ["--context={{.Environment.KubeContext}}", "apply", "-f", "control_plane_service.yaml"]
+    command: "./install_control_plane_service.sh"
+    args:
+    - {{ .Environment.KubeContext }}
   - events: ["postuninstall"]
     showlogs: true
-    command: kubectl
-    args: ["--context={{.Environment.KubeContext}}", "delete", "-f", "control_plane_service.yaml"]
+    command: "./uninstall_control_plane_service.sh"
+    args:
+    - {{ .Environment.KubeContext }}
   {{ end }}
