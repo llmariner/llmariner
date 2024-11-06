@@ -87,6 +87,17 @@ releases:
     - {{ .Values.minio.adminPass }}
     - {{ .Values.minio.accessKey }}
     - {{ .Values.minio.secretKey }}
+    - {{ .Environment.KubeContext }}
+  {{ if eq .Environment.Name "control" }}
+  - events: ["postsync"]
+    showlogs: true
+    command: kubectl
+    args: ["--context={{.Environment.KubeContext}}", "apply", "-f", "minio_service.yaml"]
+  - events: ["postuninstall"]
+    showlogs: true
+    command: kubectl
+    args: ["--context={{.Environment.KubeContext}}", "delete", "-f", "minio_service.yaml"]
+  {{ end }}
 
 - name: milvus
   namespace: milvus
@@ -189,7 +200,7 @@ releases:
       value: {{ .Values.minio.bucket }}
   {{ if eq .Environment.Name "worker" }}
   hooks:
-  - events: ["presync"]
+  - events: ["postsync"]
     showlogs: true
     command: kubectl
     args: ["--context={{.Environment.KubeContext}}", "apply", "-f", "control_plane_service.yaml"]
