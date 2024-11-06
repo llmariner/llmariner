@@ -55,6 +55,10 @@ LLMariner provides OpenAI-compatible APIs, making it easy to integrate with powe
 
 - [Transform Your Kubernetes Cluster Into a GenAI Platform: Get Ready-to-Use LLM APIs Today! - Cloud Native & Kubernetes AI Day 2024 North America](https://sched.co/1izue)
 
+## Contributing
+
+See [Contributing Guide](CONTRIBUTING.md).
+
 ## License
 
 See [LICENSE](LICENSE).
