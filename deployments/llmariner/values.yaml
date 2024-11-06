@@ -81,7 +81,7 @@ global:
     ingressClassName: kong
 
     # The URL of the ingress controller that can be accessed from
-    # outside the Kubernetes cluster. The dex-server use this for the
+    # outside the Kubernetes cluster. The dex-server uses this for the
     # issuer and redirect URL.
     controllerUrl: http://localhost:8080
 
@@ -97,7 +97,7 @@ global:
     #   hosts:
     #   - api.llm.mydomain.com
     #   secretName: api-tls
-    # 
+    #
     # +docs:property
     # tls:
     #   hosts: []
