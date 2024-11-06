@@ -31,6 +31,13 @@ cluster-manager-server:
 
 
 dex-server:
+  staticPasswords:
+  - id: example-admin
+    name: admin
+    email: admin@example.com
+    # bcrypt hash of the string: $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
+    password: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+
   # To fit in a single node
   resources:
     limits:
