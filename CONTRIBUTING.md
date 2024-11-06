@@ -8,7 +8,7 @@ All types of contributions are encouraged and valued.
 This project and everyone participating in it is governed by the
 [LLMariner Code of Conduct](https://github.com/llmariner/llmarinerblob/master/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
-to <>.
+to contact@llmariner.ai.
 
 ## I Have a Question
 
@@ -22,7 +22,7 @@ to <>.
 ### Reporting Bugs
 
 > [!IMPORTANT]
-> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to <>.
+> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to contact@llmariner.ai.
 
 We use GitHub issues to track bugs and errors. If you run into an issue with the project:
 
@@ -42,10 +42,10 @@ The following guides you through submitting an enhancement suggestion for LLMari
 
 ### Your First Code Contribution
 
-LLMariner use the [GitHub flow](https://guides.github.com/introduction/flow/):
+LLMariner uses the [GitHub flow](https://guides.github.com/introduction/flow/):
 
 1. Fork this repository
 1. Create a new branch, develop and test your changes
-1. Send a pull request to `main` branch
+1. Send a pull request to the `main` branch
 
 For more information, see [Development guide](./DEVELOPMENT.md).
