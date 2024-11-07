@@ -50,12 +50,14 @@ global:
   # Currently, only object stores with S3-compatible APIs are supported.
   objectStore:
     s3:
-      # The endpoint URL for the object store.
-      endpointUrl: http://minio.minio:9000
       # The region name.
       region: dummy
       # The bucket name to store data.
       bucket: llmariner
+
+      # Optional endpoint URL for the object store.
+      # +docs:property
+      # endpointUrl: ""
 
       # Optional AssumeRole.
       # For more information, see [AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html).
