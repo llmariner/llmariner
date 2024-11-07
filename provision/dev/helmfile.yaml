@@ -88,15 +88,16 @@ releases:
     - {{ .Values.minio.accessKey }}
     - {{ .Values.minio.secretKey }}
     - {{ .Environment.KubeContext }}
+    - "{{`{{.Release.Namespace}}`}}"
   {{ if eq .Environment.Name "control" }}
-  - events: ["postsync"]
+  - events: ["postsync", "postuninstall"]
     showlogs: true
     command: kubectl
-    args: ["--context={{.Environment.KubeContext}}", "apply", "-f", "minio_service.yaml"]
-  - events: ["postuninstall"]
-    showlogs: true
-    command: kubectl
-    args: ["--context={{.Environment.KubeContext}}", "delete", "-f", "minio_service.yaml"]
+    args:
+    - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
+    - "--context={{.Environment.KubeContext}}"
+    - "--namespace={{`{{.Release.Namespace}}`}}"
+    - "--filename=minio_service.yaml"
   {{ end }}
 
 - name: milvus
@@ -200,14 +201,11 @@ releases:
       value: {{ .Values.minio.bucket }}
   {{ if eq .Environment.Name "worker" }}
   hooks:
-  - events: ["postsync"]
+  - events: ["postsync","postuninstall"]
     showlogs: true
-    command: "./install_control_plane_service.sh"
+    command: "./control_plane_service.sh"
     args:
+    - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
     - {{ .Environment.KubeContext }}
-  - events: ["postuninstall"]
-    showlogs: true
-    command: "./uninstall_control_plane_service.sh"
-    args:
-    - {{ .Environment.KubeContext }}
+    - "{{`{{.Release.Namespace}}`}}"
   {{ end }}
