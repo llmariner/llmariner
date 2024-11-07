@@ -1,0 +1,35 @@
+# See https://github.com/kubernetes-sigs/kind/issues/1200#issuecomment-1304855791
+# This is for Linux.
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-plane
+  namespace: llmariner-wp
+spec:
+  clusterIP: None
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: control-plane
+  namespace: llmariner-wp
+subsets:
+- addresses:
+  - ip: 172.17.0.1 # Gateway IP in the "bridge" docker network
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: llmariner-wp
+spec:
+  clusterIP: None
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: minio
+  namespace: llmariner-wp
+subsets:
+- addresses:
+  - ip: 172.17.0.1 # Gateway IP in the "bridge" docker network

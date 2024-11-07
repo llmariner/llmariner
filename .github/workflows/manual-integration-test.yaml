@@ -44,6 +44,7 @@ jobs:
           projectId:
         EOF
     - name: run-tests
+      env:
+        LLMARINER_API_KEY: default-key-secret
       run: |
-        export LLMARINER_API_KEY=default-key-secret
         ./provision/dev/validate_deployment.sh
