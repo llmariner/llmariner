@@ -5,6 +5,10 @@ global:
     ssl:
       mode: disable
 
+  objectStore:
+    s3:
+      endpointUrl: http://minio:9000
+
   awsSecret:
     name: aws
 
