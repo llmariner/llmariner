@@ -86,8 +86,6 @@ sampleMapValues:
 > - Add the `+docs:property` tag to the commented-out value for detecting the setting value.
 > - When setting a non-empty value to a map-type setting, ensure to set the `+docs:property` tag to prevent the value type from being locked.
 
-#### helm-tool
-
 ### Code
 
 LLMariner, like most Go projects, delegates almost all stylistic choices to `gofmt`.
