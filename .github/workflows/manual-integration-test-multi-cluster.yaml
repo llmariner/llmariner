@@ -67,5 +67,9 @@ jobs:
       env:
         LLMARINER_API_KEY: default-key-secret
       run: |
-        kubectl config use-context kind-llmariner-control-plane
-        ./provision/dev/validate_deployment.sh
+        # TODO(kenji): Currently we don't run the inference as the runner does not have sufficient resources to run.
+        echo "Waiting for the model to be loaded..."
+        until llma models list | grep google-gemma-2b-it-q4_0; do
+          sleep 1
+        done
+        echo "Model is loaded!"
