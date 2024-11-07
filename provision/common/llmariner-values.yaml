@@ -7,7 +7,9 @@ global:
 
   objectStore:
     s3:
-      endpointUrl: http://minio:9000
+      endpointUrl: http://minio.minio:9000
+      bucket: llmariner
+      region: dummy
 
   awsSecret:
     name: aws
