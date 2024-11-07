@@ -8,9 +8,20 @@ MINIO_PASS=${2:?MINIO_PASS}
 ACCESS_KEY=${3:?ACCESS_KEY}
 SECRET_KEY=${4:?SECRET_KEY}
 KUBECONFIG_CONTEXT=${5}
+NAMESPACE=${6:?NAMESPACE}
 
-kubectl wait --context "${KUBECONFIG_CONTEXT}" --timeout=90s --for=condition=ready pod -n minio -l app.kubernetes.io/name=minio
-kubectl port-forward --context "${KUBECONFIG_CONTEXT}" -n minio service/minio 9001 &
+kubectl wait pod \
+        --context="${KUBECONFIG_CONTEXT}" \
+        --timeout=90s \
+        --for=condition=ready \
+        --namespace="${NAMESPACE}" \
+        -l app.kubernetes.io/name=minio
+
+kubectl port-forward \
+        --context="${KUBECONFIG_CONTEXT}" \
+        --namespace="${NAMESPACE}" \
+        service/minio 9001 &
+
 sleep 5
 
 # Obtain the cookie and store in cookies.txt.
