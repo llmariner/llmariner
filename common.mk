@@ -2,14 +2,9 @@
 # GIT
 # ------------------------------------------------------------------------------
 
-git_dirty := $(shell git status -s)
-
+.PHONY: git-clean-check
 git-clean-check:
-ifneq ($(git_dirty),)
-	git diff
-	@echo "Git repository is dirty!"
-	@false
-endif
+	git diff --stat --exit-code
 
 # ------------------------------------------------------------------------------
 # GO - TESTS
