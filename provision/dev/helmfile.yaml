@@ -45,7 +45,7 @@ releases:
   - name: ingressController.installCRDs
     value: false
   values:
-  - "../common/kong_values.yaml"
+  - "kong_values.yaml"
 
 - name: postgres
   namespace: postgres
@@ -108,7 +108,7 @@ releases:
   version: 4.2.15
   chart: milvus/milvus
   values:
-  - "../common/milvus_values.yaml"
+  - "milvus_values.yaml"
 
 - name: prometheus
   namespace: monitoring
@@ -165,12 +165,12 @@ releases:
   labels:
     app: llmariner
     tier: core
-  chart: "../../deployments/llmariner/"
+  chart: "{{ .Values.llmariner.chartPath }}"
   needs:
   - postgres/postgres
   - minio/minio
   values:
-  - "../common/llmariner-values.yaml"
+  - "llmariner_values.yaml"
   {{ if eq .Environment.Name "control" }}
   - "./values/llmariner-control-plane.yaml"
   {{ else if eq .Environment.Name "worker" }}
