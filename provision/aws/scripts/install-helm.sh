@@ -12,3 +12,5 @@ if [ "$HELM_VERSION" = "latest" ]; then
 else
     sudo apt install -y helm=${HELM_VERSION}
 fi
+
+helm plugin install https://github.com/databus23/helm-diff
