@@ -16,6 +16,7 @@ We use [Fake GPU operator](https://github.com/run-ai/fake-gpu-operator) so that 
 
 ```bash
 ./create_cluster.sh single
+helmfile init
 helmfile apply --skip-diff-on-install
 ```
 
@@ -28,6 +29,7 @@ helmfile apply --skip-diff-on-install
 
 ```bash
 ./create_cluster.sh multi
+helmfile init
 helmfile apply -e control -l app!=fake-gpu-operator --skip-diff-on-install
 
 # Please set the endpoint address to http://localhost/v1
