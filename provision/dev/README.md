@@ -24,6 +24,11 @@ helmfile apply --skip-diff-on-install
 > For example, to filter out the monitoring components, set the `-l tier!=monitoring` flag.
 > For deploying just the llmariner, use `-l app=llmariner`.
 
+> [!NOTE]
+> If you run `helmfile` multiple times, you might get the follwing
+> error: `Error: unknown command "diff" for "helm"`. You can resolve the error
+> by installing [Helm Diff Plugin](https://github.com/databus23/helm-diff).
+
 ### Multi-Cluster Mode
 
 ```bash
