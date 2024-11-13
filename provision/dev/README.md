@@ -16,6 +16,7 @@ We use [Fake GPU operator](https://github.com/run-ai/fake-gpu-operator) so that 
 
 ```bash
 ./create_cluster.sh single
+helmfile init
 helmfile apply --skip-diff-on-install
 ```
 
@@ -24,15 +25,11 @@ helmfile apply --skip-diff-on-install
 > For example, to filter out the monitoring components, set the `-l tier!=monitoring` flag.
 > For deploying just the llmariner, use `-l app=llmariner`.
 
-> [!NOTE]
-> If you run `helmfile` multiple times, you might get the follwing
-> error: `Error: unknown command "diff" for "helm"`. You can resolve the error
-> by installing [Helm Diff Plugin](https://github.com/databus23/helm-diff).
-
 ### Multi-Cluster Mode
 
 ```bash
 ./create_cluster.sh multi
+helmfile init
 helmfile apply -e control -l app!=fake-gpu-operator --skip-diff-on-install
 
 # Please set the endpoint address to http://localhost/v1
