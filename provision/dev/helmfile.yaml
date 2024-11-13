@@ -88,7 +88,7 @@ releases:
     - {{ .Values.minio.accessKey }}
     - {{ .Values.minio.secretKey }}
     - {{ .Environment.KubeContext }}
-    - "{{`{{.Release.Namespace}}`}}"
+    - minio
   {{ if eq .Environment.Name "control" }}
   - events: ["postsync", "postuninstall"]
     showlogs: true
@@ -96,7 +96,7 @@ releases:
     args:
     - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
     - "--context={{.Environment.KubeContext}}"
-    - "--namespace={{`{{.Release.Namespace}}`}}"
+    - "--namespace=minio"
     - "--filename=minio_service.yaml"
   {{ end }}
 
