@@ -25,7 +25,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 1.2.0
+  version: 1.3.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -35,12 +35,12 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.7.0
+  version: 1.8.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.7.0
+  version: 1.8.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -65,7 +65,7 @@ dependencies:
   tags:
   - control-plane
 - name: rbac-server
-  version: 1.2.0
+  version: 1.3.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
@@ -80,7 +80,7 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.2.0
+  version: 1.5.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   tags:
   - control-plane
