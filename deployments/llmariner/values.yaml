@@ -153,7 +153,11 @@ global:
     # The address of the dex-server to verify a token.
     dexServerAddr: dex-server-http:5556
 
+  # Settings for sending usage data to the usage API server.
+  # +docs:property
   usageSender:
+    # The flag to enable sender.
+    enable: true
     # The address for the api-usage-server to send API usage data.
     apiUsageInternalServerAddr: api-usage-server-internal-grpc:8082
 
