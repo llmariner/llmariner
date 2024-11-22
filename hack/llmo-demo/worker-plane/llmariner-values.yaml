@@ -51,7 +51,7 @@ inference-manager-engine:
       meta-llama/Meta-Llama-3.1-70B-Instruct-awq:
         preloaded: false
         contextLength: 16384
-        resourecs:
+        resources:
           limits:
             nvidia.com/gpu: 4
       sentence-transformers/all-MiniLM-L6-v2-f16:
