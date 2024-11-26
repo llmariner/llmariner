@@ -7,6 +7,8 @@ minio:
   accessKey: llmariner-key
   secretKey: llmariner-secret
   bucket: llmariner
+redis:
+  password: redispass
 llmariner:
   psSecretName: postgres
   awsSecretName: aws

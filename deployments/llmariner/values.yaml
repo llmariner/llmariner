@@ -186,6 +186,15 @@ prepare:
       # +docs:property
       # secretAccessKey: ""
 
+  redis:
+    # If enabled, a Secret resource for the redis access is created.
+    # This secret is refereed in `.inference-manager-server.rateLimit.redis.secretName`.
+    createSecret: false
+    secret:
+      # The redis password for the redis.
+      # +docs:property
+      # password: ""
+
   workerRegistration:
     # If enabled, a Secret resource for the control-plane access is created.
     # This secret is refereed in `.global.worker.registrationKeySecret`.
