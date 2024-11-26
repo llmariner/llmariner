@@ -97,6 +97,8 @@ inference-manager-engine:
 
 
 inference-manager-server:
+  rateLimit:
+    storeType: redis
   service:
     annotations:
       konghq.com/connect-timeout: "360000"

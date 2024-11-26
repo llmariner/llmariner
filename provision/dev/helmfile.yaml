@@ -100,6 +100,17 @@ releases:
     - "--filename=minio_service.yaml"
   {{ end }}
 
+- name: redis
+  namespace: redis
+  labels:
+    app: redis
+    tier: core
+  version: 20.3.0
+  chart: oci://registry-1.docker.io/bitnamicharts/redis
+  set:
+  - name: auth.password
+    value: {{ .Values.redis.password }}
+
 - name: milvus
   namespace: milvus
   labels:
@@ -186,6 +197,10 @@ releases:
         secret:
           accessKeyId: {{ .Values.minio.accessKey }}
           secretAccessKey: {{ .Values.minio.secretKey }}
+      redis:
+        createSecret: {{ ne .Environment.Name "worker" | toYaml }}
+        secret:
+          password: {{ .Values.redis.password }}
       {{ if eq .Environment.Name "worker" }}
       workerRegistration:
         createSecret: true
