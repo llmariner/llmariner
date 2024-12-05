@@ -26,7 +26,7 @@ jobs:
     - name: deploy-control-plane
       uses: helmfile/helmfile-action@v1.9.3
       with:
-        helmfile-args: apply -e control -l app!=fake-gpu-operator --skip-diff-on-install
+        helmfile-args: apply -e control -l app!=fake-gpu-operator,tier!=monitoring --skip-diff-on-install
         helmfile-workdirectory: ./provision/dev/
     - name: wait-for-control-plane-readiness
       run: |
@@ -58,7 +58,7 @@ jobs:
     - name: deploy-worker-plane
       uses: helmfile/helmfile-action@v1.9.3
       with:
-        helmfile-args: apply -e worker -l app=llmariner -l app=fake-gpu-operator --skip-diff-on-install
+        helmfile-args: apply -e worker -l app=llmariner -l app=fake-gpu-operator -l tier=monitoring --skip-diff-on-install
         helmfile-workdirectory: ./provision/dev/
     - name: wait-for-worker-plane-readiness
       run: |
