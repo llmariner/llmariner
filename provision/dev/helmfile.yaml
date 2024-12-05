@@ -137,7 +137,21 @@ releases:
         scrape_interval: 5s
         static_configs:
         - targets: ['nvidia-dcgm-exporter.nvidia.svc:9400']
-
+      - job_name: inference-runtimes"
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+              - {{if eq .Environment.Name "worker"}}llmariner-wp{{else}}llmariner{{end}}
+            selectors:
+            - role: pod
+              label: "app.kubernetes.io/name=runtime"
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_pod_annotation_llmariner_(.+)
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: pod
 - name: grafana
   namespace: monitoring
   labels:
