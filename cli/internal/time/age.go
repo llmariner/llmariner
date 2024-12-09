@@ -19,7 +19,7 @@ func toAge(t, now time.Time) string {
 		return fmt.Sprintf("%.0fh%dm", d.Hours(), min%60)
 	} else if d.Hours() < 24 {
 		return fmt.Sprintf("%.0fh", d.Hours())
-	} else if d.Hours() < 24*7 {
+	} else if d.Hours() < 24*365 {
 		return fmt.Sprintf("%.0fd", d.Hours()/24)
 	}
 	return fmt.Sprintf("%.0fy", d.Hours()/(24*365))
