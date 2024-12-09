@@ -12,8 +12,8 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0
-	github.com/llmariner/api-usage v0.10.0
-	github.com/llmariner/cluster-manager v0.24.0
+	github.com/llmariner/api-usage v1.2.0
+	github.com/llmariner/cluster-manager v1.5.2
 	github.com/llmariner/file-manager v0.69.0
 	github.com/llmariner/inference-manager v0.360.0
 	github.com/llmariner/job-manager v0.208.0
@@ -31,9 +31,9 @@ require (
 	google.golang.org/grpc v1.67.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/api v0.31.0
-	k8s.io/apimachinery v0.31.0
-	k8s.io/client-go v0.31.0
+	k8s.io/api v0.31.3
+	k8s.io/apimachinery v0.31.3
+	k8s.io/client-go v0.31.3
 )
 
 require (
