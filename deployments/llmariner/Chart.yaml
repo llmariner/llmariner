@@ -21,7 +21,7 @@ dependencies:
   tags:
   - control-plane
 - name: cluster-manager-server
-  version: 1.5.2
+  version: 1.5.3
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-server.enable
   tags:
