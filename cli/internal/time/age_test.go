@@ -38,6 +38,18 @@ func TestToAge(t *testing.T) {
 			t:    now.Add(-26 * time.Hour),
 			want: "1d",
 		},
+		{
+			t:    now.Add(-24 * 4 * time.Hour),
+			want: "4d",
+		},
+		{
+			t:    now.Add(-24 * 20 * time.Hour),
+			want: "20d",
+		},
+		{
+			t:    now.Add(-24 * 400 * time.Hour),
+			want: "1y",
+		},
 	}
 	for _, tc := range tcs {
 		t.Run(tc.t.String(), func(t *testing.T) {
