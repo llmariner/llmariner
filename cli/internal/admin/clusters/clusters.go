@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	cv1 "github.com/llmariner/cluster-manager/api/v1"
@@ -88,11 +89,25 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("NAME")
+	tbl := table.New("Name", "Heatlh Status")
 	ui.FormatTable(tbl)
 
 	for _, c := range cs {
-		tbl.AddRow(c.Name)
+		var us []string
+		for name, s := range c.ComponentStatuses {
+			if s.IsHealthy {
+				continue
+			}
+			us = append(us, fmt.Sprintf("%s: %s", name, s.Message))
+		}
+		var status string
+		if len(us) == 0 {
+			status = "Healthy"
+		} else {
+
+			status = strings.Join(us, ", ")
+		}
+		tbl.AddRow(c.Name, status)
 	}
 
 	tbl.Print()
