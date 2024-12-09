@@ -1,0 +1,12 @@
+---
+repositories:
+- name: kedacore
+  url: https://kedacore.github.io/charts
+
+releases:
+- name: keda
+  namespace: keda
+  labels:
+    app: keda
+    tier: autoscaler
+  chart: kedacore/keda
