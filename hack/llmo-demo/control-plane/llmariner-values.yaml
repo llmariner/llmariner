@@ -68,8 +68,6 @@ dex-server:
       - offline_access
 
   enablePasswordDb: false
-  staticPassword:
-    enable: false
   expiry:
    idTokens: 1h
    refreshTokens:
