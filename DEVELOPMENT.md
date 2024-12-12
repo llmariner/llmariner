@@ -98,6 +98,69 @@ make lint
 > [!NOTE]
 > Besides the linters mentioned above, `golangci-lint` is also executed for [pull requests](.github/workflows/ci-pre-merge.yml).
 
+## Protocol Buffers
+
+When you need to make changes to the protocol buffer messages and/or services, change the `.proto` files, and then run `make generate` to update the files generated from the `.proto` files.
+
+To run `make generate`, install [Buf](https://buf.build/) and plugins specified in [the CLI configuration files](https://buf.build/docs/configuration/v1/buf-yaml/) as follows.
+
+When contributing, please use the same version of tools/plugins as the ones specified in the example commands below.
+Otherwise, there will be unnecessary diffs in the generated files because of version differences.
+
+### Buf
+
+We're using Buf instead of [`protoc`](https://github.com/protocolbuffers/protobuf?tab=readme-ov-file#protobuf-compiler-installation).
+
+Install it by:
+
+```console
+go install github.com/bufbuild/buf/cmd/buf@v1.5.0
+```
+
+See [Install the Buf CLI](https://buf.build/docs/installation/) for other options.
+
+### Plugins for Go language
+
+Based on https://grpc.io/docs/languages/go/quickstart/.
+
+Install `protoc-gen-go` (`go` plugin) by:
+
+```console
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1
+```
+
+Install `protoc-gen-go-grpc` (`go-grpc` plugin) by:
+
+```console
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0
+```
+
+### Plugins for gRPC-Gateway
+
+See https://github.com/grpc-ecosystem/grpc-gateway?tab=readme-ov-file#installation for other options.
+
+Install `protoc-gen-grpc-gateway` (`grpc-gateway` plugin) by:
+
+```console
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.6.0
+```
+
+Install `protoc-gen-openapiv2` (`openapiv2` plugin) by:
+
+```console
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.6.0
+```
+
+### gRPC-Gateway TypeScript generator plugin
+
+Based on https://github.com/grpc-ecosystem/protoc-gen-grpc-gateway-ts?tab=readme-ov-file#install-protoc-gen-grpc-gateway-ts.
+
+Install `protoc-gen-grpc-gateway-ts` (`grpc-gateway-ts` plugin) by:
+
+```console
+go install github.com/grpc-ecosystem/protoc-gen-grpc-gateway-ts@v1.1.1
+```
+
 ## Testing
 
 ### Unit Test
