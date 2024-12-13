@@ -135,11 +135,11 @@ func list(ctx context.Context, orgTitle, projectTitle string) error {
 		return err
 	}
 
-	tbl := table.New("Name", "Owner", "Created At")
+	tbl := table.New("Name", "Owner", "Created At", "Secret")
 	ui.FormatTable(tbl)
 
 	for _, k := range resp.Data {
-		tbl.AddRow(k.Name, k.User.Id, time.Unix(k.CreatedAt, 0).Format(time.RFC3339))
+		tbl.AddRow(k.Name, k.User.Id, time.Unix(k.CreatedAt, 0).Format(time.RFC3339), k.Secret)
 	}
 
 	tbl.Print()
