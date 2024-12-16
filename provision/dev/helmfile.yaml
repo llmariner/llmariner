@@ -137,7 +137,8 @@ releases:
         scrape_interval: 5s
         static_configs:
         - targets: ['nvidia-dcgm-exporter.nvidia.svc:9400']
-      - job_name: inference-runtimes"
+      - job_name: inference-runtimes
+        scrape_interval: 10s
         kubernetes_sd_configs:
           - role: pod
             namespaces:
@@ -152,6 +153,26 @@ releases:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: pod
+      - job_name: inference-engine
+        scrape_interval: 10s
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+              - {{if eq .Environment.Name "worker"}}llmariner-wp{{else}}llmariner{{end}}
+            selectors:
+            - role: pod
+              label: "app.kubernetes.io/name=inference-manager-engine"
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_pod_annotation_llmariner_(.+)
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: pod
+          - source_labels: [__meta_kubernetes_pod_container_port_number]
+            regex: "8084"
+            replacement: $1
+            action: keep
 - name: grafana
   namespace: monitoring
   labels:
