@@ -93,7 +93,7 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.6.0
+  version: 1.7.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: user-manager-server.enable
   tags:
