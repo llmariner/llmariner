@@ -19,6 +19,8 @@ import (
 )
 
 const (
+	apiKeyPathPattern = "/api_keys/%s"
+
 	pathPattern = "/organizations/%s/projects/%s/api_keys"
 )
 
@@ -33,6 +35,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())
+	cmd.AddCommand(updateCmd())
 	return cmd
 }
 
@@ -77,7 +80,7 @@ func deleteCmd() *cobra.Command {
 		projectTitle string
 	)
 	cmd := &cobra.Command{
-		Use:  "delete",
+		Use:  "delete <NAME>",
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return delete(cmd.Context(), args[0], orgTitle, projectTitle)
@@ -85,6 +88,26 @@ func deleteCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Title of the organization. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&projectTitle, "project-title", "p", "", "Title of the project. The project in the current context is used if not specified.")
+	return cmd
+}
+
+func updateCmd() *cobra.Command {
+	var (
+		orgTitle     string
+		projectTitle string
+		newName      string
+	)
+	cmd := &cobra.Command{
+		Use:  "update <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return update(cmd.Context(), args[0], orgTitle, projectTitle, newName)
+		},
+	}
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Title of the organization. The organization in the current context is used if not specified.")
+	cmd.Flags().StringVarP(&projectTitle, "project-title", "p", "", "Title of the project. The project in the current context is used if not specified.")
+	cmd.Flags().StringVar(&newName, "new-name", "", "New name for the API key")
+	_ = cmd.MarkFlagRequired("new-name")
 	return cmd
 }
 
@@ -125,7 +148,7 @@ func list(ctx context.Context, orgTitle, projectTitle string) error {
 		return err
 	}
 
-	req := &uv1.ListAPIKeysRequest{
+	req := &uv1.ListProjectAPIKeysRequest{
 		OrganizationId: orgID,
 		ProjectId:      projectID,
 	}
@@ -178,7 +201,7 @@ func delete(ctx context.Context, name, orgTitle, projectTitle string) error {
 		return fmt.Errorf("API key %q not found", name)
 	}
 
-	req := &uv1.DeleteAPIKeyRequest{
+	req := &uv1.DeleteProjectAPIKeyRequest{
 		Id:             key.Id,
 		OrganizationId: orgID,
 		ProjectId:      projectID,
@@ -190,6 +213,40 @@ func delete(ctx context.Context, name, orgTitle, projectTitle string) error {
 	}
 
 	fmt.Printf("Deleted the API key (ID: %q).\n", key.Id)
+
+	return nil
+}
+
+func update(ctx context.Context, name, orgTitle, projectTitle, newName string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	orgID, projectID, err := findOrgAndProject(env, orgTitle, projectTitle)
+	if err != nil {
+		return err
+	}
+
+	key, found, err := findKeyByName(ctx, env, name, orgID, projectID)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("API key %q not found", name)
+	}
+
+	req := &uv1.APIKey{
+		Name: newName,
+	}
+
+	var resp uv1.APIKey
+	path := fmt.Sprintf(apiKeyPathPattern, key.Id)
+	if err := ihttp.NewClient(env).Send(http.MethodPatch, path, &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Updated the API key (ID: %q).\n", key.Id)
 
 	return nil
 }
@@ -252,7 +309,7 @@ func findKeyByName(
 	orgID string,
 	projectID string,
 ) (*uv1.APIKey, bool, error) {
-	req := &uv1.ListAPIKeysRequest{
+	req := &uv1.ListProjectAPIKeysRequest{
 		OrganizationId: orgID,
 		ProjectId:      projectID,
 	}
