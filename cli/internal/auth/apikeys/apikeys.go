@@ -16,10 +16,11 @@ import (
 	uv1 "github.com/llmariner/user-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
-	"google.golang.org/protobuf/types/known/fieldmaskpb"
 )
 
 const (
+	apiKeyPathPattern = "/api_keys/%s"
+
 	pathPattern = "/organizations/%s/projects/%s/api_keys"
 )
 
@@ -157,7 +158,7 @@ func list(ctx context.Context, orgTitle, projectTitle string) error {
 		return err
 	}
 
-	tbl := table.New("Name", "Owner", "A", "B", "Created At", "Secret")
+	tbl := table.New("Name", "Owner", "Created At", "Secret")
 	ui.FormatTable(tbl)
 
 	for _, k := range resp.Data {
@@ -235,17 +236,12 @@ func update(ctx context.Context, name, orgTitle, projectTitle, newName string) e
 		return fmt.Errorf("API key %q not found", name)
 	}
 
-	req := &uv1.UpdateAPIKeyRequest{
-		ApiKey: &uv1.APIKey{
-			Id:   key.Id,
-			Name: newName,
-		},
-		UpdateMask: &fieldmaskpb.FieldMask{
-			Paths: []string{"name"},
-		},
+	req := &uv1.APIKey{
+		Name: newName,
 	}
+
 	var resp uv1.APIKey
-	path := fmt.Sprintf(pathPattern, orgID, projectID)
+	path := fmt.Sprintf(apiKeyPathPattern, key.Id)
 	if err := ihttp.NewClient(env).Send(http.MethodPatch, path, &req, &resp); err != nil {
 		return err
 	}
