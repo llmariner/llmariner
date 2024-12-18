@@ -61,7 +61,7 @@ spec:
 EOF
 ```
 
-Please note that Karpenter version needs to be 1.1.0 or later to have (https://github.com/aws/karpenter-provider-aws/issues/3555)
+Please note that Karpenter version needs to be 1.1.0 or later to have (this change}[https://github.com/aws/karpenter-provider-aws/issues/3555].
 
 ## Step 2. Install the Neuron device plugin and scheduling extension
 
