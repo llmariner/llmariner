@@ -35,10 +35,6 @@ spec:
         operator: In
         values:
         - inf2.24xlarge
-      expireAfter: 720h
-  disruption:
-    consolidationPolicy: WhenEmptyOrUnderutilized
-    consolidateAfter: 1m
 ---
 apiVersion: karpenter.k8s.aws/v1
 kind: EC2NodeClass
@@ -64,6 +60,8 @@ spec:
       volumeType: gp3
 EOF
 ```
+
+Please note that Karpenter version needs to be 1.1.0 or later to have (https://github.com/aws/karpenter-provider-aws/issues/3555)
 
 ## Step 2. Install the Neuron device plugin and scheduling extension
 
@@ -133,6 +131,7 @@ inference-manager-engine:
       meta-llama/Meta-Llama-3.3-70B-Instruct-fp8-dynamic:
        preloaded: true
         contextLength: 16384
+        schedulerName: my-scheduler
         resources:
           limits:
             aws.amazon.com/neuroncore: 12
