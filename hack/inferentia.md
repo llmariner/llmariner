@@ -128,14 +128,24 @@ inference-manager-engine:
     default:
       runtimeName: vllm
     overrides:
-      meta-llama/Meta-Llama-3.3-70B-Instruct-fp8-dynamic:
-       preloaded: true
-        contextLength: 16384
+      meta-llama/Meta-Llama-3.1-8B-Instruct:
+        preloaded: true
+        vllmExtraFlags:
         schedulerName: my-scheduler
+        # Set the context length (--max-model-len) and --blocks-zie to the same value
+        contextLenght: 8192
+        - --block-size
+        - "8192"
+        - "--max-num-seqs"
+        - "64"
         resources:
           limits:
-            aws.amazon.com/neuroncore: 12
+            aws.amazon.com/neuroncore: 8
 ```
+
+The additional flags setting follows [the AWS blog](https://aws.amazon.com/blogs/machine-learning/deploy-meta-llama-3-1-8b-on-aws-inferentia-using-amazon-eks-and-vllm/),
+and missing the flags didn't work. We also set env var `FI_EFA_FORK_SAFE` to `1` in the testing.
+
 
 Note that vLLM does not currently work with `meta-llama/Meta-Llama-3.3-70B-Instruct-fp8-dynamic` due to the following error:
 
