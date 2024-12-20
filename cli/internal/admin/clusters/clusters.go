@@ -2,10 +2,10 @@ package clusters
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	cv1 "github.com/llmariner/cluster-manager/api/v1"
@@ -29,6 +29,7 @@ func Cmd() *cobra.Command {
 		DisableFlagParsing: true,
 	}
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
 	cmd.AddCommand(registerCmd())
 	cmd.AddCommand(unregisterCmd())
 	return cmd
@@ -40,6 +41,16 @@ func listCmd() *cobra.Command {
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return list(cmd.Context())
+		},
+	}
+}
+
+func getCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "get <NAME>",
+		Args: validateNameArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), args[0])
 		},
 	}
 }
@@ -89,28 +100,37 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("Name", "Heatlh Status")
+	tbl := table.New("Name", "ID", "Heatlhy?")
 	ui.FormatTable(tbl)
 
 	for _, c := range cs {
-		var us []string
-		for name, s := range c.ComponentStatuses {
+		isHealthy := "Yes"
+		for _, s := range c.ComponentStatuses {
 			if s.IsHealthy {
 				continue
 			}
-			us = append(us, fmt.Sprintf("%s: %s", name, s.Message))
+			isHealthy = "No"
+			break
 		}
-		var status string
-		if len(us) == 0 {
-			status = "Healthy"
-		} else {
-
-			status = strings.Join(us, ", ")
-		}
-		tbl.AddRow(c.Name, status)
+		tbl.AddRow(c.Name, c.Id, isHealthy)
 	}
 
 	tbl.Print()
+
+	return nil
+}
+
+func get(ctx context.Context, name string) error {
+	c, err := getClusterByName(ctx, name)
+	if err != nil {
+		return err
+	}
+
+	b, err := json.MarshalIndent(&c, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 
 	return nil
 }
@@ -152,16 +172,24 @@ func unregister(ctx context.Context, name string) error {
 }
 
 func getClusterIDByName(ctx context.Context, name string) (string, error) {
+	c, err := getClusterByName(ctx, name)
+	if err != nil {
+		return "", err
+	}
+	return c.Id, nil
+}
+
+func getClusterByName(ctx context.Context, name string) (*cv1.Cluster, error) {
 	cs, err := listClusters(ctx)
 	if err != nil {
-		return "", nil
+		return nil, nil
 	}
 	for _, c := range cs {
 		if c.Name == name {
-			return c.Id, nil
+			return c, nil
 		}
 	}
-	return "", fmt.Errorf("cluster %q not found", name)
+	return nil, fmt.Errorf("cluster %q not found", name)
 }
 
 func listClusters(ctx context.Context) ([]*cv1.Cluster, error) {
