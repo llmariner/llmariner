@@ -2,6 +2,7 @@ package org
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -32,6 +33,7 @@ func Cmd() *cobra.Command {
 	}
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
 	cmd.AddCommand(addMemberCmd())
 	cmd.AddCommand(listMembersCmd())
@@ -55,6 +57,16 @@ func listCmd() *cobra.Command {
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return list(cmd.Context())
+		},
+	}
+}
+
+func getCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "get <TITIE>",
+		Args: validateTitleArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), args[0])
 		},
 	}
 }
@@ -142,14 +154,37 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	tbl := table.New("Title", "Created At")
+	tbl := table.New("Title", "ID", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, o := range orgs {
-		tbl.AddRow(o.Title, time.Unix(o.CreatedAt, 0).Format(time.RFC3339))
+		tbl.AddRow(o.Title, o.Id, time.Unix(o.CreatedAt, 0).Format(time.RFC3339))
 	}
 
 	tbl.Print()
+
+	return nil
+}
+
+func get(ctx context.Context, title string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	org, found, err := FindOrgByTitle(env, title)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("organization %q not found", title)
+	}
+
+	b, err := json.MarshalIndent(&org, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 
 	return nil
 }
@@ -318,7 +353,9 @@ func FindOrgByTitle(env *runtime.Env, title string) (*uv1.Organization, bool, er
 
 // ListOrganizations lists organizations.
 func ListOrganizations(env *runtime.Env) ([]*uv1.Organization, error) {
-	var req uv1.ListOrganizationsRequest
+	req := uv1.ListOrganizationsRequest{
+		IncludeSummary: true,
+	}
 	var resp uv1.ListOrganizationsResponse
 	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
 		return nil, err
