@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -34,6 +35,7 @@ func Cmd() *cobra.Command {
 
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
 	cmd.AddCommand(addMemberCmd())
 	cmd.AddCommand(listMembersCmd())
@@ -64,6 +66,19 @@ func listCmd() *cobra.Command {
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return list(cmd.Context(), orgTitle)
+		},
+	}
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
+	return cmd
+}
+
+func getCmd() *cobra.Command {
+	var orgTitle string
+	cmd := &cobra.Command{
+		Use:  "get <TITLE>",
+		Args: validateTitleArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), args[0], orgTitle)
 		},
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
@@ -168,14 +183,37 @@ func list(ctx context.Context, orgTitle string) error {
 		return err
 	}
 
-	tbl := table.New("Title", "Kubernetes namespace", "Created At")
+	tbl := table.New("Title", "ID", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, o := range projects {
-		tbl.AddRow(o.Title, o.KubernetesNamespace, time.Unix(o.CreatedAt, 0).Format(time.RFC3339))
+		tbl.AddRow(o.Title, o.Id, time.Unix(o.CreatedAt, 0).Format(time.RFC3339))
 	}
 
 	tbl.Print()
+
+	return nil
+}
+
+func get(ctx context.Context, title, orgTitle string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	project, found, err := FindProjectByTitle(env, title, orgTitle)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("project %q not found", title)
+	}
+
+	b, err := json.MarshalIndent(&project, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 
 	return nil
 }
@@ -367,6 +405,7 @@ func ListProjects(env *runtime.Env, orgTitle string) ([]*uv1.Project, error) {
 
 	req := uv1.ListProjectsRequest{
 		OrganizationId: orgID,
+		IncludeSummary: true,
 	}
 	var resp uv1.ListProjectsResponse
 	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
