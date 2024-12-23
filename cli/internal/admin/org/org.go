@@ -63,7 +63,7 @@ func listCmd() *cobra.Command {
 
 func getCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:  "get <TITIE>",
+		Use:  "get <TITLE>",
 		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return get(cmd.Context(), args[0])
