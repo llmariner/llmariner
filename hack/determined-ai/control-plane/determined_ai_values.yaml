@@ -1,0 +1,46 @@
+# For CPU-only configurations
+slotType: cpu
+slotResourceRequests:
+  cpu: 1
+
+maxSlotsPerPod: 1
+
+checkpointStorage:
+  type: s3
+  bucket: determined-ai
+  accessKey: determined-ai-key
+  secretKey: determined-ai-secret
+  endpointUrl: http://minio.minio:9000
+
+# Initial password for user 'admin'.
+initialUserPassword: passworD0
+
+useNodePortForMaster: true
+
+masterCpuRequest: 0
+masterMemRequest: 0
+
+db:
+  storageSize: 100Mi
+  cpuRequest: 0
+  memRequest: 0
+
+resource_manager:
+  type: kubernetes
+  cluster_name: default-rm
+
+additional_resource_managers:
+- resource_manager:
+    type: kubernetes
+    cluster_name: worker-plane-cluster
+    default_namespace: default
+    kubeconfig_secret_name: worker-plane-kubeconfig
+    kubeconfig_secret_value: key
+    determined_master_host: determined-ai-master-service
+    determined_master_port: 8080
+    max_slots_per_pod: 1
+    slot_type: cpu
+    slot_resource_requests:
+      cpu: 1
+  resource_pools:
+  - pool_name: worker-cluster

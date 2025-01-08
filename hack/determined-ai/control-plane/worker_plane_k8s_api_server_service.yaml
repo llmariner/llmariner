@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-plane-k8s-api-server
+spec:
+  type: ExternalName
+  externalName: host.docker.internal

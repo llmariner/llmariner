@@ -1,0 +1,15 @@
+# To allow the worker-plane cluster to access Determined AI master.
+apiVersion: v1
+kind: Service
+metadata:
+  name: determined-io-nodeport
+spec:
+  type: NodePort
+  ports:
+  - name: determined-io-api
+    port: 8080
+    protocol: TCP
+    targetPort: 8081
+    nodePort: 31235
+  selector:
+    app: determined-master-determined

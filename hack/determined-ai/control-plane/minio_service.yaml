@@ -1,0 +1,16 @@
+# To allow the worker-plane cluster to access MinIO.
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-nodeport
+spec:
+  type: NodePort
+  ports:
+  - name: minio-api
+    port: 9000
+    protocol: TCP
+    targetPort: minio-api
+    nodePort: 31236
+  selector:
+    app.kubernetes.io/instance: minio
+    app.kubernetes.io/name: minio
