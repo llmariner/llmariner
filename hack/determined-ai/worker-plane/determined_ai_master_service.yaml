@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: determined-ai-master-service
+spec:
+  type: ExternalName
+  externalName: host.docker.internal
