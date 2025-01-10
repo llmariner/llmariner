@@ -9,6 +9,7 @@ nodes:
     hostPort: 80
     protocol: TCP
 - role: worker
+  extraPortMappings:
   - containerPort: 50000
     hostPort: 50000
     protocol: TCP
