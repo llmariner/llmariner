@@ -1,0 +1,7 @@
+version: 1
+
+component: llmariner
+
+channels:
+- name: testing
+  distribution: 21.2
