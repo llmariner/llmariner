@@ -3,10 +3,8 @@ environments:
     values: [common.yaml]
   control:
     values: [common.yaml]
-    kubeContext: kind-llmariner-control-plane
   worker:
     values: [common.yaml]
-    kubeContext: kind-llmariner-worker-plane
 ---
 repositories:
 - name: kong

@@ -30,12 +30,11 @@ helmfile apply --skip-diff-on-install
 ```bash
 ./create_cluster.sh multi
 helmfile init
-helmfile apply -e control -l app!=fake-gpu-operator,tier!=monitoring --skip-diff-on-install
-
+helmfile apply -e control -l app!=fake-gpu-operator,tier!=monitoring --skip-diff-on-install --kube-context kind-llmariner-control-plane
 # Please set the endpoint address to http://localhost/v1
 llma auth login
 export REGISTRATION_KEY=$(llma admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
-helmfile apply -e worker -l app=fake-gpu-operator -l tier=monitoring -l app=llmariner --skip-diff-on-install
+helmfile apply -e worker -l app=fake-gpu-operator -l tier=monitoring -l app=llmariner --skip-diff-on-install --kube-context kind-llmariner-worker-plane
 ```
 
 > [!NOTE]
