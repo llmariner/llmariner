@@ -18,6 +18,29 @@ helm upgrade --install kong kong/ingress  -f ./kong_values.yaml
 
 kubectl apply -f "${basedir}"/gateway.yaml
 
+
+# Enabling the feature gate is required to use TCPRoute.
+# See https://docs.konghq.com/kubernetes-ingress-controller/latest/reference/feature-gates/.
+kubectl patch deploy kong-controller --patch '{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "ingress-controller",
+            "env": [
+              {
+                "name": "CONTROLLER_FEATURE_GATES",
+                "value": "GatewayAlpha=true"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}'
+
 # Enable TCP request proxying.
 #
 # See https://docs.konghq.com/kubernetes-ingress-controller/latest/guides/services/tcp/#:~:text=Create%20TCP%20routing%20configuration%20for,Service%20that's%20running%20inside%20Kubernetes.
