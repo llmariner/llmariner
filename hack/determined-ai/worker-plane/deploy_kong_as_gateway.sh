@@ -42,7 +42,7 @@ kubectl patch deploy kong-controller --patch '{
 
 # Enable TCP request proxying.
 #
-# See https://docs.konghq.com/kubernetes-ingress-controller/latest/guides/services/tcp/#:~:text=Create%20TCP%20routing%20configuration%20for,Service%20that's%20running%20inside%20Kubernetes.
+# See https://docs.konghq.com/kubernetes-ingress-controller/latest/guides/services/tcp/
 #
 # TODO(kenji): Determined AI picks up port 50000 by default as we configure the port as the lowest available port.
 # This works for this example demo setting, but in a real-world scenario, we need to support a range of ports.

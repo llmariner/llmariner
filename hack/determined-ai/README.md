@@ -57,6 +57,19 @@ The username is `admin` and the password is `passworD0`.
 You can launch JupyterLab from http://localhost:8080/det/tasks. It will create a
 pod in the `default` namespace.
 
+
+The access to the notebook follows the following flow:
+
+```
+    determined-ai master component
+--> gateway-service:50000
+--> host.docker.internal:50000
+--> <worker node>:31237
+--> kong-gateway-proxy
+--> tcproute of notebook:50000
+--> service of notebook
+```
+
 If you want to use CLI,
 
 ```bash
