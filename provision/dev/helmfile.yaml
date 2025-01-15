@@ -87,7 +87,7 @@ releases:
     - {{ .Values.minio.adminPass }}
     - {{ .Values.minio.accessKey }}
     - {{ .Values.minio.secretKey }}
-    - "{{`{{.Release.KubeContext}}`}}"
+    - "{{`{{.Release.KubeContext|default .Environment.KubeContext}}`}}"
     - "{{`{{.Release.Namespace}}`}}"
   {{ if eq .Environment.Name "control" }}
   - events: ["postsync", "postuninstall"]
@@ -95,7 +95,7 @@ releases:
     command: kubectl
     args:
     - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
-    - "--context={{`{{.Release.KubeContext}}`}}"
+    - "--context={{`{{.Release.KubeContext|default .Environment.KubeContext}}`}}"
     - "--namespace={{`{{.Release.Namespace}}`}}"
     - "--filename=minio_service.yaml"
   {{ end }}
@@ -256,6 +256,6 @@ releases:
     command: "./control_plane_service.sh"
     args:
     - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
-    - "{{`{{.Release.KubeContext}}`}}"
+    - "{{`{{.Release.KubeContext|default .Environment.KubeContext}}`}}"
     - "{{`{{.Release.Namespace}}`}}"
   {{ end }}
