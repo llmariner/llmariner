@@ -42,14 +42,5 @@ additional_resource_managers:
     slot_type: cpu
     slot_resource_requests:
       cpu: 1
-    internal_task_gateway:
-      gateway_name: kong-gateway
-      gateway_namespace: default
-      gateway_ip: gateway-service
-      gateway_port_range_start: 50000
-      gateway_port_range_end: 51000
   resource_pools:
   - pool_name: worker-cluster
-
-taskContainerDefaults:
-  cpuImage: jupyter/minimal-notebook:ubuntu-22.04

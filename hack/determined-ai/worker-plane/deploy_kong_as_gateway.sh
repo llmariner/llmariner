@@ -18,7 +18,6 @@ helm upgrade --install kong kong/ingress  -f ./kong_values.yaml
 
 kubectl apply -f "${basedir}"/gateway.yaml
 
-
 # Enabling the feature gate is required to use TCPRoute.
 # See https://docs.konghq.com/kubernetes-ingress-controller/latest/reference/feature-gates/.
 kubectl patch deploy kong-controller --patch '{
@@ -74,15 +73,4 @@ kubectl patch deploy kong-gateway --patch '{
   }
 }'
 
-kubectl patch service kong-gateway-proxy --patch '{
- "spec": {
-   "ports": [
-     {
-       "name": "det-50000",
-       "port": 50000,
-       "protocol": "TCP",
-       "targetPort": 50000
-     }
-   ]
- }
-}'
+kubectl apply -f ./"${basedir}"/kong-gateway-proxy-service.yaml
