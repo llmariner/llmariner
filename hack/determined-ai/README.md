@@ -29,6 +29,8 @@ rm kubeconfig.yaml
 # This might not be neded if the worker cluster doesn't use MinIO.
 kubectl apply -f minio_service.yaml
 
+kubectl apply -f gateway_service.yaml
+
 # Install Determined AI.
 helm repo add determined-ai https://helm.determined.ai/
 helm upgrade --install determined determined-ai/determined --values determined_ai_values.yaml
@@ -41,6 +43,9 @@ cd ../
 cd worker-plane
 kubectl config use-context kind-worker-plane
 kubectl apply -f determined_ai_master_service.yaml
+
+./deploy_kong_as_gateway.sh
+
 cd ../
 ```
 
@@ -52,7 +57,18 @@ The username is `admin` and the password is `passworD0`.
 You can launch JupyterLab from http://localhost:8080/det/tasks. It will create a
 pod in the `default` namespace.
 
-> :warning: The container image (pytorch-ngc)[https://registry.hub.docker.com/r/determinedai/pytorch-ngc] only supports linux/amd64.
+
+The access to the notebook follows the following flow:
+
+```
+    determined-ai master component
+--> gateway-service:50000
+--> host.docker.internal:50000
+--> <worker node>:31237
+--> kong-gateway-proxy
+--> tcproute of notebook:50000
+--> service of notebook
+```
 
 If you want to use CLI,
 

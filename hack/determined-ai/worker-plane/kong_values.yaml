@@ -1,0 +1,6 @@
+gateway:
+  enabled: true
+  proxy:
+    type: ClusterIP
+    tls:
+      enabled: false

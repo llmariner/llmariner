@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-gateway-proxy
+spec:
+  ports:
+  - name: det-50000
+    nodePort: 31237
+    port: 50000
+    protocol: TCP
+    targetPort: 50000
+  selector:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: kong
+    app.kubernetes.io/name: gateway
+
+  type: NodePort
+status:
+  loadBalancer: {}
