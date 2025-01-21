@@ -1,6 +1,6 @@
 # Slurm deployment with Slink
 
-[Slink](https://slinky.ai) is a project from SchedMD, and one of its open source tools
+[Slinky](https://slinky.ai) is a project from SchedMD, and one of its open source tools
 is [slurm-operator](https://github.com/SlinkyProject/slurm-operator).
 
 Please [this presentation](https://slurm.schedmd.com/SLUG24/Slinky-Slurm-Operator.pdf) for its overview and future plan.
