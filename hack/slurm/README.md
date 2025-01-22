@@ -87,9 +87,47 @@ To test the REST endpoint:
 ```console
 kubectl port-forward -n slurm service/slurm-restapi 6820 &
 TOKEN=$(kubectl get secrets -n slurm slurm-token-slurm -o jsonpath='{.data.auth-token}' | base64 -d)
-curl -H "Authorization: Bearer ${TOKEN}" http://localhost:6820/slurm/v0.0.41/jobs/
+
+cat << EOF > submit_job.json
+{
+    "job": {
+        "name": "test",
+        "tasks": 1,
+        "nodes": "1",
+        "environment": [
+            "PATH=/bin:/usr/bin/:/usr/local/bin/",
+            "LD_LIBRARY_PATH=/lib/:/lib64/:/usr/local/lib"
+        ],
+		"current_working_directory": "/tmp",
+        "standard_input": "/dev/null",
+        "standard_output": "/tmp/test.out",
+        "standard_error": "/tmp/test_error.out",
+    },
+    "script": "#!/bin/bash\necho HELLO"
+  }
+EOF
+
+curl \
+  -X POST \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H "Content-type: application/json" \
+  --data-binary @submit_job.json \
+  http://localhost:6820/slurm/v0.0.41/job/submit
+
+curl \
+  -H "Authorization: Bearer ${TOKEN}" \
+  http://localhost:6820/slurm/v0.0.41/jobs/
 ```
 
-The API is documented in https://slurm.schedmd.com/rest_api.html. An example output is found [here](https://gist.githubusercontent.com/kenji-cloudnatix/8803a89e86369d9c2fe6145c28eccffe/raw/8bd82f2dbaffbd1cef8e4df1667718e610e812cc/jobs.json).
+You can check the output of the job by accessing the `slurm-compute-debug` pod:
+
+```bash
+kubectl exec -it -n slurm <slurm-compute-debug pod> cat /tmp/test.out
+```
+
+Please see https://slurm.schedmd.com/SLUG23/REST-API-SLUG23.pdf and
+https://aws.amazon.com/blogs/hpc/using-the-slurm-rest-api-to-integrate-with-distributed-architectures-on-aws/ for example API calls.
+
+Please see https://slurm.schedmd.com/rest_api.html for the API spec.
 
 Please note that the API returns 500 status code (not 401 or 403) even if an invalid auth token is given.
