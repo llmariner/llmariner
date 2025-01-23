@@ -63,13 +63,13 @@ dependencies:
   tags:
   - control-plane
 - name: model-manager-loader
-  version: 1.4.0
+  version: 1.5.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-loader.enable
   tags:
   - worker
 - name: model-manager-server
-  version: 1.4.0
+  version: 1.5.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-server.enable
   tags:
