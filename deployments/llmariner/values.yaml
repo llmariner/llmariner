@@ -211,6 +211,8 @@ tags:
   control-plane: true
   # The flag that defines whether to install the worker-plane components.
   worker: true
+  # The flag that defines whther to install the tenant control-plane components.
+  tenant-control-plane: false
 
 # +docs:section="API Usage Server"
 
@@ -275,6 +277,12 @@ job-manager-dispatcher:
 # +docs:property
 job-manager-server:
   fullnameOverride: job-manager-server
+
+# job-manager-syncer is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/job-manager/tree/main/deployments/syncer.
+# +docs:property
+job-manager-syncer:
+  fullnameOverride: job-manager-syncer
 
 # +docs:section="Model Manager Loader"
 
