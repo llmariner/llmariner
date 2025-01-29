@@ -101,7 +101,7 @@ cat << EOF > submit_job.json
 		"current_working_directory": "/tmp",
         "standard_input": "/dev/null",
         "standard_output": "/tmp/test.out",
-        "standard_error": "/tmp/test_error.out",
+        "standard_error": "/tmp/test_error.out"
     },
     "script": "#!/bin/bash\necho HELLO"
   }
@@ -131,3 +131,6 @@ https://aws.amazon.com/blogs/hpc/using-the-slurm-rest-api-to-integrate-with-dist
 Please see https://slurm.schedmd.com/rest_api.html for the API spec.
 
 Please note that the API returns 500 status code (not 401 or 403) even if an invalid auth token is given.
+
+
+curl  http://localhost:8080/slurm/v0.0.40/jobs/ | jq .jobs
