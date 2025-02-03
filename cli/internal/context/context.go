@@ -98,6 +98,7 @@ func Set(ctx context.Context) error {
 
 	orgs, err := org.ListOrganizations(env)
 	if err != nil {
+		p.Error("Failed to list organizations. Please check if you belong to at least one organization. If not, please ask your admin to add you to an organization with 'llma admin organizations add-member'. Please see https://llmariner.ai/docs/features/access_control/#creating-a-new-organization for more details.")
 		return err
 	}
 	if len(orgs) == 0 {
@@ -136,17 +137,13 @@ func Set(ctx context.Context) error {
 
 	projects, err := project.ListProjects(env, selectedO.Title)
 	if err != nil {
+		p.Error("Failed to list projects. Please check if you belong to at least one project. If not, please ask your admin to add you to an organization with 'llma admin projects add-member'. Please see https://llmariner.ai/docs/features/access_control/#creating-a-new-project for more details.")
 		return err
 	}
 
 	if len(projects) == 0 {
-		fmt.Println("No projects found. Only setting organization.")
-		env.Config.Context.ProjectID = ""
-		if err := env.Config.Save(); err != nil {
-			return err
-		}
-
-		return nil
+		p.Error("No projects found. Please check if you belong to at least one project. If not, please ask your admin to add you to an organization with 'llma admin projects add-member'. Please see https://llmariner.ai/docs/features/access_control/#creating-a-new-project for more details.")
+		return fmt.Errorf("no projects found")
 	}
 
 	defaultTitle = projects[0].Title
