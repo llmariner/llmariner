@@ -14,6 +14,7 @@ import (
 	"github.com/llmariner/llmariner/cli/internal/runtime"
 	"github.com/llmariner/llmariner/cli/internal/ui"
 	uv1 "github.com/llmariner/user-manager/api/v1"
+	"github.com/llmariner/user-manager/pkg/role"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )
@@ -41,18 +42,34 @@ func Cmd() *cobra.Command {
 
 func createCmd() *cobra.Command {
 	var (
-		orgTitle     string
-		projectTitle string
+		orgTitle         string
+		projectTitle     string
+		isServiceAccount bool
+		roleStr          string
 	)
 	cmd := &cobra.Command{
 		Use:  "create <NAME>",
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), args[0], orgTitle, projectTitle)
+			var r uv1.OrganizationRole
+			if roleStr != "" {
+				if !isServiceAccount {
+					return errors.New("--role flag is only valid when --service-account flag is set")
+				}
+				var ok bool
+				r, ok = role.OrganizationRoleToProtoEnum(roleStr)
+				if !ok {
+					return fmt.Errorf("invalid role %q. Must be 'owner', 'reader', or 'tenant-system'", roleStr)
+				}
+			}
+
+			return create(cmd.Context(), args[0], orgTitle, projectTitle, isServiceAccount, r)
 		},
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Title of the organization. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&projectTitle, "project-title", "p", "", "Title of the project. The project in the current context is used if not specified.")
+	cmd.Flags().BoolVar(&isServiceAccount, "service-account", false, "Create a service account API key")
+	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the service account. Only set when --service-account is set. One of 'owner', 'viewer', or 'tenant-system'.")
 	_ = cmd.MarkFlagRequired("name")
 	return cmd
 }
@@ -111,7 +128,14 @@ func updateCmd() *cobra.Command {
 	return cmd
 }
 
-func create(ctx context.Context, name, orgTitle, projectTitle string) error {
+func create(
+	ctx context.Context,
+	name string,
+	orgTitle string,
+	projectTitle string,
+	isServiceAccount bool,
+	role uv1.OrganizationRole,
+) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -123,9 +147,11 @@ func create(ctx context.Context, name, orgTitle, projectTitle string) error {
 	}
 
 	req := &uv1.CreateAPIKeyRequest{
-		Name:           name,
-		OrganizationId: orgID,
-		ProjectId:      projectID,
+		Name:             name,
+		OrganizationId:   orgID,
+		ProjectId:        projectID,
+		IsServiceAccount: isServiceAccount,
+		Role:             role,
 	}
 	var resp uv1.APIKey
 	path := fmt.Sprintf(pathPattern, orgID, projectID)
