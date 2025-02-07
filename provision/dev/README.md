@@ -27,6 +27,8 @@ helmfile apply --skip-diff-on-install
 
 ### Multi-Cluster Mode
 
+#### Single Worker Cluster
+
 ```bash
 ./create_cluster.sh multi
 helmfile init
@@ -45,6 +47,36 @@ helmfile apply -e worker -l app=fake-gpu-operator -l tier=monitoring -l app=llma
 
 > [!NOTE]
 > Please note that the endpoint address is http://localhost/v1, not http://localhost:8080/v1.
+
+#### For GPU Federation: Multiple Worker Cluster with Tenant Control-Plane cluster
+
+```bash
+./create_cluster.sh gpu-federation
+helmfile init
+helmfile apply -e control -l app!=fake-gpu-operator,tier!=monitoring --skip-diff-on-install
+
+# Please set the endpoint address to http://localhost/v1
+llma auth login
+# Deploy two worker clusters.
+export REGISTRATION_KEY=$(llma admin clusters register worker-cluster1 | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+helmfile apply -e worker --kube-context kind-llmariner-worker-plan1 -l app=fake-gpu-operator -l app=llmariner --skip-diff-on-install
+
+export REGISTRATION_KEY=$(llma admin clusters register worker-cluster2 | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+helmfile apply -e worker --kube-context kind-llmariner-worker-plan1 -2 app=fake-gpu-operator -l app=llmariner --skip-diff-on-install
+
+# Deploy to a tenant control-plane cluster.
+export TENANT_API_KEY=$(llma auth api-keys create tenant -o 'Default Organization' --role tenant-system --service-account | sed -n 's/.*Secret: \(.*\)/\1/p')
+helmfile apply -e tenant-control -l app=llmariner --skip-diff-on-install
+```
+
+> [!NOTE]
+> The worker cluster uses an ExternalName service to reach the control plane.
+> Please note that the current service definition is for Mac/Windows (Docker Desktop).
+> See https://github.com/kubernetes-sigs/kind/issues/1200#issuecomment-130485579.
+
+> [!NOTE]
+> Please note that the endpoint address is http://localhost/v1, not http://localhost:8080/v1.
+
 
 ## Testing
 

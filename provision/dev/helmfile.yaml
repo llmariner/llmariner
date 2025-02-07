@@ -7,6 +7,9 @@ environments:
   worker:
     values: [common.yaml]
     kubeContext: kind-llmariner-worker-plane
+  tenant-control:
+    values: [common.yaml]
+    kubeContext: kind-tenant-control-plane
 ---
 repositories:
 - name: kong
@@ -221,10 +224,12 @@ releases:
   - "./values/llmariner-control-plane.yaml"
   {{ else if eq .Environment.Name "worker" }}
   - "./values/llmariner-worker-plane.yaml"
+  {{ else if eq .Environment.Name "tenant-control" }}
+  - "./values/tenant-control-plane.yaml"
   {{ end }}
   - prepare:
       database:
-        createSecret: {{ ne .Environment.Name "worker" | toYaml }}
+        createSecret: {{ (and (ne .Environment.Name "worker") (ne .Environment.Name "tenant-control")) | toYaml }}
         secret:
           password: {{ .Values.postgres.pass }}
       objectStore:
@@ -233,7 +238,7 @@ releases:
           accessKeyId: {{ .Values.minio.accessKey }}
           secretAccessKey: {{ .Values.minio.secretKey }}
       redis:
-        createSecret: {{ ne .Environment.Name "worker" | toYaml }}
+        createSecret: {{ (and (ne .Environment.Name "worker") (ne .Environment.Name "tenant-control")) | toYaml }}
         secret:
           password: {{ .Values.redis.password }}
       {{ if eq .Environment.Name "worker" }}
@@ -242,6 +247,12 @@ releases:
         secret:
           key: {{ requiredEnv "REGISTRATION_KEY" }}
       {{ end }}
+      {{ if eq .Environment.Name "tenant-control" }}
+      tenantClusterRegistration:
+        createSecret: true
+        secret:
+          key: {{ requiredEnv "TENANT_API_KEY" }}
+      {{ end }}
   set:
     - name: global.databaseSecret.name
       value: {{ .Values.llmariner.psSecretName }}
@@ -249,7 +260,7 @@ releases:
       value: {{ .Values.llmariner.awsSecretName }}
     - name: global.objectStore.s3.bucket
       value: {{ .Values.minio.bucket }}
-  {{ if eq .Environment.Name "worker" }}
+  {{ if or (eq .Environment.Name "worker") (eq .Environment.Name "tenant-control") }}
   hooks:
   - events: ["postsync","postuninstall"]
     showlogs: true

@@ -1,0 +1,11 @@
+tags:
+  control-plane: false
+  worker: false
+  tenant-control-plane: true
+
+job-manager-syncer:
+  jobManagerServerSyncerServiceAddr: control-plane:80
+  sessionManagerEndpoint: http://control-plane:81/v1
+  apiKeySecret:
+    name: syncer-api-key
+    key: key
