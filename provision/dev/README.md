@@ -51,3 +51,24 @@ helmfile apply -e worker -l app=fake-gpu-operator -l tier=monitoring -l app=llma
 ```bash
 LLMARINER_API_KEY=default-key-secret ./validate_deployment.sh
 ```
+
+### Multi-Cluster Mode with Tenant Controle-Plane
+
+```bash
+./create_cluster.sh tenant
+helmfile init
+helmfile apply -e control -l app!=fake-gpu-operator,tier!=monitoring --skip-diff-on-install
+
+# Please set the endpoint address to http://localhost/v1
+llma auth login
+export REGISTRATION_KEY=$(llma admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+helmfile apply -e worker -l app=fake-gpu-operator -l tier=monitoring -l app=llmariner --skip-diff-on-install
+
+TOKEN=$(cat ~/.config/llmariner/token.yaml|yq .accessToken)
+ORG=$(cat ~/.config/llmariner/config.yaml|yq .context.organizationId)
+PRJ=$(cat ~/.config/llmariner/config.yaml|yq .context.projectId)
+curl -X POST http://localhost/v1/api_keys \
+   -H "Authorization: Bearer $TOKEN" \
+   -d '{"name":"syncer","project_id":"$PRJ","organization_id":"$ORG","is_service_account":true,"role":3}'
+helmfile apply -e tenant -l app=llmariner --skip-diff-on-install
+```

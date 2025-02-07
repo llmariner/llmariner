@@ -7,6 +7,9 @@ environments:
   worker:
     values: [common.yaml]
     kubeContext: kind-llmariner-worker-plane
+  tenant:
+    values: [common.yaml]
+    kubeContext: kind-llmariner-tenant-plane
 ---
 repositories:
 - name: kong
@@ -221,6 +224,8 @@ releases:
   - "./values/llmariner-control-plane.yaml"
   {{ else if eq .Environment.Name "worker" }}
   - "./values/llmariner-worker-plane.yaml"
+  {{ else if eq .Environment.Name "tenant" }}
+  - "./values/llmariner-tenant-plane.yaml"
   {{ end }}
   - prepare:
       database:
@@ -242,6 +247,12 @@ releases:
         secret:
           key: {{ requiredEnv "REGISTRATION_KEY" }}
       {{ end }}
+      {{ if eq .Environment.Name "tenant" }}
+      syncerApiKey:
+        createSecret: true
+        secret:
+          key: {{ requiredEnv "SYNCER_API_KEY" }}
+      {{ end }}
   set:
     - name: global.databaseSecret.name
       value: {{ .Values.llmariner.psSecretName }}
@@ -249,7 +260,7 @@ releases:
       value: {{ .Values.llmariner.awsSecretName }}
     - name: global.objectStore.s3.bucket
       value: {{ .Values.minio.bucket }}
-  {{ if eq .Environment.Name "worker" }}
+  {{ if or (eq .Environment.Name "worker") (eq .Environment.Name "tenant") }}
   hooks:
   - events: ["postsync","postuninstall"]
     showlogs: true

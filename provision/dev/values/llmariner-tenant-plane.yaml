@@ -1,0 +1,8 @@
+tags:
+  control-plane: false
+  control-plane: false
+  tenant-control-plane: true
+
+job-manager-syncer:
+  jobManagerServerSyncerServiceAddr: control-plane:80
+  sessionManagerEndpoint: http://control-plane:80/v1

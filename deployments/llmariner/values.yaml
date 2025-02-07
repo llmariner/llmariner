@@ -204,6 +204,15 @@ prepare:
       # +docs:property
       # key: ""
 
+  syncerApiKey:
+    # If enabled, a Secret resource for the control-plane access is created.
+    # This secret is refereed in `.job-manager-syncer.apiKeySecret`.
+    createSecret: false
+    secret:
+      # The registration key for the worker.
+      # +docs:property
+      # key: ""
+
 # +docs:section=Tags
 
 tags:
