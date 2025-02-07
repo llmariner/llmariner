@@ -27,7 +27,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 1.7.1
+  version: 1.8.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: dex-server.enable
   tags:
@@ -39,31 +39,31 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.14.0
+  version: 1.14.1
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-engine.enable
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.14.0
+  version: 1.14.1
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 1.5.0
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-dispatcher.enable
   tags:
   - worker
 - name: job-manager-server
-  version: 1.5.0
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-syncer
-  version: 1.5.0
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-syncer.enable
   tags:
@@ -81,19 +81,19 @@ dependencies:
   tags:
   - control-plane
 - name: rbac-server
-  version: 1.7.1
+  version: 1.8.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: rbac-server.enable
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 1.3.1
+  version: 1.4.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: session-manager-agent.enable
   tags:
   - worker
 - name: session-manager-server
-  version: 1.3.1
+  version: 1.4.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: session-manager-server.enable
   tags:
