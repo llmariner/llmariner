@@ -5,7 +5,7 @@ tags:
 
 job-manager-syncer:
   jobManagerServerSyncerServiceAddr: control-plane:80
-  sessionManagerEndpoint: http://control-plane:81/v1
+  sessionManagerEndpoint: http://control-plane/v1
   apiKeySecret:
     name: syncer-api-key
     key: key
