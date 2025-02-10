@@ -62,7 +62,7 @@ export REGISTRATION_KEY=$(llma admin clusters register worker-cluster1 | sed -n 
 helmfile apply -e worker --kube-context kind-llmariner-worker-plane1 -l app=fake-gpu-operator -l app=llmariner --skip-diff-on-install
 
 export REGISTRATION_KEY=$(llma admin clusters register worker-cluster2 | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
-helmfile apply -e worker --kube-context kind-llmariner-worker-plane1 -2 app=fake-gpu-operator -l app=llmariner --skip-diff-on-install
+helmfile apply -e worker --kube-context kind-llmariner-worker-plane2 -l app=fake-gpu-operator -l app=llmariner --skip-diff-on-install
 
 # Deploy to a tenant control-plane cluster.
 export TENANT_API_KEY=$(llma auth api-keys create tenant -o 'Default Organization' --role tenant-system --service-account | sed -n 's/.*Secret: \(.*\)/\1/p')

@@ -18,6 +18,8 @@ inference-manager-engine:
 job-manager-dispatcher:
   notebook:
     llmarinerBaseUrl: http://control-plane/v1
+  # TODO(kenji): Consider changing the default values in the chart.
+  clusterStatusUpdateInterval: 10s
 
 session-manager-agent:
   sessionManagerServerWorkerServiceAddr: control-plane:81
