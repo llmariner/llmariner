@@ -200,10 +200,13 @@ session-manager-server:
 
 
 user-manager-server:
-  defaultApiKey:
-    name: default-key
+  defaultApiKeys:
+  - name: default-key
     secret: default-key-secret
     userId: admin@example.com
+  - name: default-service-account
+    secret: default-service-account-secret
+    isServiceAccount: true
   # To fit in a single node
   resources:
     limits:
