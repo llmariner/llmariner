@@ -204,6 +204,15 @@ prepare:
       # +docs:property
       # key: ""
 
+  tenantClusterRegistration:
+    # If enabled, a Secret resource for the tenant control-plane cluster is created.
+    # This secret is refereed in `.job-manager-syncer.apiKeySecret`.
+    createSecret: false
+    secret:
+      # The service account key for the tenant control-plane cluser.
+      # +docs:property
+      # key: ""
+
 # +docs:section=Tags
 
 tags:

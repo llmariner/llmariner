@@ -1,0 +1,12 @@
+tags:
+  control-plane: false
+  worker: false
+  tenant-control-plane: true
+
+job-manager-syncer:
+  jobManagerServerSyncerServiceAddr: api.llm.staging.cloudnatix.com:443
+  sessionManagerEndpoint: https://api.llm.staging.cloudnatix.com/v1
+  tenant:
+    apiKeySecret:
+      name: syncer-api-key
+      key: key

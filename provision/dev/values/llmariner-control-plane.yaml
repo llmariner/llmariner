@@ -25,3 +25,14 @@ session-manager-server:
   workerServiceHttpService:
     type: NodePort
     nodePort: 31234
+
+job-manager-server:
+  # This is meaningful only for GPU federation, but we enable
+  # by default to simplfy the configuration.
+  syncerServiceGrpcService:
+    annotations:
+      konghq.com/protocol: grpc
+  syncerServiceIngress:
+    create: true
+    annotations:
+      konghq.com/protocols: grpc,grpcs
