@@ -35,8 +35,14 @@ releases:
   - events: ["presync"]
     showlogs: true
     command: "kubectl"
-    args: ["label", "nodes", "--all", "--overwrite", "nvidia.com/gpu.deploy.device-plugin=true", "nvidia.com/gpu.deploy.dcgm-exporter=true"]
-
+    args:
+    - "label"
+    - "--context={{`{{.Release.KubeContext|default .Environment.KubeContext}}`}}"
+    - "nodes"
+    - "--all"
+    - "--overwrite"
+    - "nvidia.com/gpu.deploy.device-plugin=true"
+    - "nvidia.com/gpu.deploy.dcgm-exporter=true"
 - name: kong
   namespace: kong
   labels:
