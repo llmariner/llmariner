@@ -49,16 +49,6 @@ jobs:
           organizationId:
           projectId:
         EOF
-    - name: deploy-tenant-control-plane
-      uses: helmfile/helmfile-action@v1.9.3
-      env:
-        TENANT_API_KEY: default-service-account-secret
-      with:
-        helmfile-args: apply -e tenant-control -l app=llmariner --skip-diff-on-install
-        helmfile-workdirectory: ./provision/dev/
-    - name: wait-for-tenant-control-plane-readiness
-      run: |
-        kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
     - name: generate-worker-registration-key
       env:
         LLMARINER_API_KEY: default-key-secret
@@ -74,6 +64,16 @@ jobs:
     - name: wait-for-worker-plane-readiness
       run: |
         kubectl wait --context kind-llmariner-worker-plane1 --timeout=300s --for=condition=ready pod -n llmariner-wp -l app.kubernetes.io/instance=llmariner
+    - name: deploy-tenant-control-plane
+      uses: helmfile/helmfile-action@v1.9.3
+      env:
+        TENANT_API_KEY: default-service-account-secret
+      with:
+        helmfile-args: apply -e tenant-control -l app=llmariner --skip-diff-on-install
+        helmfile-workdirectory: ./provision/dev/
+    - name: wait-for-tenant-control-plane-readiness
+      run: |
+        kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
     - name: run-tests
       run: |
         cat <<EOF | kubectl apply --context kind-tenant-control-plane -f -
