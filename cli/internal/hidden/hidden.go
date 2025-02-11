@@ -1,6 +1,7 @@
 package hidden
 
 import (
+	"github.com/llmariner/llmariner/cli/internal/hidden/jobs"
 	"github.com/llmariner/llmariner/cli/internal/hidden/usage"
 	"github.com/spf13/cobra"
 )
@@ -15,5 +16,6 @@ func Cmd() *cobra.Command {
 	}
 	cmd.Hidden = true
 	cmd.AddCommand(usage.Cmd())
+	cmd.AddCommand(jobs.Cmd())
 	return cmd
 }
