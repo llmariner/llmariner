@@ -1,0 +1,32 @@
+tags:
+  control-plane: false
+
+global:
+  worker:
+    controlPlaneAddr: api.llm.staging.cloudnatix.com:443
+    tls:
+      enable: true
+    registrationKeySecret:
+      name: cluster-registration-key
+      key: regKey
+
+  # Do not configure as we don't need in this demo.
+  objectStore:
+    s3:
+      endpointUrl: ""
+      region: us-west-2
+
+job-manager-dispatcher:
+  # TODO(kenji): Consider changing the default values in the chart.
+  clusterStatusUpdateInterval: 10s
+  notebook:
+    llmarinerBaseUrl: https://api.llm.staging.cloudnatix.com/v1
+
+inference-manager-engine:
+  enable: false
+
+model-manager-loader:
+  enable: false
+
+session-manager-agent:
+  sessionManagerServerWorkerServiceAddr: session.llm.staging.cloudnatix.com:443
