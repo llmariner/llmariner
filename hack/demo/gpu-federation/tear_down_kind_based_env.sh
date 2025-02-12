@@ -4,7 +4,7 @@ set -xe
 
 llma auth api-keys delete tenant || true
 
-for cluster in "gpu-worker-cluster-large gpu-worker-cluster-small"; do
+for cluster in gpu-worker-cluster-large gpu-worker-cluster-small; do
   llma admin clusters unregister "${cluster}" || true
 done
 
