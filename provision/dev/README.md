@@ -58,9 +58,6 @@ helmfile apply -e control -l app!=fake-gpu-operator,tier!=monitoring --skip-diff
 # Please set the endpoint address to http://localhost/v1
 llma auth login
 
-# Unregister the default cluster.
-llma admin clusters unregister Default
-
 # Deploy two worker clusters.
 export REGISTRATION_KEY=$(llma admin clusters register worker-cluster1 | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
 helmfile apply -e worker --kube-context kind-llmariner-worker-plane1 -l app=fake-gpu-operator -l app=llmariner --skip-diff-on-install
