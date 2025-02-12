@@ -53,7 +53,6 @@ jobs:
       env:
         LLMARINER_API_KEY: default-key-secret
       run: |
-        # TODO(kenji): Remove unneeded default cluster.
         regKey=$(llma admin clusters register worker-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
         echo "REGISTRATION_KEY=${regKey}" >> $GITHUB_ENV
     - name: deploy-worker-plane
