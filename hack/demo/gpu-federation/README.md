@@ -25,8 +25,13 @@ Run:
 
 ### Step 2. Submit GPU jobs
 
-TODO(kenji): Fill. You can access the frontend or run `llma hidden jobs clusters list` to check the status.
+Run:
 
+```bash
+./submit_gpu_jobs.sh
+```
+
+To show the job distribution, run `llma hidden jobs clusters list` or access https://app.llm.staging.cloudnatix.com.
 
 ### Step 3. Tear down the demo env
 
