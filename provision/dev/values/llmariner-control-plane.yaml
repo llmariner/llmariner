@@ -36,3 +36,6 @@ job-manager-server:
     create: true
     annotations:
       konghq.com/protocols: grpc,grpcs
+
+cluster-manager-server:
+  defaultCluster: {}
