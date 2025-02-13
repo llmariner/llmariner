@@ -81,8 +81,7 @@ jobs:
         metadata:
           name: gpu-job
         spec:
-          managedBy:
-            cloudnatix.com/job-controller
+          managedBy: cloudnatix.com/job-controller
           template:
             spec:
               containers:
