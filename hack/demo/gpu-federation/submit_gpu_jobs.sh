@@ -11,8 +11,7 @@ for i in {1..20}; do
   metadata:
     name: gpu-job-${i}
   spec:
-    managedBy:
-      cloudnatix.com/job-controller
+    managedBy: cloudnatix.com/job-controller
     template:
       spec:
         containers:
