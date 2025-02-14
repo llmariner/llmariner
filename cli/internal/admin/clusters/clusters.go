@@ -182,7 +182,7 @@ func getClusterIDByName(ctx context.Context, name string) (string, error) {
 func getClusterByName(ctx context.Context, name string) (*cv1.Cluster, error) {
 	cs, err := listClusters(ctx)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	for _, c := range cs {
 		if c.Name == name {
