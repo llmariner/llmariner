@@ -1,0 +1,69 @@
+# Installation with CloudNatix
+
+## Preparation
+
+Create a S3 bucket:
+
+```bash
+aws s3 mb s3://cloudnatix-installation-demo --region us-west-2
+```
+
+Install Metric Server:
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+Install Nvidia Operator:
+
+```bash
+helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
+helm repo update
+helm upgrade --install --wait \
+  --namespace nvidia \
+  --create-namespace \
+  gpu-operator nvidia/gpu-operator \
+  --set cdi.enabled=true \
+  --set driver.enabled=false \
+  --set toolkit.enabled=false
+```
+
+Create a secret for S3 and HuggingFace:
+
+```bash
+kubectl create namespace cloudnatix
+
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+kubectl create secret generic \
+  aws \
+  -n cloudnatix \
+  --from-literal=accessKeyId=${AWS_ACCESS_KEY_ID} \
+  --from-literal=secretAccessKey=${AWS_SECRET_ACCESS_KEY}
+
+kubectl create secret generic \
+  huggingface-key \
+  -n cloudnatix \
+  --from-literal=apiKey=${HUGGING_FACE_HUB_TOKEN}
+```
+
+## Installation
+
+Run:
+
+```bash
+export CNATIX_FEATURE_FLAG_LLMARINER=true
+export CNATIX_GC_DOMAIN=staging.cloudnatix.com
+export KUBECONFIG=<Vulter VKE kubeconfig>
+
+# Login with demo+gpu@cloudnatix.com
+llma auth login
+llma admin clusters register kenji-test
+
+# Login with demo+gpu@cloudnatix.com
+cnatix login
+cnatix clusters configure
+cnatix install
+```
+
+Select the `testing` channel until we release LLMariner to the `stable` channel.
