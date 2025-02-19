@@ -60,7 +60,7 @@ export KUBECONFIG=<Vulter VKE kubeconfig>
 
 # Login with demo+gpu@cloudnatix.com
 llma auth login
-llma admin clusters register kenji-test
+llma admin clusters register my-demo-cluster
 
 # Login with demo+gpu@cloudnatix.com
 cnatix login
@@ -73,7 +73,7 @@ Select the `testing` channel until we release LLMariner to the `stable` channel.
 If you just want to deploy LLMariner for testing, run:
 
 ```bash
-registration_key=$(llma admin clusters register kenji-test | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
+registration_key=$(llma admin clusters register my-demo-cluster | sed -n 's/.*Registration Key: "\([^"]*\)".*/\1/p')
 kubectl create secret -n cloudnatix generic cluster-registration-key --from-literal=regKey=${registration_key}
 helm upgrade \
   --install \

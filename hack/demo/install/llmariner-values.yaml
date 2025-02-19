@@ -64,7 +64,7 @@ inference-manager-engine:
         vllmExtraFlags:
         - --tokenizer
         - deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
-      lmstudio-community-phi-4-GGUF-phi-4-Q6_K:
+      lmstudio-community/phi-4-GGUF/phi-4-Q4_K_M.gguf:
         preloaded: true
         runtimeName: vllm
         resources:
