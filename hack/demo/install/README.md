@@ -28,7 +28,9 @@ helm upgrade --install --wait \
   --set toolkit.enabled=false
 ```
 
-Create a secret for S3 and HuggingFace:
+Create a secret for S3 and HuggingFace.
+
+The AWS credentials are stored in the "dev" vault of 1Password.
 
 ```bash
 kubectl create namespace cloudnatix
