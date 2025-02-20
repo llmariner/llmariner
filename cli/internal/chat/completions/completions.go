@@ -32,12 +32,20 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	msg := &iv1.CreateChatCompletionRequest_Message{}
+	msg := &iv1.CreateChatCompletionRequest_Message{
+		Content: []*iv1.CreateChatCompletionRequest_Message_Content{
+			{
+				Type: "text",
+			},
+		},
+	}
 	req := &iv1.CreateChatCompletionRequest{
 		Messages: []*iv1.CreateChatCompletionRequest_Message{msg},
 		Stream:   true,
 	}
-	var noStream bool
+	var (
+		noStream bool
+	)
 	cmd := &cobra.Command{
 		Use:  "create",
 		Args: cobra.NoArgs,
@@ -50,7 +58,7 @@ func createCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVar(&req.Model, "model", "", "Model to be used")
 	cmd.Flags().StringVar(&msg.Role, "role", "", "Chat completion role")
-	cmd.Flags().StringVar(&msg.Content, "completion", "", "Chat completion content")
+	cmd.Flags().StringVar(&msg.Content[0].Text, "completion", "", "Chat completion content")
 	cmd.Flags().Float64Var(&req.PresencePenalty, "presence-penalty", 0.0, "Presence penalty")
 	cmd.Flags().Float64Var(&req.FrequencyPenalty, "frequency-penalty", 0.0, "Frequency penalty")
 	cmd.Flags().StringArrayVar(&req.Stop, "stop", nil, "Stop words")
