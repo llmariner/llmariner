@@ -31,7 +31,7 @@ func Cmd() *cobra.Command {
 func listCmd() *cobra.Command {
 	var ()
 	cmd := &cobra.Command{
-		Use:   "list <TENANT_ID>",
+		Use:   "list",
 		Short: "List clusters from job-manager-server",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return listClusters(cmd.Context())
