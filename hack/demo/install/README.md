@@ -8,6 +8,8 @@ Create a S3 bucket:
 aws s3 mb s3://cloudnatix-installation-demo --region us-west-2
 ```
 
+Create a K8s cluster in Vultr. We can use `vcg-a100-3c-30g-20vram` for GPU nodes.
+
 Install Metric Server:
 
 ```bash
