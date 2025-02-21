@@ -13,3 +13,4 @@ llmariner:
   psSecretName: postgres
   awsSecretName: aws
   chartPath: ../../deployments/llmariner/
+  deployLatest: true

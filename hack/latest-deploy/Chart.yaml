@@ -1,0 +1,112 @@
+apiVersion: v2
+name: llmariner
+description: Scalable, extensible platform for managing generative AI workloads on Kubernetes, featuring OpenAI-compatible APIs and optimized resource management.
+home: https://llmariner.ai/
+icon: https://raw.githubusercontent.com/llmariner/llmariner.github.io/refs/heads/main/assets/icons/logo.svg
+type: application
+version: 1.20.0
+appVersion: 1.20.0
+sources:
+  - https://github.com/llmariner/llmariner
+keywords:
+  - llmariner
+annotations:
+  "artifacthub.io/category": ai-machine-learning
+  "artifacthub.io/license": Apache-2.0
+dependencies:
+- name: api-usage-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/api-usage/deployments/server"
+  condition: api-usage-server.enable
+  tags:
+  - control-plane
+- name: cluster-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/cluster-manager/deployments/server"
+  condition: cluster-manager-server.enable
+  tags:
+  - control-plane
+- name: dex-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/rbac-manager/deployments/dex-server"
+  condition: dex-server.enable
+  tags:
+  - control-plane
+- name: file-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/file-manager/deployments/server"
+  condition: file-manager-server.enable
+  tags:
+  - control-plane
+- name: inference-manager-engine
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/inference-manager/deployments/engine"
+  condition: inference-manager-engine.enable
+  tags:
+  - worker
+- name: inference-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/inference-manager/deployments/server"
+  condition: inference-manager-server.enable
+  tags:
+  - control-plane
+- name: job-manager-dispatcher
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/job-manager/deployments/dispatcher"
+  condition: job-manager-dispatcher.enable
+  tags:
+  - worker
+- name: job-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/job-manager/deployments/server"
+  condition: job-manager-server.enable
+  tags:
+  - control-plane
+- name: job-manager-syncer
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/job-manager/deployments/syncer"
+  condition: job-manager-syncer.enable
+  tags:
+  - tenant-control-plane
+- name: model-manager-loader
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/model-manager/deployments/loader"
+  condition: model-manager-loader.enable
+  tags:
+  - worker
+- name: model-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/model-manager/deployments/server"
+  condition: model-manager-server.enable
+  tags:
+  - control-plane
+- name: rbac-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/rbac-manager/deployments/rbac-server"
+  condition: rbac-server.enable
+  tags:
+  - control-plane
+- name: session-manager-agent
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/session-manager/deployments/agent"
+  condition: session-manager-agent.enable
+  tags:
+  - worker
+- name: session-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/session-manager/deployments/server"
+  condition: session-manager-server.enable
+  tags:
+  - control-plane
+- name: user-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/user-manager/deployments/server"
+  condition: user-manager-server.enable
+  tags:
+  - control-plane
+- name: vector-store-manager-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/vector-store-manager/deployments/server"
+  condition: vector-store-manager-server.enable
+  tags:
+  - control-plane
