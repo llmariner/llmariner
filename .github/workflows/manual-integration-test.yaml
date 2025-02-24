@@ -5,11 +5,8 @@ on:
       deployLatest:
         description: 'Deploy unreleased latest?'
         required: true
-        default: "false"
-        type: choice
-        options:
-        - true
-        - false
+        default: false
+        type: boolean
 
 jobs:
   run-integration-test:
