@@ -1,6 +1,15 @@
 name: manual-run-integration-test
 on:
   workflow_dispatch:
+    inputs:
+      deployLatest:
+        description: 'Deploy unreleased latest?'
+        required: true
+        default: "false"
+        type: choice
+        options:
+        - true
+        - false
 
 jobs:
   run-integration-test:
@@ -16,6 +25,11 @@ jobs:
         curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
         sudo install -o root -g root -m 0755 kind /usr/local/bin/kind
         rm ./kind
+    - name: set-up-latest-deploy
+      if: github.event.inputs.deployLatest == 'true'
+      run: |
+        ./hack/latest-deploy/set_up_repos.sh
+        cp ././hack/latest-deploy/Chart.yaml deployments/llmariner/Chart.yaml
     - name: build-cli
       run: |
         make build
@@ -26,7 +40,7 @@ jobs:
     - name: deploy-local-helm-chart
       uses: helmfile/helmfile-action@v1.9.3
       with:
-        helmfile-args: apply --skip-diff-on-install
+        helmfile-args: apply --skip-diff-on-install --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }}
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
