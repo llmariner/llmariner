@@ -233,6 +233,9 @@ releases:
   {{ else if eq .Environment.Name "tenant-control" }}
   - "./values/tenant-control-plane.yaml"
   {{ end }}
+  {{ if .Values.llmariner.deployLatest }}
+  - "./values/latest.yaml"
+  {{ end }}
   - prepare:
       database:
         createSecret: {{ (and (ne .Environment.Name "worker") (ne .Environment.Name "tenant-control")) | toYaml }}

@@ -1,0 +1,47 @@
+api-usage-server:
+  version: latest
+
+cluster-manager-server:
+  version: latest
+
+dex-server:
+  version: latest
+
+file-manager-server:
+  version: latest
+
+inference-manager-engine:
+  version: latest
+
+inference-manager-server:
+  version: latest
+
+job-manager-dispatcher:
+  version: latest
+
+job-manager-server:
+  version: latest
+
+job-manager-syncer:
+  version: latest
+
+model-manager-loader:
+  version: latest
+
+model-manager-server:
+  version: latest
+
+rbac-server:
+  version: latest
+
+session-manager-agent:
+  version: latest
+
+session-manager-server:
+  version: latest
+
+user-manager-server:
+  version: latest
+
+vector-store-manager-server:
+  version: latest
