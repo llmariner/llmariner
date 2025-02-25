@@ -1,0 +1,26 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: gpu
+spec:
+  template:
+    spec:
+      requirements:
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["on-demand", "spot"]
+        - key: eks.amazonaws.com/instance-family
+          operator: In
+          values: ["g6", "g5", "g4dn"]
+        - key: eks.amazonaws.com/instance-size
+          operator: In
+          values: ["xlarge", "2xlarge"]
+        - key: eks.amazonaws.com/instance-gpu-manufacturer
+          operator: In
+          values: ["nvidia"]
+      nodeClassRef:
+        group: eks.amazonaws.com
+        kind: NodeClass
+        name: default
+  limits:
+    nvidia.com/gpu: 1
