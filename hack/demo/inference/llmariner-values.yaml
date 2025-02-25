@@ -1,0 +1,95 @@
+tags:
+  control-plane: false
+
+global:
+  worker:
+    controlPlaneAddr: api.llm.staging.cloudnatix.com:443
+    tls:
+      enable: true
+    registrationKeySecret:
+      name: cluster-registration-key
+      key: regKey
+
+  objectStore:
+    s3:
+      bucket: cloudnatix-installation-demo
+      endpointUrl: ""
+      region: us-west-2
+
+  awsSecret:
+    name: aws
+    accessKeyIdKey: accessKeyId
+    secretAccessKeyKey: secretAccessKey
+
+inference-manager-engine:
+  version: latest
+  # To fit in a single node
+  resources:
+    limits:
+      cpu: 0
+      memory: 0
+    requests:
+      cpu: 0
+      memory: 0
+  inferenceManagerServerWorkerServiceAddr: inference.llm.staging.cloudnatix.com:443
+  replicaCount: 1
+  runtime:
+    runtimeImages:
+      ollama: mirror.gcr.io/ollama/ollama:0.3.6
+      # To use the upstream vLLM. Update once a new release that
+      # fixes https://github.com/vllm-project/vllm/issues/11970 is made.
+      vllm: public.ecr.aws/cloudnatix/llm-operator/vllm-openai:20250115
+      triton: nvcr.io/nvidia/tritonserver:24.09-trtllm-python-py3
+  model:
+    default:
+      runtimeName: vllm
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+    overrides:
+      google/gemma-2b-it-q4_0:
+        preloaded: false
+        runtimeName: ollama
+      NikolayKozloff/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M-GGUF:
+        preloaded: false
+        runtimeName: vllm
+        vllmExtraFlags:
+        - --tokenizer
+        - deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+        - --max-model-len
+        - 8200
+      lmstudio-community/phi-4-GGUF/phi-4-Q4_K_M.gguf:
+        preloaded: true
+        runtimeName: vllm
+        vllmExtraFlags:
+        - --tokenizer
+        - microsoft/phi-4
+        - --max-model-len
+        - 8200
+  autoscaler:
+    enable: true
+    builtin:
+      defaultScaler:
+        targetValue: 30
+        maxReplicas: 3
+
+model-manager-loader:
+  runOnce: true
+  baseModels:
+  - google/gemma-2b-it-q4_0
+  - lmstudio-community/phi-4-GGUF/phi-4-Q4_K_M.gguf
+  - NikolayKozloff/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M-GGUF
+  downloader:
+    kind: huggingFace
+    huggingFace:
+      cacheDir: /tmp/.cache/huggingface/hub
+  huggingFaceSecret:
+    name: huggingface-key
+    apiKeyKey: apiKey
+
+job-manager-dispatcher:
+  notebook:
+    llmarinerBaseUrl: https://api.llm.staging.cloudnatix.com/v1
+
+session-manager-agent:
+  sessionManagerServerWorkerServiceAddr: session.llm.staging.cloudnatix.com:443
