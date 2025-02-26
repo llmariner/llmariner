@@ -15,7 +15,7 @@ annotations:
   "artifacthub.io/license": Apache-2.0
 dependencies:
 - name: api-usage-server
-  version: 1.3.0
+  version: 1.4.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: api-usage-server.enable
   tags:
@@ -99,7 +99,7 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.10.1
+  version: 1.11.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: user-manager-server.enable
   tags:
