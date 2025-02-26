@@ -1,4 +1,4 @@
-name: manual-create-pull-request
+name: manual-release-pr
 on:
   workflow_dispatch:
     inputs:
@@ -39,5 +39,5 @@ jobs:
         add-paths: deployments/*/Chart.yaml
         branch: bump-chart-ver-${{ steps.tag_version.outputs.new_tag }}
         reviewers: ${{ github.actor }}
-        body: This pull-request is created by `manual workflow` by ${{ github.actor }}
+        body: This pull-request is created by `${{ github.workflow }}` by ${{ github.actor }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
