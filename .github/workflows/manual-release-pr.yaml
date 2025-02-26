@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       default_bump:
-        description: "bump version type (default: minor version)"
+        description: "default bump version type (default: minor version)"
         required: true
         default: 'minor'
         type: choice
