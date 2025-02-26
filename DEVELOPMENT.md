@@ -113,6 +113,8 @@ go install github.com/bufbuild/buf/cmd/buf@v1.5.0 && \
   go install github.com/grpc-ecosystem/protoc-gen-grpc-gateway-ts@v1.1.1
 ```
 
+Note that some repositories have migrated to Buf `v1.50.0`. If the repo is using the `buf dep update` command, `v1.5.0` doesn't work. In such a case, please use `v1.50.0`.
+
 When contributing, please use the same version of tools/plugins as the ones specified in the example commands below.
 Otherwise, there will be unnecessary diffs in the generated files because of version differences.
 
