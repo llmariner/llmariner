@@ -42,3 +42,29 @@ cat questions |\
         --role system \
         --completion
 ```
+
+## Set up monitoring
+
+Install DCGM Exporter:
+
+```
+kubectl create namespace nvidia
+
+helm upgrade \
+ --install \
+ -n nvidia \
+ dcgm-exporter \
+ gpu-helm-charts/dcgm-exporter \
+ --set serviceMonitor.enabled=false
+
+kubectl apply -f ./dcgm-exporter-service.yaml
+```
+
+We might be able to use GPU Operator, but decided not to as it might
+conflict with the existing setup in EKS Auto mode.
+
+Then follow https://github.com/llmariner/llmariner/blob/main/provision/aws/scripts/setup-kind-cluster.sh#L44 to
+install Prometheus and Grafana.
+
+Please note that the Prometheus scraping config there is for a single
+node. You need to specify individual nodes in the target.
