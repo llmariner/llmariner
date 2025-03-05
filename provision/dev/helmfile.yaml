@@ -278,4 +278,13 @@ releases:
     - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
     - "{{`{{.Release.KubeContext|default .Environment.KubeContext}}`}}"
     - "{{`{{.Release.Namespace}}`}}"
+  # Create the services in the "default" namespace as well for Jupyter Notebooks and
+  # fine-tuning jobs.
+  - events: ["postsync","postuninstall"]
+    showlogs: true
+    command: "./control_plane_service.sh"
+    args:
+    - "{{`{{if eq .Event.Name \"postsync\"}}apply{{else}}delete{{end}}`}}"
+    - "{{`{{.Release.KubeContext|default .Environment.KubeContext}}`}}"
+    - "default"
   {{ end }}
