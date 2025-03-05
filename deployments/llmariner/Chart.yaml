@@ -33,7 +33,7 @@ dependencies:
   tags:
   - control-plane
 - name: file-manager-server
-  version: 1.3.0
+  version: 1.4.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: file-manager-server.enable
   tags:
