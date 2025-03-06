@@ -1,11 +1,5 @@
-tags:
-  control-plane: false
-
 global:
   worker:
-    controlPlaneAddr: api.llm.staging.cloudnatix.com:443
-    tls:
-      enable: true
     registrationKeySecret:
       name: cluster-registration-key
       key: regKey
@@ -30,7 +24,6 @@ inference-manager-engine:
     requests:
       cpu: 0
       memory: 0
-  inferenceManagerServerWorkerServiceAddr: inference.llm.staging.cloudnatix.com:443
   replicaCount: 2
   runtime:
     runtimeImages:
@@ -87,10 +80,3 @@ model-manager-loader:
   huggingFaceSecret:
     name: huggingface-key
     apiKeyKey: apiKey
-
-job-manager-dispatcher:
-    notebook:
-      llmarinerBaseUrl: https://api.llm.staging.cloudnatix.com/v1
-
-session-manager-agent:
-  sessionManagerServerWorkerServiceAddr: session.llm.staging.cloudnatix.com:443
