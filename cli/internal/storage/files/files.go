@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -29,8 +30,31 @@ func Cmd() *cobra.Command {
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
 	}
+	cmd.AddCommand(createLinkCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())
+	return cmd
+}
+
+func createLinkCmd() *cobra.Command {
+	var objectPath, purpose string
+	cmd := &cobra.Command{
+		Use:   "create-link",
+		Short: "Create a file from an object path.",
+		Long:  "Create a file from an object path. A new file object will be created without upload.",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if strings.HasPrefix(objectPath, "s3://") {
+				return fmt.Errorf("--object-path must not include a bucket name. For example, if a target object is located at s3://<bucket>/<path>, pass --object-path=<path>")
+			}
+
+			return createLink(cmd.Context(), objectPath, purpose)
+		},
+	}
+	cmd.Flags().StringVar(&objectPath, "object-path", "", "Path to the object in the object storage. This does not include a bucket name.")
+	cmd.Flags().StringVar(&purpose, "purpose", "", "Purpose. Either 'fine-tune' or 'assistants'.")
+	_ = cmd.MarkFlagRequired("object-path")
+	_ = cmd.MarkFlagRequired("purpose")
 	return cmd
 }
 
@@ -52,6 +76,26 @@ func deleteCmd() *cobra.Command {
 			return delete(cmd.Context(), args[0])
 		},
 	}
+}
+
+func createLink(ctx context.Context, objectPath, purpose string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := fv1.CreateFileFromObjectPathRequest{
+		ObjectPath: objectPath,
+		Purpose:    purpose,
+	}
+	var resp fv1.File
+	if err := ihttp.NewClient(env).Send(http.MethodPost, path+":createFromObjectPath", &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Created the file (ID: %q).\n", resp.Id)
+	return nil
+
 }
 
 func list(ctx context.Context) error {

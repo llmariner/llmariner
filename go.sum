@@ -85,8 +85,8 @@ github.com/llmariner/api-usage v1.2.0 h1:edjwOYqaZcbQN+wuvXwhdpbyrfLSjFlLhV7RNMV
 github.com/llmariner/api-usage v1.2.0/go.mod h1:3Vw2URGxzgjacdmdCpP3ouqi7SzpQHWYKYXDCIglFyg=
 github.com/llmariner/cluster-manager v1.5.3 h1:oP3MoFAF46b53dW0RLI2P9HMUd8RksaBF0mFOWrO07Y=
 github.com/llmariner/cluster-manager v1.5.3/go.mod h1:A6DRmn8lVZ36Et4sGtX9mmLvFaLkJOU9cc8eqWZA2QE=
-github.com/llmariner/file-manager v1.1.0 h1:nnzaYrnQtMejpXNOdcAzbZlkiFZ+gdw3zWXYtKVNe3E=
-github.com/llmariner/file-manager v1.1.0/go.mod h1:B1Wo3xmd5DWKHwxnZjYYOEyTqAw3ZDibIQHoiNGAIMA=
+github.com/llmariner/file-manager v1.3.0 h1:32tsiV2Bcl0WhnRI+5NKIE4kgK6lNK0iJZ20YgUFnS0=
+github.com/llmariner/file-manager v1.3.0/go.mod h1:rXGrR8pQUApzkEQitnl+wG34UprU7HP1Mb7RrkveY4I=
 github.com/llmariner/inference-manager v1.15.2 h1:5Jk+nHNHYP8Un8fr2k3EKzt3LJcQYvXqeGa/XtdCYDk=
 github.com/llmariner/inference-manager v1.15.2/go.mod h1:WqMTv7AlhGYsV6iO+jXWuaIQNDP6GfA0M0Yxbno+Tg4=
 github.com/llmariner/job-manager v1.7.0 h1:jL1b4j48bdfsm+1TNeQ2Bxpbw/0TBcECVqQaoN0+tY0=
