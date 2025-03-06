@@ -104,16 +104,27 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	var req fv1.ListFilesRequest
-	var resp fv1.ListFilesResponse
-	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
-		return err
+	var files []*fv1.File
+	var after string
+	for {
+		req := fv1.ListFilesRequest{
+			After: after,
+		}
+		var resp fv1.ListFilesResponse
+		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
+			return err
+		}
+		files = append(files, resp.Data...)
+		if !resp.HasMore {
+			break
+		}
+		after = resp.Data[len(resp.Data)-1].Id
 	}
 
 	tbl := table.New("ID", "Filename", "Purpose", "Size", "Created At")
 	ui.FormatTable(tbl)
 
-	for _, f := range resp.Data {
+	for _, f := range files {
 		tbl.AddRow(
 			f.Id,
 			f.Filename,
