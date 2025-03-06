@@ -109,7 +109,6 @@ func list(ctx context.Context) error {
 	for {
 		req := fv1.ListFilesRequest{
 			After: after,
-			Limit: 1,
 		}
 		var resp fv1.ListFilesResponse
 		if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
