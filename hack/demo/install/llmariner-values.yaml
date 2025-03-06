@@ -1,9 +1,4 @@
 global:
-  worker:
-    registrationKeySecret:
-      name: cluster-registration-key
-      key: regKey
-
   objectStore:
     s3:
       bucket: cloudnatix-installation-demo
