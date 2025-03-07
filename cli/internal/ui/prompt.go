@@ -10,7 +10,7 @@ import (
 	"github.com/AlecAivazis/survey/v2/core"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/briandowns/spinner"
-	ghterm "github.com/cli/go-gh/pkg/term"
+	ghterm "github.com/cli/go-gh/v2/pkg/term"
 	"github.com/mattn/go-colorable"
 )
 
