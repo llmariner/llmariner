@@ -60,6 +60,8 @@ type C struct {
 
 	Auth Auth `yaml:"auth"`
 
+	EnableOkta bool `yaml:"enableOkta"`
+
 	Context Context `yaml:"context"`
 }
 
@@ -147,15 +149,32 @@ func CreateNewConfig() error {
 	endpointURL = strings.TrimSuffix(endpointURL, "/")
 
 	issuerURL := fmt.Sprintf("%s/dex", endpointURL)
-	c := &C{
-		Version:     configVersion,
-		EndpointURL: endpointURL,
-		Auth: Auth{
-			ClientID:     authClientID,
-			ClientSecret: authClientSecret,
-			RedirectURI:  authRedirectURI,
-			IssuerURL:    issuerURL,
-		},
+
+	var c *C
+	if os.Getenv("LLMA_ENABLE_OKTA") == "true" {
+		c = &C{
+			Version:     configVersion,
+			EndpointURL: endpointURL,
+			Auth: Auth{
+				ClientID:     "0oak1yta82395U5wP4x7",
+				ClientSecret: os.Getenv("LLMA_CLIENT_SECRET"),
+				RedirectURI:  "http://localhost:8084/callback",
+				IssuerURL:    "https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7",
+			},
+			EnableOkta: true,
+		}
+	} else {
+		c = &C{
+			Version:     configVersion,
+			EndpointURL: endpointURL,
+			Auth: Auth{
+				ClientID:     authClientID,
+				ClientSecret: authClientSecret,
+				RedirectURI:  authRedirectURI,
+				IssuerURL:    issuerURL,
+			},
+			EnableOkta: false,
+		}
 	}
 	if err := c.Save(); err != nil {
 		return err
