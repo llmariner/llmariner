@@ -152,12 +152,17 @@ func CreateNewConfig() error {
 
 	var c *C
 	if os.Getenv("LLMA_ENABLE_OKTA") == "true" {
+		clientSecret := os.Getenv("LLMA_CLIENT_SECRET")
+		if clientSecret == "" {
+			return errors.New("LLMA_CLIENT_SECRET is required")
+		}
+
 		c = &C{
 			Version:     configVersion,
 			EndpointURL: endpointURL,
 			Auth: Auth{
 				ClientID:     "0oak1yta82395U5wP4x7",
-				ClientSecret: os.Getenv("LLMA_CLIENT_SECRET"),
+				ClientSecret: clientSecret,
 				RedirectURI:  "http://localhost:8084/callback",
 				IssuerURL:    "https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7",
 			},
