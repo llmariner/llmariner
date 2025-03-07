@@ -9,6 +9,7 @@ import (
 
 	"github.com/llmariner/llmariner/cli/internal/configs"
 	"github.com/zchee/go-xdgbasedir"
+	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v2"
 )
 
@@ -21,12 +22,34 @@ type T struct {
 }
 
 // saveToken saves the token to a file.
-func saveToken(token *T) error {
+func saveToken(token *oauth2.Token) error {
+	tokenType, ok := token.Extra("token_type").(string)
+	if !ok {
+		return fmt.Errorf("no token_type in token response")
+	}
+
+	accessToken, ok := token.Extra("access_token").(string)
+	if !ok {
+		return fmt.Errorf("no access_token in token response")
+	}
+
+	refreshToken, ok := token.Extra("refresh_token").(string)
+	if !ok {
+		return fmt.Errorf("no refresh_token in token response")
+	}
+
+	t := &T{
+		TokenType:    tokenType,
+		TokenExpiry:  token.Expiry,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}
+
 	path := TokenFilePath()
 	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 		return fmt.Errorf("create config directory: %s", err)
 	}
-	b, err := yaml.Marshal(token)
+	b, err := yaml.Marshal(t)
 	if err != nil {
 		return fmt.Errorf("marshal token: %s", err)
 	}
@@ -59,11 +82,7 @@ func LoadToken(ctx context.Context, c *configs.C) (*T, error) {
 		return nil, fmt.Errorf("unmarshal token: %s", err)
 	}
 
-	tokenExchanger, err := NewTokenExchanger(c)
-	if err != nil {
-		return nil, fmt.Errorf("new token exchanger: %s", err)
-	}
-	token, err = tokenExchanger.refreshTokenIfExpired(ctx, token)
+	token, err = refreshTokenIfExpired(ctx, token, c.Auth)
 	if err != nil {
 		return nil, fmt.Errorf("refresh token: %s", err)
 	}

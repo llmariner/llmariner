@@ -13,20 +13,28 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// NewTokenExchanger creates a new token exchanger.
-func NewTokenExchanger(c *configs.C) (*TokenExchanger, error) {
-	return &TokenExchanger{
+// TokenExchanger exchanges a code for a token.
+type TokenExchanger interface {
+	// ObtainToken obtains a token from the issuer.
+	ObtainToken(ctx context.Context, code string) error
+}
+
+// DexTokenExchanger exchanges a code for a token via Dex.
+type DexTokenExchanger struct {
+	auth configs.Auth
+}
+
+var _ TokenExchanger = &DexTokenExchanger{}
+
+// NewDexTokenExchanger creates a new token exchanger.
+func NewDexTokenExchanger(c *configs.C) (*DexTokenExchanger, error) {
+	return &DexTokenExchanger{
 		auth: c.Auth,
 	}, nil
 }
 
-// TokenExchanger exchanges a code for a token.
-type TokenExchanger struct {
-	auth configs.Auth
-}
-
 // LoginURL returns a URL to login.
-func (e *TokenExchanger) LoginURL() (string, error) {
+func (e *DexTokenExchanger) LoginURL() (string, error) {
 	iu, err := url.Parse(e.auth.IssuerURL)
 	if err != nil {
 		return "", fmt.Errorf("parse issuer-url: %v", err)
@@ -45,17 +53,10 @@ func (e *TokenExchanger) LoginURL() (string, error) {
 }
 
 // ObtainToken obtains a token from the issuer.
-func (e *TokenExchanger) ObtainToken(ctx context.Context, code string) error {
-	provider, err := e.newOIDCProvider(ctx)
+func (e *DexTokenExchanger) ObtainToken(ctx context.Context, code string) error {
+	oauth2Config, err := NewOauth2Config(ctx, e.auth)
 	if err != nil {
-		return fmt.Errorf("failed to get provider: %v", err)
-	}
-
-	oauth2Config := &oauth2.Config{
-		ClientID:     e.auth.ClientID,
-		ClientSecret: e.auth.ClientSecret,
-		Endpoint:     provider.Endpoint(),
-		RedirectURL:  e.auth.RedirectURI,
+		return fmt.Errorf("new oauth2 config: %v", err)
 	}
 
 	token, err := oauth2Config.Exchange(ctx, code)
@@ -67,54 +68,32 @@ func (e *TokenExchanger) ObtainToken(ctx context.Context, code string) error {
 	if !ok {
 		return fmt.Errorf("no id_token in token response")
 	}
+
+	provider, err := newOIDCProvider(ctx, e.auth.IssuerURL)
+	if err != nil {
+		return fmt.Errorf("failed to get provider: %v", err)
+	}
 	verifier := provider.Verifier(&oidc.Config{ClientID: e.auth.ClientID})
 	if _, err := verifier.Verify(ctx, rawIDToken); err != nil {
 		return fmt.Errorf("failed to verify ID token: %v", err)
 	}
 
-	tokenType, ok := token.Extra("token_type").(string)
-	if !ok {
-		return fmt.Errorf("no token_type in token response")
-	}
-
-	accessToken, ok := token.Extra("access_token").(string)
-	if !ok {
-		return fmt.Errorf("no access_token in token response")
-	}
-
-	refreshToken, ok := token.Extra("refresh_token").(string)
-	if !ok {
-		return fmt.Errorf("no refresh_token in token response")
-	}
-
-	if err := saveToken(&T{
-		TokenType:    tokenType,
-		TokenExpiry:  token.Expiry,
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-	}); err != nil {
+	if err := saveToken(token); err != nil {
 		return fmt.Errorf("failed to save token token: %v", err)
 	}
 
 	return nil
 }
 
-func (e *TokenExchanger) refreshTokenIfExpired(ctx context.Context, token T) (T, error) {
+func refreshTokenIfExpired(ctx context.Context, token T, auth configs.Auth) (T, error) {
 	if token.TokenExpiry.After(time.Now()) {
 		// No need to refresh.
 		return token, nil
 	}
 
-	provider, err := e.newOIDCProvider(ctx)
+	oauth2Config, err := NewOauth2Config(ctx, auth)
 	if err != nil {
-		return T{}, fmt.Errorf("failed to get provider: %v", err)
-	}
-
-	oauth2Config := &oauth2.Config{
-		ClientID:     e.auth.ClientID,
-		ClientSecret: e.auth.ClientSecret,
-		Endpoint:     provider.Endpoint(),
-		RedirectURL:  e.auth.RedirectURI,
+		return T{}, fmt.Errorf("new oauth2 config: %v", err)
 	}
 
 	savedToken := &oauth2.Token{
@@ -129,19 +108,28 @@ func (e *TokenExchanger) refreshTokenIfExpired(ctx context.Context, token T) (T,
 	if err != nil {
 		return T{}, fmt.Errorf("failed to get token: %v", err)
 	}
-	token = T{
-		TokenType:    newToken.TokenType,
-		TokenExpiry:  newToken.Expiry,
-		AccessToken:  newToken.AccessToken,
-		RefreshToken: newToken.RefreshToken,
-	}
-	if err := saveToken(&token); err != nil {
+	if err := saveToken(newToken); err != nil {
 		return token, err
 	}
 	return token, nil
 }
 
-func (e *TokenExchanger) newOIDCProvider(ctx context.Context) (*oidc.Provider, error) {
+func newOIDCProvider(ctx context.Context, issuerURL string) (*oidc.Provider, error) {
 	ctx = oidc.ClientContext(ctx, http.DefaultClient)
-	return oidc.NewProvider(ctx, e.auth.IssuerURL)
+	return oidc.NewProvider(ctx, issuerURL)
+}
+
+// NewOauth2Config creates a new oauth2 config.
+func NewOauth2Config(ctx context.Context, auth configs.Auth) (*oauth2.Config, error) {
+	provider, err := newOIDCProvider(ctx, auth.IssuerURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get provider: %v", err)
+	}
+
+	return &oauth2.Config{
+		ClientID:     auth.ClientID,
+		ClientSecret: auth.ClientSecret,
+		Endpoint:     provider.Endpoint(),
+		RedirectURL:  auth.RedirectURI,
+	}, nil
 }
