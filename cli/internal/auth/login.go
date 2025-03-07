@@ -45,13 +45,13 @@ func dexLogin(ctx context.Context, c *configs.C, noOpen bool) error {
 
 	tokenExchanger, err := accesstoken.NewDexTokenExchanger(c)
 	if err != nil {
-		return fmt.Errorf("create token exchanger: %v", err)
+		return fmt.Errorf("create token exchanger: %s", err)
 	}
 	cli.tokenExechanger = tokenExchanger
 
 	loginURL, err := tokenExchanger.LoginURL()
 	if err != nil {
-		return fmt.Errorf("get login URL: %v", err)
+		return fmt.Errorf("get login URL: %s", err)
 	}
 
 	if noOpen {
@@ -65,7 +65,7 @@ func dexLogin(ctx context.Context, c *configs.C, noOpen bool) error {
 
 	ru, err := url.Parse(c.Auth.RedirectURI)
 	if err != nil {
-		return fmt.Errorf("parse redirect-uri: %v", err)
+		return fmt.Errorf("parse redirect-uri: %s", err)
 	}
 
 	l, err := net.Listen("tcp", ru.Host)
