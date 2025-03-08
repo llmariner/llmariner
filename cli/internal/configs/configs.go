@@ -156,10 +156,10 @@ func CreateNewConfig() error {
 			Version:     configVersion,
 			EndpointURL: endpointURL,
 			Auth: Auth{
-				ClientID:     "0oak1yta82395U5wP4x7",
-				ClientSecret: "nxU6XRatwKdweHn-CgS5YiYKNfahfS8l1N3kjhqNeWfPEAEb7ub2TfvezU5OYifH",
+				ClientID:     "0oa17m60zdJLsJUG14x7",
+				ClientSecret: "",
 				RedirectURI:  "http://localhost:8084/callback",
-				IssuerURL:    "https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7",
+				IssuerURL:    "https://login.cloudnatix.com/oauth2/aus202ft6fhz9alff4x7",
 			},
 			EnableOkta: true,
 		}
