@@ -1,7 +1,6 @@
 package configs
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -32,16 +31,16 @@ type Auth struct {
 
 func (a *Auth) validate() error {
 	if a.ClientID == "" {
-		return errors.New("clientId is required")
+		return fmt.Errorf("clientId is required")
 	}
 	if a.ClientSecret == "" {
-		return errors.New("clientSecret is required")
+		return fmt.Errorf("clientSecret is required")
 	}
 	if a.RedirectURI == "" {
-		return errors.New("redirectUri is required")
+		return fmt.Errorf("redirectUri is required")
 	}
 	if a.IssuerURL == "" {
-		return errors.New("issuerUrl is required")
+		return fmt.Errorf("issuerUrl is required")
 	}
 	return nil
 }
@@ -68,11 +67,11 @@ type C struct {
 // Validate validates the config.
 func (c *C) Validate() error {
 	if c.Version == "" {
-		return errors.New("version is required")
+		return fmt.Errorf("version is required")
 	}
 
 	if c.EndpointURL == "" {
-		return errors.New("endpointUrl is required")
+		return fmt.Errorf("endpointUrl is required")
 	}
 
 	if err := c.Auth.validate(); err != nil {
@@ -134,10 +133,10 @@ func CreateNewConfig() error {
 		defaultEndpointURL,
 		func(v string) error {
 			if !isHTTPURL(v) {
-				return errors.New("must start with 'http://' or 'https://'")
+				return fmt.Errorf("must start with 'http://' or 'https://'")
 			}
 			if !strings.HasSuffix(v, "/v1") {
-				return errors.New("must end with '/v1'")
+				return fmt.Errorf("must end with '/v1'")
 			}
 			return nil
 		},
@@ -150,19 +149,15 @@ func CreateNewConfig() error {
 
 	issuerURL := fmt.Sprintf("%s/dex", endpointURL)
 
+	useOkta := endpointURL == "https://api.llm.cloudnatix.com/v1" || endpointURL == "https://api.llm.staging.cloudnatix.com/v1"
 	var c *C
-	if os.Getenv("LLMA_ENABLE_OKTA") == "true" {
-		clientSecret := os.Getenv("LLMA_CLIENT_SECRET")
-		if clientSecret == "" {
-			return errors.New("LLMA_CLIENT_SECRET is required")
-		}
-
+	if useOkta {
 		c = &C{
 			Version:     configVersion,
 			EndpointURL: endpointURL,
 			Auth: Auth{
 				ClientID:     "0oak1yta82395U5wP4x7",
-				ClientSecret: clientSecret,
+				ClientSecret: "nxU6XRatwKdweHn-CgS5YiYKNfahfS8l1N3kjhqNeWfPEAEb7ub2TfvezU5OYifH",
 				RedirectURI:  "http://localhost:8084/callback",
 				IssuerURL:    "https://login.cloudnatix.com/oauth2/aus24366mbRFxF3De4x7",
 			},
