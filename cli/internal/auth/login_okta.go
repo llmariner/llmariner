@@ -36,6 +36,7 @@ func oktaLogin(ctx context.Context, c *configs.C, noOpen bool) error {
 		return fmt.Errorf("create token exchanger: %s", err)
 	}
 	cli.tokenExechanger = tokenExchanger
+	cli.listener = listerner
 
 	cli.wg.Add(1)
 	go cli.start(listerner)
