@@ -27,7 +27,7 @@ dependencies:
   tags:
   - control-plane
 - name: dex-server
-  version: 1.11.1
+  version: 1.12.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: dex-server.enable
   tags:
@@ -81,7 +81,7 @@ dependencies:
   tags:
   - control-plane
 - name: rbac-server
-  version: 1.11.1
+  version: 1.12.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: rbac-server.enable
   tags:
@@ -99,7 +99,7 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.12.0
+  version: 1.13.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: user-manager-server.enable
   tags:
