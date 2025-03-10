@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -106,7 +107,10 @@ func (c *oktaClient) start(l net.Listener) {
 	http.HandleFunc("/login", c.handleLogin)
 	http.HandleFunc("/callback", c.handleCallback)
 	if err := http.Serve(l, nil); err != nil {
-		fmt.Printf("HTTP server for login finished with an error: %s", err)
+		// Ignore an error if that is caused by closing the listener.
+		if !strings.Contains(err.Error(), "use of closed network connection") {
+			fmt.Printf("HTTP server for login finished with an error: %s", err)
+		}
 	}
 }
 
