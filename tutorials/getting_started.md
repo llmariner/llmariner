@@ -138,7 +138,9 @@ completion = client.chat.completions.create(
      "type": "function",
      "function": {
        "name": "rag",
-       "parameters": "{\"vector_store_name\":\"Test vector store\"}"
+       "parameters": {
+         "vector_store_name": "Test vector store"
+       }
      }
    }
  ],
