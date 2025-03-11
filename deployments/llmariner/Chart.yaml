@@ -15,13 +15,13 @@ annotations:
   "artifacthub.io/license": Apache-2.0
 dependencies:
 - name: api-usage-server
-  version: 1.4.0
+  version: 1.5.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: api-usage-server.enable
   tags:
   - control-plane
 - name: cluster-manager-server
-  version: 1.5.3
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-server.enable
   tags:
@@ -33,37 +33,37 @@ dependencies:
   tags:
   - control-plane
 - name: file-manager-server
-  version: 1.5.1
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: file-manager-server.enable
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.16.0
+  version: 1.17.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-engine.enable
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.16.0
+  version: 1.17.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 1.7.0
+  version: 1.11.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-dispatcher.enable
   tags:
   - worker
 - name: job-manager-server
-  version: 1.7.0
+  version: 1.11.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-syncer
-  version: 1.7.0
+  version: 1.11.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-syncer.enable
   tags:
@@ -75,7 +75,7 @@ dependencies:
   tags:
   - worker
 - name: model-manager-server
-  version: 1.6.1
+  version: 1.7.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-server.enable
   tags:
@@ -99,13 +99,13 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.13.0
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: user-manager-server.enable
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 1.3.0
+  version: 1.4.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: vector-store-manager-server.enable
   tags:
