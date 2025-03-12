@@ -1,0 +1,55 @@
+tags:
+  control-plane: false
+
+global:
+  worker:
+    controlPlaneAddr: api.llm.staging.cloudnatix.com:443
+    tls:
+      enable: true
+    registrationKeySecret:
+      name: cluster-registration-key
+      key: regKey
+
+  objectStore:
+    s3:
+      bucket: cloudnatix-installation-demo
+      endpointUrl: ""
+      region: us-west-2
+
+  awsSecret:
+    name: aws
+    accessKeyIdKey: accessKeyId
+    secretAccessKeyKey: secretAccessKey
+
+inference-manager-engine:
+  inferenceManagerServerWorkerServiceAddr: inference.llm.staging.cloudnatix.com:443
+  replicaCount: 2
+  runtime:
+    runtimeImages:
+      ollama: mirror.gcr.io/ollama/ollama:0.3.6
+      # To use the upstream vLLM. Update once a new release that
+      # fixes https://github.com/vllm-project/vllm/issues/11970 is made.
+      vllm: public.ecr.aws/cloudnatix/llm-operator/vllm-openai:20250115
+      triton: nvcr.io/nvidia/tritonserver:24.09-trtllm-python-py3
+  model:
+    default:
+      runtimeName: vllm
+    overrides:
+      meta-llama/Llama-3.2-1B-Instruct:
+        preloaded: false
+        runtimeName: vllm
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+
+model-manager-loader:
+  baseModels:
+  - meta-llama/Llama-3.2-1B-Instruct
+
+job-manager-dispatcher:
+  notebook:
+    llmarinerBaseUrl: https://api.llm.staging.cloudnatix.com/v1
+  clusterStatusUpdateInterval: 10s
+
+session-manager-agent:
+  sessionManagerServerWorkerServiceAddr: session.llm.staging.cloudnatix.com:443
