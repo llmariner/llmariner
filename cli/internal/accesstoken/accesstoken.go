@@ -23,26 +23,11 @@ type T struct {
 
 // saveToken saves the token to a file.
 func saveToken(token *oauth2.Token) error {
-	tokenType, ok := token.Extra("token_type").(string)
-	if !ok {
-		return fmt.Errorf("no token_type in token response")
-	}
-
-	accessToken, ok := token.Extra("access_token").(string)
-	if !ok {
-		return fmt.Errorf("no access_token in token response")
-	}
-
-	refreshToken, ok := token.Extra("refresh_token").(string)
-	if !ok {
-		return fmt.Errorf("no refresh_token in token response")
-	}
-
 	t := &T{
-		TokenType:    tokenType,
+		TokenType:    token.TokenType,
 		TokenExpiry:  token.Expiry,
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
 	}
 
 	path := TokenFilePath()
