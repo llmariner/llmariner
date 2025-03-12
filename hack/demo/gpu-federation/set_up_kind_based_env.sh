@@ -38,16 +38,17 @@ cat << EOF > ~/.config/llmariner/config.yaml
 version: v1
 endpointUrl: https://api.llm.staging.cloudnatix.com/v1
 auth:
-  clientId: llmariner
-  clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
-  redirectUri: http://127.0.0.1:5555/callback
-  issuerUrl: https://api.llm.staging.cloudnatix.com/v1/dex
+  clientId: 0oa17m60zdJLsJUG14x7
+  clientSecret: ""
+  redirectUri: http://localhost:8084/callback
+  issuerUrl: https://login.cloudnatix.com/oauth2/aus202ft6fhz9alff4x7
+enableOkta: true
 context:
   organizationId: org-z_PNhaYEjl1S6bWGh2RppPcy
   projectId: proj_UTxizYdNMTyDEh6tBNJ1SnJk
 EOF
 
-# Login with demp+gpu@cloudnatix.com
+# Login with demo+gpu@cloudnatix.com
 llma auth login
 
 # Set up the worker clusters.
