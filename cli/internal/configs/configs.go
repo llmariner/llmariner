@@ -127,27 +127,44 @@ func LoadOrCreate() (*C, error) {
 // CreateNewConfig creates a new config file.
 func CreateNewConfig() error {
 	p := ui.NewPrompter()
-	endpointURL, err := askWithDefaultValue(
-		p,
-		"Input endpoint URL of LLM service",
-		defaultEndpointURL,
-		func(v string) error {
-			if !isHTTPURL(v) {
-				return fmt.Errorf("must start with 'http://' or 'https://'")
-			}
-			if !strings.HasSuffix(v, "/v1") {
-				return fmt.Errorf("must end with '/v1'")
-			}
-			return nil
-		},
-	)
-	if err != nil {
-		return err
-	}
-	// Remove the trailing slash.
-	endpointURL = strings.TrimSuffix(endpointURL, "/")
 
-	issuerURL := fmt.Sprintf("%s/dex", endpointURL)
+	const otherCandidate = "Other"
+	defaultEndPointURLs := []string{
+		"http://localhost:8080/v1",
+		"https://api.llm.cloudnatix.com/v1",
+		otherCandidate,
+	}
+	var endpointURL string
+	if err := p.Ask(&survey.Select{
+		Message: "Input the endpoint URL of LLM service",
+		Options: defaultEndPointURLs,
+		Default: defaultEndPointURLs[0],
+	}, &endpointURL); err != nil {
+		return fmt.Errorf("failed to select org: %s", err)
+	}
+
+	if endpointURL == otherCandidate {
+		var err error
+		endpointURL, err = askWithDefaultValue(
+			p,
+			"Input the endpoint URL of LLM service",
+			"http://localhost:8080/v1",
+			func(v string) error {
+				if !isHTTPURL(v) {
+					return fmt.Errorf("must start with 'http://' or 'https://'")
+				}
+				if !strings.HasSuffix(v, "/v1") {
+					return fmt.Errorf("must end with '/v1'")
+				}
+				return nil
+			},
+		)
+		if err != nil {
+			return err
+		}
+		// Remove the trailing slash.
+		endpointURL = strings.TrimSuffix(endpointURL, "/")
+	}
 
 	useOkta := endpointURL == "https://api.llm.cloudnatix.com/v1" || endpointURL == "https://api.llm.staging.cloudnatix.com/v1"
 	var c *C
@@ -171,7 +188,7 @@ func CreateNewConfig() error {
 				ClientID:     authClientID,
 				ClientSecret: authClientSecret,
 				RedirectURI:  authRedirectURI,
-				IssuerURL:    issuerURL,
+				IssuerURL:    fmt.Sprintf("%s/dex", endpointURL),
 			},
 			EnableOkta: false,
 		}
