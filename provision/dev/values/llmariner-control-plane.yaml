@@ -38,4 +38,5 @@ job-manager-server:
       konghq.com/protocols: grpc,grpcs
 
 cluster-manager-server:
-  defaultCluster: {}
+  defaultCluster:
+    name: ""
