@@ -143,7 +143,12 @@ func list(ctx context.Context) error {
 			}
 			row = append(row, p)
 		}
-		row = append(row, humanize.Bytes(uint64(f.Bytes)), time.Unix(f.CreatedAt, 0).Format(time.RFC3339))
+
+		sizeStr := "Unknown"
+		if f.Bytes > 0 {
+			humanize.Bytes(uint64(f.Bytes))
+		}
+		row = append(row, sizeStr, time.Unix(f.CreatedAt, 0).Format(time.RFC3339))
 		tbl.AddRow(row...)
 	}
 
