@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -116,17 +117,34 @@ func list(ctx context.Context) error {
 		after = resp.Data[len(resp.Data)-1].Id
 	}
 
-	tbl := table.New("ID", "Filename", "Purpose", "Size", "Created At")
+	// Show the object store path if any of the files are created with CreateFileFromObjectPath.
+	showObjectPath := false
+	for _, f := range files {
+		if strings.HasPrefix(f.ObjectStorePath, "s3://") {
+			showObjectPath = true
+			break
+		}
+	}
+
+	headers := []interface{}{"ID", "Filename", "Purpose"}
+	if showObjectPath {
+		headers = append(headers, "Object Store Path")
+	}
+	headers = append(headers, "Size", "Created At")
+	tbl := table.New(headers...)
 	ui.FormatTable(tbl)
 
 	for _, f := range files {
-		tbl.AddRow(
-			f.Id,
-			f.Filename,
-			f.Purpose,
-			humanize.IBytes(uint64(f.Bytes)),
-			time.Unix(f.CreatedAt, 0).Format(time.RFC3339),
-		)
+		row := []interface{}{f.Id, f.Filename, f.Purpose}
+		if showObjectPath {
+			p := f.ObjectStorePath
+			if !strings.HasPrefix(p, "s3://") {
+				p = ""
+			}
+			row = append(row, p)
+		}
+		row = append(row, humanize.Bytes(uint64(f.Bytes)), time.Unix(f.CreatedAt, 0).Format(time.RFC3339))
+		tbl.AddRow(row...)
 	}
 
 	tbl.Print()

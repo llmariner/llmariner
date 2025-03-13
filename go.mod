@@ -16,7 +16,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/llmariner/api-usage v1.2.0
 	github.com/llmariner/cluster-manager v1.5.3
-	github.com/llmariner/file-manager v1.4.0
+	github.com/llmariner/file-manager v1.7.0
 	github.com/llmariner/inference-manager v1.15.2
 	github.com/llmariner/job-manager v1.7.0
 	github.com/llmariner/model-manager v1.1.0

@@ -59,7 +59,7 @@ python ./validate_training_data_format.py
 
 aws s3 cp training.jsonl s3://cloudnatix-installation-demo/training-data/training.jsonl
 
-llma storage files create-link --object-path training-data/training.jsonl --purpose fine-tune
+llma storage files create-link --object-path s3://cloudnatix-installation-demo/training-data/training.jsonl --purpose fine-tune
 ```
 
 ## Submit a fine-tuning job
