@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -44,14 +43,10 @@ func createLinkCmd() *cobra.Command {
 		Long:  "Create a file from an object path. A new file object will be created without upload.",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if strings.HasPrefix(objectPath, "s3://") {
-				return fmt.Errorf("--object-path must not include a bucket name. For example, if a target object is located at s3://<bucket>/<path>, pass --object-path=<path>")
-			}
-
 			return createLink(cmd.Context(), objectPath, purpose)
 		},
 	}
-	cmd.Flags().StringVar(&objectPath, "object-path", "", "Path to the object in the object storage. This does not include a bucket name.")
+	cmd.Flags().StringVar(&objectPath, "object-path", "", "Path to the object in the object storage")
 	cmd.Flags().StringVar(&purpose, "purpose", "", "Purpose. Either 'fine-tune' or 'assistants'.")
 	_ = cmd.MarkFlagRequired("object-path")
 	_ = cmd.MarkFlagRequired("purpose")
