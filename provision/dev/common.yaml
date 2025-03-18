@@ -14,3 +14,4 @@ llmariner:
   awsSecretName: aws
   chartPath: ../../deployments/llmariner/
   deployLatest: false
+  useFakeFineTuningJob: false

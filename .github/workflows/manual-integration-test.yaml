@@ -7,6 +7,11 @@ on:
         required: true
         default: false
         type: boolean
+      testFineTuning:
+        description: 'Test fine-tuning?'
+        required: true
+        default: false
+        type: boolean
 
 jobs:
   run-integration-test:
@@ -37,7 +42,7 @@ jobs:
     - name: deploy-local-helm-chart
       uses: helmfile/helmfile-action@v1.9.3
       with:
-        helmfile-args: apply --skip-diff-on-install --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }}
+        helmfile-args: apply --skip-diff-on-install --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }} --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }}
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
@@ -59,3 +64,11 @@ jobs:
         LLMARINER_API_KEY: default-key-secret
       run: |
         ./provision/dev/validate_deployment.sh
+    - name: test-fine-tuning
+      if: github.event.inputs.testFineTuning == 'true'
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        cd ./provision/dev/tests/fine-tuning/
+        pip install -r requirements.txt
+        ./run.py
