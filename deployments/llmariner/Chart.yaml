@@ -4,8 +4,8 @@ description: Scalable, extensible platform for managing generative AI workloads 
 home: https://llmariner.ai/
 icon: https://raw.githubusercontent.com/llmariner/llmariner.github.io/refs/heads/main/assets/icons/logo.svg
 type: application
-version: 1.28.1
-appVersion: 1.28.1
+version: 1.29.0
+appVersion: 1.29.0
 sources:
   - https://github.com/llmariner/llmariner
 keywords:
