@@ -1,0 +1,46 @@
+global:
+  awsSecret:
+    accessKeyIdKey: accessKeyId
+    name: aws
+    secretAccessKeyKey: secretAccessKey
+  objectStore:
+    s3:
+      bucket: cloudnatix-installation-demo
+      endpointUrl: ""
+      region: us-west-2
+  worker:
+    controlPlaneAddr: api.llm.staging.cloudnatix.com:443
+    registrationKeySecret:
+      key: regKey
+      name: cluster-registration-key
+    tls:
+      enable: true
+inference-manager-engine:
+  inferenceManagerServerWorkerServiceAddr: inference.llm.staging.cloudnatix.com:443
+  model:
+    default:
+      runtimeName: vllm
+    overrides:
+      meta-llama/Llama-3.2-1B-Instruct:
+        preloaded: true
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        runtimeName: vllm
+  replicaCount: 2
+  runtime:
+    runtimeImages:
+      ollama: mirror.gcr.io/ollama/ollama:0.3.6
+      triton: nvcr.io/nvidia/tritonserver:24.09-trtllm-python-py3
+      vllm: public.ecr.aws/cloudnatix/llm-operator/vllm-openai:20250115
+job-manager-dispatcher:
+  clusterStatusUpdateInterval: 10s
+  notebook:
+    llmarinerBaseUrl: https://api.llm.staging.cloudnatix.com/v1
+model-manager-loader:
+  baseModels:
+  - meta-llama/Llama-3.2-1B-Instruct
+session-manager-agent:
+  sessionManagerServerWorkerServiceAddr: session.llm.staging.cloudnatix.com:443
+tags:
+  control-plane: false

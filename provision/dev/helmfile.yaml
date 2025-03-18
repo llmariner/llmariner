@@ -236,6 +236,13 @@ releases:
   {{ if .Values.llmariner.deployLatest }}
   - "./values/latest.yaml"
   {{ end }}
+  {{ if .Values.llmariner.useFakeFineTuningJob }}
+  - job-manager-dispatcher:
+      job:
+        image: public.ecr.aws/cloudnatix/llm-operator/fake-job
+        version: latest
+        numGpus: 0
+  {{ end }}
   - prepare:
       database:
         createSecret: {{ (and (ne .Environment.Name "worker") (ne .Environment.Name "tenant-control")) | toYaml }}
