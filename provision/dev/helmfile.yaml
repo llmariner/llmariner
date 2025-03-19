@@ -239,7 +239,7 @@ releases:
   {{ if .Values.llmariner.useFakeFineTuningJob }}
   - job-manager-dispatcher:
       job:
-        image: public.ecr.aws/cloudnatix/llm-operator/fake-job
+        image: public.ecr.aws/cloudnatix/llmariner/fake-job
         version: latest
         numGpus: 0
   {{ end }}
