@@ -113,7 +113,7 @@ func addMemberCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVar(&email, "email", "", "Email of the user")
-	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the user (owner or reader)")
+	cmd.Flags().StringVar(&roleStr, "role", "", "Role of the user (owner or member)")
 	_ = cmd.MarkFlagRequired("email")
 	_ = cmd.MarkFlagRequired("role")
 	return cmd
