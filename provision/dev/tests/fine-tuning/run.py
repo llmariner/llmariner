@@ -18,7 +18,7 @@ dataset = load_dataset("csv", data_files={
 })["train"]
 
 filename = "training.jsonl"
-with open(filename, 'w', encoding='utf-8') as f:
+with open(filename, "w", encoding="utf-8") as f:
     for row in dataset:
         json_obj = {
             "messages": [
@@ -38,7 +38,7 @@ print("Uploaded file. ID=%s" % file.id)
 
 job = client.fine_tuning.jobs.create(
     model="google-gemma-2b-it-q4_0",
-    suffix='fine-tuning',
+    suffix="fine-tuning",
     training_file=file.id,
 )
 print("Created job. ID=%s" % job.id)
