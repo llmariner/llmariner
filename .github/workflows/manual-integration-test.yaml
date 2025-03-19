@@ -71,4 +71,7 @@ jobs:
       run: |
         cd ./provision/dev/tests/fine-tuning/
         pip install -r requirements.txt
+        # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
+        # was unstable due to lack of VM resources.
+        kubectl delete statefulsets -n llmariner ollama-google-gemma-2b-it-q4-0 ollama-sentence-transformers-all-minilm-l6-v2-f16
         python ./run.py
