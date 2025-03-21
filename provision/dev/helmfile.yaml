@@ -236,6 +236,11 @@ releases:
   {{ if .Values.llmariner.deployLatest }}
   - "./values/latest.yaml"
   {{ end }}
+  {{ if .Values.llmariner.enableOllamaDynamicModelLoading }}
+  - inference-manager-engine:
+      ollama:
+        dynamicModelLoading: true
+  {{ end }}
   {{ if .Values.llmariner.useFakeFineTuningJob }}
   - job-manager-dispatcher:
       job:
