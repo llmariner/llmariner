@@ -29,8 +29,30 @@ func Cmd() *cobra.Command {
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
 	}
+	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())
+	return cmd
+}
+
+func createCmd() *cobra.Command {
+	var (
+		repoStr string
+	)
+	cmd := &cobra.Command{
+		Use:  "create <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			repo, err := toSourceRepositoryEnum(repoStr)
+			if err != nil {
+				return err
+			}
+			return create(cmd.Context(), args[0], repo)
+		},
+	}
+
+	cmd.Flags().StringVarP(&repoStr, "source-repository", "s", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
+	_ = cmd.MarkFlagRequired("source-repository")
 	return cmd
 }
 
@@ -54,13 +76,39 @@ func deleteCmd() *cobra.Command {
 	}
 }
 
+func create(
+	ctx context.Context,
+	id string,
+	repo mv1.SourceRepository,
+) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := &mv1.CreateModelRequest{
+		Id:               id,
+		SourceRepository: repo,
+	}
+	var resp mv1.Model
+	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Created the model (ID: %q).\n", id)
+	fmt.Printf("The model becomes available once it is loaded.\n")
+	return nil
+}
+
 func list(ctx context.Context) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
 	}
 
-	var req mv1.ListModelsRequest
+	req := &mv1.ListModelsRequest{
+		IncludeLoadingModels: true,
+	}
 	var resp mv1.ListModelsResponse
 	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
 		return err
@@ -73,13 +121,19 @@ func list(ctx context.Context) error {
 		return ms[i].Id < ms[j].Id
 	})
 
-	tbl := table.New("ID", "Owned By", "Created At")
+	tbl := table.New("ID", "Owned By", "Loading Status", "Source Repository", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, m := range ms {
+		r := toloadingStatusString(m.LoadingStatus)
+		if m.LoadingStatus == mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_FAILED {
+			r = fmt.Sprintf("%s (%s)", r, m.LoadingFailureReason)
+		}
 		tbl.AddRow(
 			m.Id,
 			m.OwnedBy,
+			r,
+			toSourceRepositoryString(m.SourceRepository),
 			time.Unix(m.Created, 0).Format(time.RFC3339),
 		)
 	}
@@ -125,4 +179,50 @@ func validateIDArg(cmd *cobra.Command, args []string) error {
 		return errors.New("<ID> is required argument")
 	}
 	return nil
+}
+
+func toSourceRepositoryEnum(repoStr string) (mv1.SourceRepository, error) {
+	switch repoStr {
+	case "object-store":
+		return mv1.SourceRepository_SOURCE_REPOSITORY_OBJECT_STORE, nil
+	case "hugging-face":
+		return mv1.SourceRepository_SOURCE_REPOSITORY_HUGGING_FACE, nil
+	case "ollama":
+		return mv1.SourceRepository_SOURCE_REPOSITORY_OLLAMA, nil
+	default:
+		return mv1.SourceRepository_SOURCE_REPOSITORY_UNSPECIFIED, fmt.Errorf("invalid source repository %q. Must be 'object-store', 'hugging-face' or 'ollama'", repoStr)
+	}
+}
+
+func toSourceRepositoryString(repo mv1.SourceRepository) string {
+	switch repo {
+	case mv1.SourceRepository_SOURCE_REPOSITORY_OBJECT_STORE:
+		return "object-store"
+	case mv1.SourceRepository_SOURCE_REPOSITORY_HUGGING_FACE:
+		return "hugging-face"
+	case mv1.SourceRepository_SOURCE_REPOSITORY_OLLAMA:
+		return "ollama"
+	case mv1.SourceRepository_SOURCE_REPOSITORY_FINE_TUNING:
+		return "fine-tuning"
+	default:
+		return "Unknown"
+	}
+}
+
+func toloadingStatusString(status mv1.ModelLoadingStatus) string {
+	switch status {
+	case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_UNSPECIFIED:
+		// Considered as "succeeded" for backward compatibility.
+		return "succeeded"
+	case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_REQUESTED:
+		return "requested"
+	case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_LOADING:
+		return "loading"
+	case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_SUCCEEDED:
+		return "succeeded"
+	case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_FAILED:
+		return "failed"
+	default:
+		return "Unknown"
+	}
 }
