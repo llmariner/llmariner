@@ -14,4 +14,5 @@ llmariner:
   awsSecretName: aws
   chartPath: ../../deployments/llmariner/
   deployLatest: false
+  enableOllamaDynamicModelLoading: false
   useFakeFineTuningJob: false

@@ -7,6 +7,11 @@ on:
         required: true
         default: false
         type: boolean
+      enableOllamaDynamicModelLoading:
+        description: 'Enable Ollama dynamic model loading?'
+        required: true
+        default: false
+        type: boolean
       testFineTuning:
         description: 'Test fine-tuning?'
         required: true
@@ -47,7 +52,7 @@ jobs:
     - name: deploy-local-helm-chart
       uses: helmfile/helmfile-action@v1.9.3
       with:
-        helmfile-args: apply --skip-diff-on-install --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }} --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }}
+        helmfile-args: apply --skip-diff-on-install --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }} --state-values-set llmariner.enableOllamaDynamicModelLoading=${{ github.event.inputs.enableOllamaDynamicModelLoading }} --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }}
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
@@ -69,6 +74,17 @@ jobs:
         LLMARINER_API_KEY: default-key-secret
       run: |
         ./provision/dev/validate_deployment.sh
+    - name: test-ollama-dynamic-mode-loading
+      if: github.event.inputs.enableOllamaDynamicModelLoading == 'true'
+      run: |
+        # Check if the statefulset for the dynamic model loading exists.
+        kubectl get statefulsets -n llmariner ollama-dynamic
+    - name: delete-model-runtime-statefulsets
+      if: github.event.inputs.enableOllamaDynamicModelLoading == 'false'
+      run: |
+        # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
+        # was unstable due to lack of VM resources.
+        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
     - name: test-fine-tuning
       if: github.event.inputs.testFineTuning == 'true'
       env:
@@ -76,17 +92,17 @@ jobs:
       run: |
         cd ./provision/dev/tests/fine-tuning/
         pip install -r requirements.txt
+        python ./run.py
+        cd -
+    - name: delete-model-runtime-statefulsets
+      if: github.event.inputs.enableOllamaDynamicModelLoading == 'false'
+      run: |
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
         kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
-        python ./run.py
-        cd -
     - name: test-dynamic-model-loading
       if: github.event.inputs.testDynamicModelLoading == 'true'
       env:
         LLMARINER_API_KEY: default-key-secret
       run: |
-        # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
-        # was unstable due to lack of VM resources.
-        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
         ./provision/dev/tests/dynamic-model-creation/run.sh
