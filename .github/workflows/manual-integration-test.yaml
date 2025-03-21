@@ -10,7 +10,12 @@ on:
       testFineTuning:
         description: 'Test fine-tuning?'
         required: true
-        default: false
+        default: true
+        type: boolean
+      testDynamicModelLoading:
+        description: 'Test dynamic model loading?'
+        required: true
+        default: true
         type: boolean
 
 jobs:
@@ -73,5 +78,15 @@ jobs:
         pip install -r requirements.txt
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
-        kubectl delete statefulsets -n llmariner ollama-google-gemma-2b-it-q4-0 ollama-sentence-transformers-all-minilm-l6-v2-f16
+        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
         python ./run.py
+        cd -
+    - name: test-dynamic-model-loading
+      if: github.event.inputs.testDynamicModelLoading == 'true'
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
+        # was unstable due to lack of VM resources.
+        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
+        ./provision/dev/tests/dynamic-model-loading/run.sh
