@@ -89,4 +89,4 @@ jobs:
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
         kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
-        ./provision/dev/tests/dynamic-model-loading/run.sh
+        ./provision/dev/tests/dynamic-model-creation/run.sh
