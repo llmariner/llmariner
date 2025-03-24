@@ -241,6 +241,12 @@ releases:
       ollama:
         dynamicModelLoading: true
   {{ end }}
+  {{ if .Values.llmariner.enableHuggingFaceDownload }}
+  - model-manager-loader:
+      huggingFaceSecret:
+        name: huggingface-key
+        apiKeyKey: apiKey
+  {{ end }}
   {{ if .Values.llmariner.useFakeFineTuningJob }}
   - job-manager-dispatcher:
       job:
@@ -273,6 +279,12 @@ releases:
         createSecret: true
         secret:
           key: {{ requiredEnv "TENANT_API_KEY" }}
+      {{ end }}
+      {{ if .Values.llmariner.enableHuggingFaceDownload }}
+      huggingFaceApiKey:
+        createSecret: true
+        secret:
+          apiKey: {{ requiredEnv "HUGGING_FACE_HUB_TOKEN" }}
       {{ end }}
   set:
     - name: global.databaseSecret.name
