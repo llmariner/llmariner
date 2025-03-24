@@ -213,6 +213,15 @@ prepare:
       # +docs:property
       # key: ""
 
+  huggingFaceApiKey:
+    # If enabled, a Secret resource for the Hugging Face API Key is created.
+    # This secret is refereed in `.model-manager-loader.huggingFaceSecret`.
+    createSecret: false
+    secret:
+      # The Hugging Face API key.
+      # +docs:property
+      # key: ""
+
 # +docs:section=Tags
 
 tags:

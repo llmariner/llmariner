@@ -15,4 +15,5 @@ llmariner:
   chartPath: ../../deployments/llmariner/
   deployLatest: false
   enableOllamaDynamicModelLoading: false
+  enableHuggingFaceDownload: false
   useFakeFineTuningJob: false
