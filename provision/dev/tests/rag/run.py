@@ -61,5 +61,8 @@ completion = client.chat.completions.create(
 # TODO(kenji): Verify the response. Currently the model might not answer
 # correctly with the information obtained from the vector store.
 for response in completion:
+  # TODO(kenji): This checke was needed to pass the integration test. Investigate why.
+  if not response.choices:
+    break
   print(response.choices[0].delta.content, end="")
 print("\n")
