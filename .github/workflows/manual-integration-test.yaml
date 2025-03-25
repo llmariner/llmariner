@@ -17,6 +17,11 @@ on:
         required: true
         default: true
         type: boolean
+      testRag:
+        description: 'Test RAG?'
+        required: true
+        default: true
+        type: boolean
       testFineTuning:
         description: 'Test fine-tuning?'
         required: true
@@ -91,6 +96,15 @@ jobs:
       run: |
         # Check if the statefulset for the dynamic model loading exists.
         kubectl get statefulsets -n llmariner ollama-dynamic
+    - name: test-rag
+      if: github.event.inputs.testRag == 'true'
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        cd ./provision/dev/tests/rag/
+        pip install -r requirements.txt
+        python ./run.py
+        cd -
     - name: delete-model-runtime-statefulsets
       if: github.event.inputs.enableOllamaDynamicModelLoading == 'false'
       run: |
