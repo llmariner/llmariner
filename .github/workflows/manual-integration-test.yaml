@@ -12,6 +12,11 @@ on:
         required: true
         default: false
         type: boolean
+      enableHuggingFaceDownload:
+        description: 'Enable Hugging Face model loading?'
+        required: true
+        default: true
+        type: boolean
       testFineTuning:
         description: 'Test fine-tuning?'
         required: true
@@ -51,8 +56,15 @@ jobs:
         ./provision/dev/create_cluster.sh single
     - name: deploy-local-helm-chart
       uses: helmfile/helmfile-action@v1.9.3
+      env:
+        HUGGING_FACE_HUB_TOKEN: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       with:
-        helmfile-args: apply --skip-diff-on-install --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }} --state-values-set llmariner.enableOllamaDynamicModelLoading=${{ github.event.inputs.enableOllamaDynamicModelLoading }} --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }}
+        helmfile-args: apply |
+          --skip-diff-on-install \
+          --state-values-set llmariner.deployLatest=${{ github.event.inputs.deployLatest }} \
+          --state-values-set llmariner.enableOllamaDynamicModelLoading=${{ github.event.inputs.enableOllamaDynamicModelLoading }} \
+          --state-values-set llmariner.enableHuggingFaceDownload=${{ github.event.inputs.enableHuggingFaceDownload }} \
+          --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }} \
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
@@ -100,9 +112,21 @@ jobs:
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
         kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
-    - name: test-dynamic-model-loading
+    - name: test-dynamic-model-loading-ollama
       if: github.event.inputs.testDynamicModelLoading == 'true'
       env:
         LLMARINER_API_KEY: default-key-secret
       run: |
-        ./provision/dev/tests/dynamic-model-creation/run.sh
+        ./provision/dev/tests/dynamic-model-creation/test_ollama_download.sh
+    - name: delete-model-runtime-statefulsets
+      if: github.event.inputs.enableOllamaDynamicModelLoading == 'false'
+      run: |
+        # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
+        # was unstable due to lack of VM resources.
+        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
+    - name: test-dynamic-model-loading-hugging-face
+      if: ${{ (github.event.inputs.testDynamicModelLoading == 'true') && (github.event.inputs.enableHuggingFaceDownload == 'true') }}
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        ./provision/dev/tests/dynamic-model-creation/test_hugging_face_download.sh
