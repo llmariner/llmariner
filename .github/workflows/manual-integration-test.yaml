@@ -96,7 +96,7 @@ jobs:
       run: |
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
-        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
+        kubectl get statefulsets -n llmariner -o name | xargs --no-run-if-empty kubectl delete -n llmariner
     - name: test-fine-tuning
       if: github.event.inputs.testFineTuning == 'true'
       env:
@@ -111,7 +111,7 @@ jobs:
       run: |
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
-        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
+        kubectl get statefulsets -n llmariner -o name | xargs --no-run-if-empty kubectl delete -n llmariner
     - name: test-dynamic-model-loading-ollama
       if: github.event.inputs.testDynamicModelLoading == 'true'
       env:
@@ -123,7 +123,7 @@ jobs:
       run: |
         # Delete existing statefulsts to create space for running a fine-tuning job. The github workflow
         # was unstable due to lack of VM resources.
-        kubectl get statefulsets -n llmariner -o name  | xargs kubectl delete -n llmariner
+        kubectl get statefulsets -n llmariner -o name | xargs --no-run-if-empty kubectl delete -n llmariner
     - name: test-dynamic-model-loading-hugging-face
       if: ${{ (github.event.inputs.testDynamicModelLoading == 'true') && (github.event.inputs.enableHuggingFaceDownload == 'true') }}
       env:
