@@ -105,12 +105,12 @@ file = client.files.create(
 )
 print("Uploaded file. ID=%s" % file.id)
 
-vs = client.beta.vector_stores.create(
+vs = client.vector_stores.create(
   name='Test vector store',
 )
 print("Created vector store. ID=%s" % vs.id)
 
-vfs = client.beta.vector_stores.files.create(
+vfs = client.vector_stores.files.create(
   vector_store_id=vs.id,
   file_id=file.id,
 )
