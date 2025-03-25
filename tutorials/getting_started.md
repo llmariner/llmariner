@@ -151,6 +151,9 @@ for response in completion:
 print("\n")
 ```
 
+Please note that this tutorial uses a small model to make it run with CPU, and there is no guarantee
+that the model answers to the question correctly. Please switch to other model and use GPU for real use cases.
+
 
 ## Fine-tune a Model
 
