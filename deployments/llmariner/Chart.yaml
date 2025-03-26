@@ -57,25 +57,25 @@ dependencies:
   tags:
   - worker
 - name: job-manager-server
-  version: 1.13.1
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-syncer
-  version: 1.13.1
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-syncer.enable
   tags:
   - tenant-control-plane
 - name: model-manager-loader
-  version: 1.10.2
+  version: 1.10.3
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-loader.enable
   tags:
   - worker
 - name: model-manager-server
-  version: 1.10.2
+  version: 1.10.3
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-server.enable
   tags:
