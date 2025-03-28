@@ -51,7 +51,7 @@ dependencies:
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 1.13.1
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-dispatcher.enable
   tags:
