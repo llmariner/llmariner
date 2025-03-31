@@ -101,7 +101,11 @@ jobs:
     - name: run-tests-jobsets
       run: |
         kubectl apply --context kind-tenant-control-plane --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
+        kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=ready pod -n jobset-system -l control-plane=controller-manager
+
         kubectl apply --context kind-llmariner-worker-plane1 --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
+        kubectl wait --context kind-llmariner-worker-plane1 --timeout=300s --for=condition=ready pod -n jobset-system -l control-plane=controller-manager
+
         cat <<EOF | kubectl apply --context kind-tenant-control-plane -f -
         apiVersion: jobset.x-k8s.io/v1alpha2
         kind: JobSet
