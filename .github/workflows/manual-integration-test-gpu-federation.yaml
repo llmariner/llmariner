@@ -73,7 +73,7 @@ jobs:
     - name: wait-for-tenant-control-plane-readiness
       run: |
         kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/instance=llmariner
-    - name: run-tests
+    - name: run-tests-jobs
       run: |
         cat <<EOF | kubectl apply --context kind-tenant-control-plane -f -
         apiVersion: batch/v1
@@ -98,3 +98,35 @@ jobs:
         kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=complete job gpu-job
         # Verify that the job is created in the worker-control-plane1.
         kubectl get --context kind-llmariner-worker-plane1 job gpu-job
+    - name: run-tests-jobsets
+      run: |
+        kubectl apply --context kind-tenant-control-plane --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
+        kubectl apply --context kind-llmariner-worker-plane1 --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
+        cat <<EOF | kubectl apply --context kind-tenant-control-plane -f -
+        apiVersion: jobset.x-k8s.io/v1alpha2
+        kind: JobSet
+        metadata:
+          name: gpu-jobset
+        spec:
+          managedBy: cloudnatix.com/jobset-controller
+          replicatedJobs:
+          - name: workers
+            replicas: 1
+            template:
+              spec:
+                template:
+                  spec:
+                    containers:
+                    - name: gpu-job
+                      image: ubuntu
+                      command:
+                      - echo
+                      - Hello
+                      resources:
+                        limits:
+                          nvidia.com/gpu: 1
+        EOF
+        # Verify that the jobset and job are created in the worker-control-plane1.
+        kubectl wait --context kind-llmariner-worker-plane1 --timeout=300s --for=condition=completed jobset gpu-jobset
+        kubectl get --context kind-llmariner-worker-plane1 jobset gpu-job
+        kubectl get --context kind-llmariner-worker-plane1 job gpu-jobset-workers-0
