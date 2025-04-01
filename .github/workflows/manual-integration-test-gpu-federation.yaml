@@ -23,6 +23,16 @@ jobs:
     - name: set-up-kind-cluster
       run: |
         ./provision/dev/create_cluster.sh gpu-federation
+    - name: install-jobset-controller
+      run: |
+        kubectl apply --context kind-tenant-control-plane --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
+        # Wait for the pod to be created.
+        sleep 3
+        kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=ready pod -n jobset-system -l control-plane=controller-manager
+        kubectl apply --context kind-llmariner-worker-plane1 --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
+        # Wait for the pod to be created.
+        sleep 3
+        kubectl wait --context kind-llmariner-worker-plane1 --timeout=300s --for=condition=ready pod -n jobset-system -l control-plane=controller-manager
     - name: deploy-control-plane
       uses: helmfile/helmfile-action@v1.9.3
       with:
@@ -100,12 +110,6 @@ jobs:
         kubectl get --context kind-llmariner-worker-plane1 job gpu-job
     - name: run-tests-jobsets
       run: |
-        kubectl apply --context kind-tenant-control-plane --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
-        kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=ready pod -n jobset-system -l control-plane=controller-manager
-
-        kubectl apply --context kind-llmariner-worker-plane1 --server-side -f https://github.com/kubernetes-sigs/jobset/releases/download/v0.8.0/manifests.yaml
-        kubectl wait --context kind-llmariner-worker-plane1 --timeout=300s --for=condition=ready pod -n jobset-system -l control-plane=controller-manager
-
         cat <<EOF | kubectl apply --context kind-tenant-control-plane -f -
         apiVersion: jobset.x-k8s.io/v1alpha2
         kind: JobSet
