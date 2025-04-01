@@ -10,3 +10,4 @@ job-manager-syncer:
     apiKeySecret:
       name: syncer-api-key
       key: key
+  logLevel: 10

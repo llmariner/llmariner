@@ -95,6 +95,24 @@ jobs:
                     nvidia.com/gpu: 1
               restartPolicy: Never
         EOF
+        echo "checking jobs"
+        kubectl --context kind-tenant-control-plane get jobs
+        kubectl --context kind-llmariner-worker-plane1 get jobs
+        sleep 3
+        echo "checking jobs"
+        kubectl --context kind-tenant-control-plane get jobs
+        kubectl --context kind-llmariner-worker-plane1 get jobs
+        sleep 3
+        echo "checking jobs"
+        kubectl --context kind-tenant-control-plane get jobs
+        kubectl --context kind-llmariner-worker-plane1 get jobs
+        sleep 3
+        echo "checking jobs"
+        kubectl --context kind-tenant-control-plane get jobs
+        kubectl --context kind-llmariner-worker-plane1 get jobs
+
+        kubectl logs --context kind-tenant-control-plane -n llmariner deploy/job-manager-syncer
+
         kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=complete job gpu-job
         # Verify that the job is created in the worker-control-plane1.
         kubectl get --context kind-llmariner-worker-plane1 job gpu-job
