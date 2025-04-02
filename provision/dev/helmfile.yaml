@@ -240,6 +240,8 @@ releases:
   - inference-manager-engine:
       ollama:
         dynamicModelLoading: true
+  - vector-store-manager-server:
+      llmEngineAddr: ollama-dynamic:11434
   {{ end }}
   {{ if .Values.llmariner.enableHuggingFaceDownload }}
   - model-manager-loader:
