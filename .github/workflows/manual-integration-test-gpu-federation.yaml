@@ -136,5 +136,5 @@ jobs:
         EOF
         # Verify that the jobset and job are created in the worker-control-plane1.
         kubectl wait --context kind-tenant-control-plane --timeout=300s --for=condition=completed jobset gpu-jobset
-        kubectl get --context kind-llmariner-worker-plane1 jobset gpu-job
+        kubectl get --context kind-llmariner-worker-plane1 jobset gpu-jobset
         kubectl get --context kind-llmariner-worker-plane1 job gpu-jobset-workers-0
