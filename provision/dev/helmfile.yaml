@@ -241,7 +241,7 @@ releases:
       ollama:
         dynamicModelLoading: true
   - vector-store-manager-server:
-      llmEngineAddr: ollama-dynamic-0:11434
+      llmEngineAddr: ollama-dynamic:11434
   {{ end }}
   {{ if .Values.llmariner.enableHuggingFaceDownload }}
   - model-manager-loader:
