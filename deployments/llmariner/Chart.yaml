@@ -39,31 +39,31 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.20.2
+  version: 1.20.3
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-engine.enable
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.20.2
+  version: 1.20.3
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 1.15.2
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-dispatcher.enable
   tags:
   - worker
 - name: job-manager-server
-  version: 1.15.2
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-syncer
-  version: 1.15.2
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-syncer.enable
   tags:
