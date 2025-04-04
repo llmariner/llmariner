@@ -37,7 +37,7 @@ file = client.files.create(
 print("Uploaded file. ID=%s" % file.id)
 
 job = client.fine_tuning.jobs.create(
-    model="google-gemma-2b-it-q4_0",
+    model="meta-llama-Llama-3.2-1B-Instruct",
     suffix="fine-tuning",
     training_file=file.id,
 )
@@ -50,6 +50,7 @@ while True:
         break
     if job.status == "failed":
         print("Job failed")
+        os.system("llma fine-tuning jobs logs %s" % job.id)
         sys.exit(1)
     print("Wait for the job to complete (current status: %s)" % job.status)
     time.sleep(5)
