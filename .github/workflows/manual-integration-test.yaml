@@ -117,6 +117,7 @@ jobs:
         LLMARINER_API_KEY: default-key-secret
       run: |
         cd ./provision/dev/tests/fine-tuning/
+        ./load_llama_3.2.sh
         pip install -r requirements.txt
         python ./run.py
         cd -
