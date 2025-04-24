@@ -93,10 +93,8 @@ github.com/llmariner/inference-manager v1.21.0 h1:SecZrR9PeLzcnOW6xX6mBCJaOYgVbf
 github.com/llmariner/inference-manager v1.21.0/go.mod h1:/F/NWSC5JDDsSgiafi4z6+PE5DIjNTcQbaf30r+PQc4=
 github.com/llmariner/job-manager v1.7.0 h1:jL1b4j48bdfsm+1TNeQ2Bxpbw/0TBcECVqQaoN0+tY0=
 github.com/llmariner/job-manager v1.7.0/go.mod h1:91nXgfOkIAL1XdyQcElAslNzmoccrlEvVXR9wsrYNFI=
-github.com/llmariner/model-manager v1.10.0 h1:anAWKcY2fLMexHepyNIasBfCoByFTMruGHMmhb+Cib4=
-github.com/llmariner/model-manager v1.10.0/go.mod h1:syjDVecJ2d04vpdL1yVkDxxhMV1tzYQMnFE8ECzNVf0=
-github.com/llmariner/model-manager v1.13.1-0.20250424194504-823b0bb1143c h1:RxHxdIwsqj/yvzll3F6N2E1Tu2ySC4/kBEm3sC9IRXY=
-github.com/llmariner/model-manager v1.13.1-0.20250424194504-823b0bb1143c/go.mod h1:syjDVecJ2d04vpdL1yVkDxxhMV1tzYQMnFE8ECzNVf0=
+github.com/llmariner/model-manager v1.14.0 h1:Vy3lUUv7P2E9uBJWntTK6w5m+4C6Tg95aTyDlqQ6EQ4=
+github.com/llmariner/model-manager v1.14.0/go.mod h1:IbbSLHi25WnKDedgdsZ3bv8N18bm2bYT+pXK3VW0J10=
 github.com/llmariner/user-manager v1.9.1 h1:V6sbsBJvsL2+8v/hMu2uDVI1xwJxr33TIXsHGkURGeU=
 github.com/llmariner/user-manager v1.9.1/go.mod h1:Ct8P7m10YWYt3q4QyKp5mpflTRTa6sNui1btGPIDekY=
 github.com/llmariner/vector-store-manager v0.52.0 h1:LxwAqYTSDuejuSualtZh8WfeoXGgxhqiFUprzZbZuos=
@@ -189,8 +187,8 @@ golang.org/x/net v0.0.0-20200226121028-0de0cce0169b/go.mod h1:z5CRVTTTmAJ677TzLL
 golang.org/x/net v0.0.0-20201021035429-f5854403a974/go.mod h1:sp8m0HH+o8qH0wwXwYZr8TS3Oi6o0r6Gce1SSxlDquU=
 golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
 golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
-golang.org/x/net v0.37.0 h1:1zLorHbz+LYj7MQlSf1+2tPIIgibq2eL5xkrGk6f+2c=
-golang.org/x/net v0.37.0/go.mod h1:ivrbrMbzFq5J41QOQh0siUuly180yBYtLp+CKbEaFx8=
+golang.org/x/net v0.38.0 h1:vRMAPTMaeGqVhG5QyLJHqNDwecKTomGeqbnfZyKlBI8=
+golang.org/x/net v0.38.0/go.mod h1:ivrbrMbzFq5J41QOQh0siUuly180yBYtLp+CKbEaFx8=
 golang.org/x/oauth2 v0.23.0 h1:PbgcYx2W7i4LvjJWEbf0ngHV6qJYr86PkAV3bXdLEbs=
 golang.org/x/oauth2 v0.23.0/go.mod h1:XYTD2NtWslqkgxebSiOHnXEap4TF09sJSc7H1sXbhtI=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=

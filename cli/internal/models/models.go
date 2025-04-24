@@ -75,7 +75,7 @@ func createBaseCmd() *cobra.Command {
 
 func createFineTunedCmd() *cobra.Command {
 	var (
-		baseModelID      string
+		baseModelID       string
 		suffix            string
 		repoStr           string
 		modelFileLocation string
@@ -88,11 +88,11 @@ func createFineTunedCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return createFineTuned(cmd.Context(), baseMoldelID, suffix, repo, modelFileLocation)
+			return createFineTuned(cmd.Context(), baseModelID, suffix, repo, modelFileLocation)
 		},
 	}
 
-	cmd.Flags().StringVar(&baseMoldelID, "base-model-id", "", "Base model ID.")
+	cmd.Flags().StringVar(&baseModelID, "base-model-id", "", "Base model ID.")
 	cmd.Flags().StringVar(&suffix, "suffix", "", "Suffix for the model ID.")
 	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
 	cmd.Flags().StringVar(&modelFileLocation, "model-file-location", "", "Model file location.")
