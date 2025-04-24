@@ -75,7 +75,7 @@ func createBaseCmd() *cobra.Command {
 
 func createFineTunedCmd() *cobra.Command {
 	var (
-		baseMoldelID      string
+		baseModelID      string
 		suffix            string
 		repoStr           string
 		modelFileLocation string
