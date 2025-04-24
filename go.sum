@@ -95,6 +95,8 @@ github.com/llmariner/job-manager v1.7.0 h1:jL1b4j48bdfsm+1TNeQ2Bxpbw/0TBcECVqQao
 github.com/llmariner/job-manager v1.7.0/go.mod h1:91nXgfOkIAL1XdyQcElAslNzmoccrlEvVXR9wsrYNFI=
 github.com/llmariner/model-manager v1.10.0 h1:anAWKcY2fLMexHepyNIasBfCoByFTMruGHMmhb+Cib4=
 github.com/llmariner/model-manager v1.10.0/go.mod h1:syjDVecJ2d04vpdL1yVkDxxhMV1tzYQMnFE8ECzNVf0=
+github.com/llmariner/model-manager v1.13.1-0.20250424194504-823b0bb1143c h1:RxHxdIwsqj/yvzll3F6N2E1Tu2ySC4/kBEm3sC9IRXY=
+github.com/llmariner/model-manager v1.13.1-0.20250424194504-823b0bb1143c/go.mod h1:syjDVecJ2d04vpdL1yVkDxxhMV1tzYQMnFE8ECzNVf0=
 github.com/llmariner/user-manager v1.9.1 h1:V6sbsBJvsL2+8v/hMu2uDVI1xwJxr33TIXsHGkURGeU=
 github.com/llmariner/user-manager v1.9.1/go.mod h1:Ct8P7m10YWYt3q4QyKp5mpflTRTa6sNui1btGPIDekY=
 github.com/llmariner/vector-store-manager v0.52.0 h1:LxwAqYTSDuejuSualtZh8WfeoXGgxhqiFUprzZbZuos=

@@ -41,23 +41,66 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                "create",
+		Short:              "Create commands",
+		Args:               cobra.NoArgs,
+		DisableFlagParsing: true,
+	}
+	cmd.AddCommand(createBaseCmd())
+	cmd.AddCommand(createFineTunedCmd())
+	return cmd
+}
+
+func createBaseCmd() *cobra.Command {
 	var (
 		repoStr string
 	)
 	cmd := &cobra.Command{
-		Use:  "create <ID>",
+		Use:  "base <ID>",
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			repo, err := toSourceRepositoryEnum(repoStr)
 			if err != nil {
 				return err
 			}
-			return create(cmd.Context(), args[0], repo)
+			return createBase(cmd.Context(), args[0], repo)
 		},
 	}
 
-	cmd.Flags().StringVarP(&repoStr, "source-repository", "s", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
+	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
 	_ = cmd.MarkFlagRequired("source-repository")
+	return cmd
+}
+
+func createFineTunedCmd() *cobra.Command {
+	var (
+		baseMoldelID      string
+		suffix            string
+		repoStr           string
+		modelFileLocation string
+	)
+	cmd := &cobra.Command{
+		Use:  "fine-tuned",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			repo, err := toSourceRepositoryEnum(repoStr)
+			if err != nil {
+				return err
+			}
+			return createFineTuned(cmd.Context(), baseMoldelID, suffix, repo, modelFileLocation)
+		},
+	}
+
+	cmd.Flags().StringVar(&baseMoldelID, "base-model-id", "", "Base model ID.")
+	cmd.Flags().StringVar(&suffix, "suffix", "", "Suffix for the model ID.")
+	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
+	cmd.Flags().StringVar(&modelFileLocation, "model-file-location", "", "Model file location.")
+
+	_ = cmd.MarkFlagRequired("base-model-id")
+	_ = cmd.MarkFlagRequired("suffix")
+	_ = cmd.MarkFlagRequired("source-repository")
+	_ = cmd.MarkFlagRequired("model-file-location")
 	return cmd
 }
 
@@ -101,7 +144,7 @@ func deactivateCmd() *cobra.Command {
 	}
 }
 
-func create(
+func createBase(
 	ctx context.Context,
 	id string,
 	repo mv1.SourceRepository,
@@ -112,6 +155,7 @@ func create(
 	}
 
 	req := &mv1.CreateModelRequest{
+		IsFineTunedModel: false,
 		Id:               id,
 		SourceRepository: repo,
 	}
@@ -121,6 +165,35 @@ func create(
 	}
 
 	fmt.Printf("Created the model (ID: %q).\n", id)
+	fmt.Printf("The model becomes available once it is loaded.\n")
+	return nil
+}
+
+func createFineTuned(
+	ctx context.Context,
+	baseModelID string,
+	suffix string,
+	repo mv1.SourceRepository,
+	modelFileLocation string,
+) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := &mv1.CreateModelRequest{
+		IsFineTunedModel:  true,
+		BaseModelId:       baseModelID,
+		Suffix:            suffix,
+		SourceRepository:  repo,
+		ModelFileLocation: modelFileLocation,
+	}
+	var resp mv1.Model
+	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Created the model (ID: %q).\n", resp.Id)
 	fmt.Printf("The model becomes available once it is loaded.\n")
 	return nil
 }
