@@ -69,19 +69,19 @@ dependencies:
   tags:
   - tenant-control-plane
 - name: model-manager-loader
-  version: 1.12.0
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-loader.enable
   tags:
   - worker
 - name: model-manager-server
-  version: 1.12.0
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-server.enable
   tags:
   - control-plane
 - name: rbac-server
-  version: 1.13.0
+  version: 1.14.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: rbac-server.enable
   tags:
@@ -99,7 +99,7 @@ dependencies:
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.16.0
+  version: 1.18.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: user-manager-server.enable
   tags:
