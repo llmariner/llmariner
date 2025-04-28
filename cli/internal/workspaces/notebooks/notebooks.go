@@ -12,8 +12,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/cli/browser"
 	jv1 "github.com/llmariner/job-manager/api/v1"
+	v1 "github.com/llmariner/job-manager/api/v1"
 	ihttp "github.com/llmariner/llmariner/cli/internal/http"
-	"github.com/llmariner/llmariner/cli/internal/nbtoken"
 	"github.com/llmariner/llmariner/cli/internal/runtime"
 	itime "github.com/llmariner/llmariner/cli/internal/time"
 	"github.com/llmariner/llmariner/cli/internal/ui"
@@ -88,11 +88,11 @@ func getCmd() *cobra.Command {
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
-			nbID, err := getNotebookIDByName(ctx, args[0])
+			nb, err := getNotebookByName(ctx, args[0])
 			if err != nil {
 				return err
 			}
-			return get(ctx, nbID)
+			return printNotebook(nb)
 		},
 	}
 	return cmd
@@ -104,11 +104,11 @@ func stopCmd() *cobra.Command {
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
-			nbID, err := getNotebookIDByName(ctx, args[0])
+			nb, err := getNotebookByName(ctx, args[0])
 			if err != nil {
 				return err
 			}
-			return stop(ctx, nbID)
+			return stop(ctx, nb.Id)
 		},
 	}
 	return cmd
@@ -120,11 +120,11 @@ func startCmd() *cobra.Command {
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
-			nbID, err := getNotebookIDByName(ctx, args[0])
+			nb, err := getNotebookByName(ctx, args[0])
 			if err != nil {
 				return err
 			}
-			return start(ctx, nbID)
+			return start(ctx, nb.Id)
 		},
 	}
 	return cmd
@@ -150,11 +150,11 @@ func openCmd() *cobra.Command {
 		Args: validateNameArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
-			nbID, err := getNotebookIDByName(ctx, args[0])
+			nb, err := getNotebookByName(ctx, args[0])
 			if err != nil {
 				return err
 			}
-			return open(ctx, nbID, noOpen)
+			return open(ctx, nb, noOpen)
 		},
 	}
 	cmd.Flags().BoolVar(&noOpen, "no-open", false, "Do not open the browser")
@@ -192,7 +192,7 @@ func create(ctx context.Context, name string, opts createOpts) error {
 	}
 	fmt.Printf("Created the notebook (ID: %q).\n", resp.Id)
 
-	return nbtoken.SaveToken(resp.Id, resp.Token)
+	return nil
 }
 
 func list(ctx context.Context) error {
@@ -219,10 +219,6 @@ func list(ctx context.Context) error {
 	return nil
 }
 
-func get(ctx context.Context, id string) error {
-	return sendRequestAndPrintNotebook(ctx, http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetNotebookRequest{})
-}
-
 func stop(ctx context.Context, id string) error {
 	return sendRequestAndPrintNotebook(ctx, http.MethodPost, fmt.Sprintf("%s/%s/actions:stop", path, id), &jv1.StopNotebookRequest{})
 }
@@ -232,7 +228,7 @@ func start(ctx context.Context, id string) error {
 }
 
 func delete(ctx context.Context, name string) error {
-	id, err := getNotebookIDByName(ctx, name)
+	nb, err := getNotebookByName(ctx, name)
 	if err != nil {
 		return err
 	}
@@ -254,10 +250,10 @@ func delete(ctx context.Context, name string) error {
 		return err
 	}
 	var resp jv1.DeleteNotebookResponse
-	if err := ihttp.NewClient(env).Send(http.MethodDelete, fmt.Sprintf("%s/%s", path, id), &jv1.DeleteNotebookRequest{}, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodDelete, fmt.Sprintf("%s/%s", path, nb.Id), &jv1.DeleteNotebookRequest{}, &resp); err != nil {
 		return err
 	}
-	fmt.Printf("Deleted the notebook (ID: %q).\n", id)
+	fmt.Printf("Deleted the notebook (ID: %q).\n", nb.Id)
 	return nil
 }
 
@@ -268,20 +264,14 @@ func validateNameArg(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func open(ctx context.Context, id string, noOpen bool) error {
+func open(ctx context.Context, nb *v1.Notebook, noOpen bool) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
 	}
 
-	token, err := nbtoken.LoadToken(id)
-	if err != nil {
-		// TODO(aya): implement get token API?
-		return err
-	}
-
 	var resp jv1.Notebook
-	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &jv1.GetJobRequest{}, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, nb.Id), &jv1.GetJobRequest{}, &resp); err != nil {
 		return err
 	}
 	if resp.Status != "running" {
@@ -289,7 +279,7 @@ func open(ctx context.Context, id string, noOpen bool) error {
 	}
 
 	fmt.Println("Opening browser...")
-	nbURL := fmt.Sprintf("%s/sessions/%s/v1/services/notebooks/%s/%s?token=%s", env.Config.EndpointURL, resp.ClusterId, id, resp.KubernetesNamespace, token)
+	nbURL := fmt.Sprintf("%s/sessions/%s/v1/services/notebooks/%s/%s?token=%s", env.Config.EndpointURL, resp.ClusterId, nb.Id, resp.KubernetesNamespace, nb.Token)
 	if noOpen {
 		fmt.Printf("Please open the following URL from your browser:\n%s\n", nbURL)
 		return nil
@@ -298,17 +288,17 @@ func open(ctx context.Context, id string, noOpen bool) error {
 	return browser.OpenURL(nbURL)
 }
 
-func getNotebookIDByName(ctx context.Context, name string) (string, error) {
+func getNotebookByName(ctx context.Context, name string) (*jv1.Notebook, error) {
 	nbs, err := listNotebooks(ctx)
 	if err != nil {
-		return "", nil
+		return nil, err
 	}
 	for _, nb := range nbs {
 		if nb.Name == name {
-			return nb.Id, nil
+			return nb, nil
 		}
 	}
-	return "", fmt.Errorf("notebook %q not found", name)
+	return nil, fmt.Errorf("notebook %q not found", name)
 }
 
 func listNotebooks(ctx context.Context) ([]*jv1.Notebook, error) {
