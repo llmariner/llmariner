@@ -15,4 +15,4 @@ done
 
 echo "Model is loaded!"
 echo "Running chat completion..."
-llma chat completions create --model deepseek-r1:1.5b --role user --completion "What is the capital of France?"
+llma chat completions create base --model deepseek-r1:1.5b --role user --completion "What is the capital of France?"
