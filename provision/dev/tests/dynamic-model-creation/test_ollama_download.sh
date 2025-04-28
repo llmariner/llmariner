@@ -3,7 +3,7 @@
 set -euo pipefail
 
 echo "Creating a model..."
-llma models create deepseek-r1:1.5b -s ollama
+llma models create base deepseek-r1:1.5b -s ollama
 
 # Wait until the model is loaded. The status of the model becomes "succeeded" when it is loaded.
 for i in {1..300}; do
