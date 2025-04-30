@@ -109,9 +109,14 @@ func refreshTokenIfExpired(ctx context.Context, token T, auth configs.Auth) (T, 
 		return T{}, fmt.Errorf("failed to get token: %v", err)
 	}
 	if err := saveToken(newToken); err != nil {
-		return token, err
+		return T{}, err
 	}
-	return token, nil
+	return T{
+		TokenType:    newToken.TokenType,
+		AccessToken:  newToken.AccessToken,
+		RefreshToken: newToken.RefreshToken,
+		TokenExpiry:  newToken.Expiry,
+	}, nil
 }
 
 func newOIDCProvider(ctx context.Context, issuerURL string) (*oidc.Provider, error) {
