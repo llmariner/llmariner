@@ -3,7 +3,7 @@
 set -euo pipefail
 
 echo "Creating a model..."
-llma models create base deepseek-r1:1.5b -s ollama
+llma models create base deepseek-r1:1.5b --source-repository ollama
 
 # Wait until the model is loaded. The status of the model becomes "succeeded" when it is loaded.
 for i in {1..300}; do
@@ -15,4 +15,4 @@ done
 
 echo "Model is loaded!"
 echo "Running chat completion..."
-llma chat completions create base --model deepseek-r1:1.5b --role user --completion "What is the capital of France?"
+llma chat completions create --model deepseek-r1:1.5b --role user --completion "What is the capital of France?"

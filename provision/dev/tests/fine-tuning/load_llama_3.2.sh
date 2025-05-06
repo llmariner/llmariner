@@ -3,7 +3,7 @@
 set -euo pipefail
 
 echo "Creating a model..."
-llma models create base meta-llama/Llama-3.2-1B-Instruct -s object-store
+llma models create base meta-llama/Llama-3.2-1B-Instruct --source-repository object-store
 
 # Wait until the model is loaded. The status of the model becomes "succeeded" when it is loaded.
 for i in {1..300}; do
