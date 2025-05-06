@@ -39,13 +39,13 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.24.0
+  version: 1.25.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-engine.enable
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.24.0
+  version: 1.25.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-server.enable
   tags:
@@ -69,13 +69,13 @@ dependencies:
   tags:
   - tenant-control-plane
 - name: model-manager-loader
-  version: 1.14.0
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-loader.enable
   tags:
   - worker
 - name: model-manager-server
-  version: 1.15.0
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-server.enable
   tags:
