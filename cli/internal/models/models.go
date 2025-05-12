@@ -20,8 +20,6 @@ import (
 
 const (
 	path = "/models"
-
-	infPath = "/inference/models"
 )
 
 // Cmd is the root command for models.
@@ -219,7 +217,7 @@ func list(ctx context.Context) error {
 		return ms[i].Id < ms[j].Id
 	})
 
-	tbl := table.New("ID", "Owned By", "Loading Status", "Source Repository", "Created At")
+	tbl := table.New("ID", "Owned By", "Loading Status", "Activation Status", "Source Repository", "Created At")
 	ui.FormatTable(tbl)
 
 	for _, m := range ms {
@@ -227,10 +225,12 @@ func list(ctx context.Context) error {
 		if m.LoadingStatus == mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_FAILED {
 			r = fmt.Sprintf("%s (%s)", r, m.LoadingFailureReason)
 		}
+		a := toActivationStatusString(m.ActivationStatus)
 		tbl.AddRow(
 			m.Id,
 			m.OwnedBy,
 			r,
+			a,
 			toSourceRepositoryString(m.SourceRepository),
 			time.Unix(m.Created, 0).Format(time.RFC3339),
 		)
@@ -282,7 +282,7 @@ func activate(ctx context.Context, id string) error {
 		Id: id,
 	}
 	var resp iv1.ActivateModelResponse
-	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s:activate", infPath, id), &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s:activate", path, id), &req, &resp); err != nil {
 		return err
 	}
 
@@ -313,7 +313,7 @@ func deactivate(ctx context.Context, id string) error {
 		Id: id,
 	}
 	var resp iv1.DeactivateModelResponse
-	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s:deactivate", infPath, id), &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s:deactivate", path, id), &req, &resp); err != nil {
 		return err
 	}
 
@@ -372,5 +372,18 @@ func toloadingStatusString(status mv1.ModelLoadingStatus) string {
 		return "failed"
 	default:
 		return "Unknown"
+	}
+}
+
+func toActivationStatusString(status mv1.ActivationStatus) string {
+	switch status {
+	case mv1.ActivationStatus_ACTIVATION_STATUS_UNSPECIFIED:
+		return "unspecified"
+	case mv1.ActivationStatus_ACTIVATION_STATUS_ACTIVE:
+		return "active"
+	case mv1.ActivationStatus_ACTIVATION_STATUS_INACTIVE:
+		return "inactive"
+	default:
+		return "unknown"
 	}
 }
