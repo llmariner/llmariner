@@ -17,8 +17,6 @@ const (
 	authClientID     = "llmariner"
 	authClientSecret = "ZXhhbXBsZS1hcHAtc2VjcmV0"
 	authRedirectURI  = "http://127.0.0.1:5555/callback"
-
-	defaultEndpointURL = "http://localhost:8080/v1"
 )
 
 // Auth is an authentication configuration.

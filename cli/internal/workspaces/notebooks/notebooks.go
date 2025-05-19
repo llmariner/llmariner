@@ -12,7 +12,6 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/cli/browser"
 	jv1 "github.com/llmariner/job-manager/api/v1"
-	v1 "github.com/llmariner/job-manager/api/v1"
 	ihttp "github.com/llmariner/llmariner/cli/internal/http"
 	"github.com/llmariner/llmariner/cli/internal/runtime"
 	itime "github.com/llmariner/llmariner/cli/internal/time"
@@ -264,7 +263,7 @@ func validateNameArg(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func open(ctx context.Context, nb *v1.Notebook, noOpen bool) error {
+func open(ctx context.Context, nb *jv1.Notebook, noOpen bool) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
