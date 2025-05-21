@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	parallelism  = 50
+	parallelism  = 400
 	duration     = 5 * time.Minute
 	logFrequency = 1000
 
@@ -24,6 +24,7 @@ const (
 )
 
 func runLoadTest() error {
+	start := time.Now()
 	accessToken := os.Getenv(accessTokenEnvVar)
 	if accessToken == "" {
 		return fmt.Errorf("environment variable %s is not set", accessTokenEnvVar)
@@ -31,15 +32,17 @@ func runLoadTest() error {
 
 	messages := []string{
 		"Hello, World!",
-		"Where is the capital of France?",
-		"What is the meaning of life?",
-		"Tell me a joke.",
-		"How do you make a sandwich?",
-		"What's the weather like today?",
-		"Can you recommend a good book?",
-		"What's your favorite movie?",
-		"How do I cook pasta?",
-		"Tell me a fun fact.",
+		/*
+			"Where is the capital of France?",
+			"What is the meaning of life?",
+			"Tell me a joke.",
+			"How do you make a sandwich?",
+			"What's the weather like today?",
+			"Can you recommend a good book?",
+			"What's your favorite movie?",
+			"How do I cook pasta?",
+			"Tell me a fun fact.",
+		*/
 	}
 
 	ctx := context.Background()
@@ -47,6 +50,7 @@ func runLoadTest() error {
 	defer cancel()
 
 	count := &atomic.Int64{}
+	errCount := &atomic.Int64{}
 
 	eg, ctx := errgroup.WithContext(ctx)
 	for i := 0; i < parallelism; i++ {
@@ -72,13 +76,14 @@ func runLoadTest() error {
 				}
 
 				if err := sendChatCompletion(ctx, endpointURL, accessToken, req, printOutput); err != nil {
-					return fmt.Errorf("send chat completion request: %w", err)
+					errCount.Add(1)
+					continue
 				}
 
 				n := count.Add(1)
 
 				if n%logFrequency == 0 {
-					fmt.Printf("Processed %d requests\n", n)
+					fmt.Printf("Processed %d requests. %s elapsed\n", n, time.Since(start))
 				}
 
 				select {
@@ -91,12 +96,15 @@ func runLoadTest() error {
 		})
 	}
 
-	return eg.Wait()
+	if err := eg.Wait(); err != nil {
+		return fmt.Errorf("error during load test: %s", err)
+	}
+	fmt.Printf("Load test completed. Total requests: %d, Errors: %d\n", count.Load(), errCount.Load())
+	return nil
 }
 
 func main() {
 	if err := runLoadTest(); err != nil {
-		fmt.Printf("Error running load test: %v\n", err)
+		fmt.Printf("Error running load test: %s\n", err)
 	}
-	fmt.Println("Load test completed successfully.")
 }
