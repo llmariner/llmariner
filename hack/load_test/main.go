@@ -12,12 +12,12 @@ import (
 )
 
 const (
-	parallelism  = 400
+	parallelism  = 10
 	duration     = 5 * time.Minute
-	logFrequency = 1000
+	logFrequency = 10
 
 	model             = "meta-llama-Llama-3.2-1B-Instruct"
-	endpointURL       = "https://api.cloudnatix.com/v1"
+	endpointURL       = "https://api.llm.staging.cloudnatix.com/v1"
 	accessTokenEnvVar = "LLMARINER_TOKEN"
 
 	printOutput = false
@@ -56,7 +56,9 @@ func runLoadTest() error {
 	for i := 0; i < parallelism; i++ {
 		i := i
 		eg.Go(func() error {
+			j := 0
 			for {
+				j++
 				message := messages[i%len(messages)]
 
 				req := &iv1.CreateChatCompletionRequest{
@@ -75,7 +77,10 @@ func runLoadTest() error {
 					Stream: true,
 				}
 
-				if err := sendChatCompletion(ctx, endpointURL, accessToken, req, printOutput); err != nil {
+				reqID := fmt.Sprintf("load-test-%d-%d", i, j)
+
+				if err := sendChatCompletion(ctx, endpointURL, accessToken, req, printOutput, reqID); err != nil {
+					fmt.Printf("Error sending request, reqID=%s, (%s): %s\n", reqID, time.Now(), err)
 					errCount.Add(1)
 					continue
 				}
@@ -83,7 +88,7 @@ func runLoadTest() error {
 				n := count.Add(1)
 
 				if n%logFrequency == 0 {
-					fmt.Printf("Processed %d requests. %s elapsed\n", n, time.Since(start))
+					fmt.Printf("Processed %d requests (%d errors). %s elapsed\n", n, errCount.Load(), time.Since(start))
 				}
 
 				select {

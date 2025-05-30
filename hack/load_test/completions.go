@@ -22,9 +22,10 @@ func sendChatCompletion(
 	accessToken string,
 	req *iv1.CreateChatCompletionRequest,
 	printOutput bool,
+	reqID string,
 ) error {
 	client := newClient(endpointURL, accessToken)
-	body, err := client.SendRequest(http.MethodPost, path, &req)
+	body, err := client.SendRequest(http.MethodPost, path, &req, reqID)
 	if err != nil {
 		return err
 	}
@@ -53,6 +54,8 @@ func sendChatCompletion(
 
 	scanner := sse.NewScanner(body)
 
+	var respBuf string
+
 	for scanner.Scan() {
 		resp := scanner.Text()
 		if !strings.HasPrefix(resp, "data: ") {
@@ -67,12 +70,16 @@ func sendChatCompletion(
 
 		var d iv1.ChatCompletionChunk
 		if err := json.Unmarshal([]byte(respD), &d); err != nil {
+			fmt.Println("Error unmarshalling response:", err)
+			fmt.Printf("ResponseBuf: %s\n", respBuf)
+			fmt.Printf("Response: %s\n", respD)
 			return fmt.Errorf("unmarshal response: %s", err)
 		}
 		cs := d.Choices
 		if len(cs) > 0 && printOutput {
 			// TODO(kenji): Handle multiple choices.
 			fmt.Print(cs[0].Delta.Content)
+			respBuf += cs[0].Delta.Content
 		}
 	}
 
