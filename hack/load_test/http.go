@@ -34,8 +34,9 @@ func (c *Client) Send(
 	path string,
 	req any,
 	resp any,
+	reqID string,
 ) error {
-	body, err := c.SendRequest(method, path, req)
+	body, err := c.SendRequest(method, path, req, reqID)
 	if err != nil {
 		return err
 	}
@@ -61,6 +62,7 @@ func (c *Client) SendRequest(
 	method string,
 	path string,
 	req any,
+	reqID string,
 ) (io.ReadCloser, error) {
 	m := newMarshaler()
 
@@ -93,6 +95,8 @@ func (c *Client) SendRequest(
 	hreq.URL.RawQuery = query.Encode()
 
 	c.addHeaders(hreq)
+	hreq.Header.Add("X-Request-ID", reqID)
+
 	hresp, err := http.DefaultClient.Do(hreq)
 	if err != nil {
 		return nil, fmt.Errorf("send request: %s", err)
