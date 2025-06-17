@@ -1,0 +1,32 @@
+tags:
+  control-plane: false
+
+global:
+  worker:
+    controlPlaneAddr: api.llm.cloudnatix.com:443
+    tls:
+      enable: true
+    registrationKeySecret:
+      name: ""
+      key: ""
+
+  objectStore:
+    s3:
+      bucket: ""
+      endpointUrl: ""
+      region: ""
+
+  awsSecret:
+    name: ""
+    accessKeyIdKey: ""
+    secretAccessKeyKey: ""
+
+inference-manager-engine:
+  inferenceManagerServerWorkerServiceAddr: inference.llm.cloudnatix.com:443
+
+job-manager-dispatcher:
+  notebook:
+    llmarinerBaseUrl: https://api.llm.cloudnatix.com/v1
+
+session-manager-agent:
+  sessionManagerServerWorkerServiceAddr: session.llm.cloudnatix.com:443
