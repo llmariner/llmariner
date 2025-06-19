@@ -26,6 +26,18 @@ dependencies:
   condition: cluster-manager-server.enable
   tags:
   - control-plane
+- name: cluster-monitor-agent
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/cluster-monitor/deployments/agent"
+  condition: cluster-manager-agent.enable
+  tags:
+  - worker
+- name: cluster-monitor-server
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/cluster-monitor/deployments/server"
+  condition: cluster-manager-server.enable
+  tags:
+  - control-plane
 - name: dex-server
   version: "*"
   repository: "file://../../hack/latest-deploy/repos/rbac-manager/deployments/dex-server"

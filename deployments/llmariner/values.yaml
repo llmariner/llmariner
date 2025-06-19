@@ -248,6 +248,22 @@ api-usage-server:
 cluster-manager-server:
   fullnameOverride: cluster-manager-server
 
+# +docs:section="Cluster Monitor Agent"
+
+# cluster-monitor-agent is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/cluster-monitor/tree/main/deployments/agent.
+# +docs:property
+cluster-monitor-agent:
+  fullnameOverride: cluster-monitor-agent
+
+# +docs:section="Cluster Monitor Server"
+
+# cluster-monitor-server is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/cluster-monitor/tree/main/deployments/server.
+# +docs:property
+cluster-monitor-server:
+  fullnameOverride: cluster-monitor-server
+
 # +docs:section="Dex Server"
 
 # dex-server is the sub-chart configurable values.
