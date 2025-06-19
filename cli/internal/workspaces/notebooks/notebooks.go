@@ -174,17 +174,13 @@ func create(ctx context.Context, name string, opts createOpts) error {
 		return err
 	}
 
-	var image *jv1.CreateNotebookRequest_Image
-	if opts.imageURI != "" {
-		image = &jv1.CreateNotebookRequest_Image{
-			Image: &jv1.CreateNotebookRequest_Image_Uri{Uri: opts.imageURI},
-		}
-	} else if opts.imageType != "" {
-		image = &jv1.CreateNotebookRequest_Image{
-			Image: &jv1.CreateNotebookRequest_Image_Type{Type: opts.imageType},
-		}
+	image := &jv1.CreateNotebookRequest_Image{}
+	if uri := opts.imageURI; uri != "" {
+		image.Image = &jv1.CreateNotebookRequest_Image_Uri{Uri: uri}
+	} else if t := opts.imageType; t != "" {
+		image.Image = &jv1.CreateNotebookRequest_Image_Type{Type: t}
 	} else {
-		return fmt.Errorf("image type or uri is required")
+		return fmt.Errorf("either --image-uri or --image-type must be specified")
 	}
 	req := jv1.CreateNotebookRequest{
 		Name:  name,
