@@ -4,6 +4,12 @@ api-usage-server:
 cluster-manager-server:
   version: latest
 
+cluster-monitor-agent:
+  version: latest
+
+cluster-monitor-server:
+  version: latest
+
 dex-server:
   version: latest
 

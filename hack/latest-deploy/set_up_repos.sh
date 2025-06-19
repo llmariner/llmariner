@@ -9,7 +9,7 @@ basedir=$(dirname "$0")
 mkdir -p "${basedir}"/repos
 cd "${basedir}"/repos
 
-repos="api-usage cluster-manager file-manager inference-manager job-manager model-manager rbac-manager session-manager user-manager vector-store-manager"
+repos="api-usage cluster-manager cluster-monitor file-manager inference-manager job-manager model-manager rbac-manager session-manager user-manager vector-store-manager"
 
 for repo in $repos; do
   if [ ! -d "${repo}" ]; then
