@@ -47,6 +47,11 @@ helmfile apply -e worker -l app=fake-gpu-operator -l tier=monitoring -l app=llma
 
 > [!NOTE]
 > Please note that the endpoint address is http://localhost/v1, not http://localhost:8080/v1.
+>
+> [!NOTE] If you counter an error from `model-manager-loader` indicating the lack of MinIO API key
+> ("The Access Key Id you provided does not exist in our records."), you can try creating the API key with
+> `./minio_create_apikey.sh minioadmin minioadmin llmariner-key llmariner-secret kind-llmariner-demo minio`,
+
 
 #### For GPU Federation: Multiple Worker Cluster with Tenant Control-Plane cluster
 
