@@ -66,6 +66,7 @@ func createCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&opts.imageType, "image-type", "jupyter-lab-base", "Type of the Notebook Image")
+	cmd.Flags().StringVar(&opts.imageURI, "image-uri", "", "URI of the Notebook Image")
 	cmd.Flags().StringArrayVar(&envs, "env", nil, "Environment variables used within the Notebook (e.g., MY_ENV=somevalue)")
 	cmd.Flags().Int32Var(&opts.gpuCount, "gpu", 0, "Number of GPUs")
 	return cmd
@@ -162,6 +163,7 @@ func openCmd() *cobra.Command {
 
 type createOpts struct {
 	imageType string
+	imageURI  string
 	envs      map[string]string
 	gpuCount  int32
 }
@@ -172,12 +174,22 @@ func create(ctx context.Context, name string, opts createOpts) error {
 		return err
 	}
 
-	req := jv1.CreateNotebookRequest{
-		Name: name,
-		Image: &jv1.CreateNotebookRequest_Image{
+	var image *jv1.CreateNotebookRequest_Image
+	if opts.imageURI != "" {
+		image = &jv1.CreateNotebookRequest_Image{
+			Image: &jv1.CreateNotebookRequest_Image_Uri{Uri: opts.imageURI},
+		}
+	} else if opts.imageType != "" {
+		image = &jv1.CreateNotebookRequest_Image{
 			Image: &jv1.CreateNotebookRequest_Image_Type{Type: opts.imageType},
-		},
-		Envs: opts.envs,
+		}
+	} else {
+		return fmt.Errorf("image type or uri is required")
+	}
+	req := jv1.CreateNotebookRequest{
+		Name:  name,
+		Image: image,
+		Envs:  opts.envs,
 	}
 	if opts.gpuCount > 0 {
 		req.Resources = &jv1.Resources{
