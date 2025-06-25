@@ -1,3 +1,6 @@
+api-usage-cleaner:
+  version: latest
+
 api-usage-server:
   version: latest
 

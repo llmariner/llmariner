@@ -234,6 +234,12 @@ tags:
 
 # +docs:section="API Usage Server"
 
+# api-usage-cleaner is the sub-chart configurable values.
+# For other values, see https://github.com/llmariner/api-usage/tree/main/deployments/server.
+# +docs:property
+api-usage-cleaner:
+  fullnameOverride: api-usage-cleaner
+
 # api-usage-server is the sub-chart configurable values.
 # For other values, see https://github.com/llmariner/api-usage/tree/main/deployments/server.
 # +docs:property

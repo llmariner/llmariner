@@ -14,6 +14,12 @@ annotations:
   "artifacthub.io/category": ai-machine-learning
   "artifacthub.io/license": Apache-2.0
 dependencies:
+- name: api-usage-cleaner
+  version: "*"
+  repository: "file://../../hack/latest-deploy/repos/api-usage/deployments/server"
+  condition: api-usage-cleaner.enable
+  tags:
+  - control-plane
 - name: api-usage-server
   version: "*"
   repository: "file://../../hack/latest-deploy/repos/api-usage/deployments/server"
