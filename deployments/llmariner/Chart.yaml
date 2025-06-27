@@ -33,13 +33,13 @@ dependencies:
   tags:
   - control-plane
 - name: cluster-monitor-agent
-  version: 0.3.0
+  version: 0.3.1
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-agent.enable
   tags:
   - worker
 - name: cluster-monitor-server
-  version: 0.3.0
+  version: 0.3.1
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-server.enable
   tags:
