@@ -84,7 +84,7 @@ func create(ctx context.Context, name string, timeSlicingGPUs int) error {
 		return err
 	}
 
-	req := &cv1.CreateClusterConfigRequest{
+	req := cv1.CreateClusterConfigRequest{
 		DevicePluginConfig: &cv1.DevicePluginConfig{
 			TimeSlicing: &cv1.DevicePluginConfig_TimeSlicing{
 				Gpus: int32(timeSlicingGPUs),
@@ -151,7 +151,7 @@ func delete(ctx context.Context, name string) error {
 		return err
 	}
 
-	req := &cv1.DeleteClusterConfigRequest{}
+	req := cv1.DeleteClusterConfigRequest{}
 	var resp emptypb.Empty
 	path := fmt.Sprintf(pathPattern, cl.Id)
 	if err := ihttp.NewClient(env).Send(http.MethodDelete, path, &req, &resp); err != nil {
