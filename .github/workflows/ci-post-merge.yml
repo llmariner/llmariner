@@ -20,7 +20,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.23
+        go-version: 1.24
     - name: Re-test
       run: make test
 
@@ -55,7 +55,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.23
+        go-version: 1.24
     - name: Generate GitHub App Token
       uses: actions/create-github-app-token@v1
       id: app-token

@@ -41,7 +41,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: 1.23
+        go-version: 1.24
     - name: install-kind
       run: |
         curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
