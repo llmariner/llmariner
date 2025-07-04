@@ -130,7 +130,7 @@ func createBase(
 		return err
 	}
 
-	req := &mv1.CreateModelRequest{
+	req := mv1.CreateModelRequest{
 		IsFineTunedModel: false,
 		Id:               id,
 		SourceRepository: repo,
@@ -157,7 +157,7 @@ func createFineTuned(
 		return err
 	}
 
-	req := &mv1.CreateModelRequest{
+	req := mv1.CreateModelRequest{
 		IsFineTunedModel:  true,
 		BaseModelId:       baseModelID,
 		Suffix:            suffix,
@@ -180,7 +180,7 @@ func list(ctx context.Context) error {
 		return err
 	}
 
-	req := &mv1.ListModelsRequest{
+	req := mv1.ListModelsRequest{
 		IncludeLoadingModels: true,
 	}
 	var resp mv1.ListModelsResponse
@@ -237,7 +237,7 @@ func delete(ctx context.Context, id string) error {
 		return err
 	}
 
-	req := &mv1.DeleteModelRequest{
+	req := mv1.DeleteModelRequest{
 		Id: id,
 	}
 	var resp mv1.DeleteModelResponse
