@@ -105,13 +105,13 @@ dependencies:
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 1.5.2
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: session-manager-agent.enable
   tags:
   - worker
 - name: session-manager-server
-  version: 1.5.2
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: session-manager-server.enable
   tags:
