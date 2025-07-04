@@ -9,6 +9,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	cv1 "github.com/llmariner/cluster-manager/api/v1"
+	"github.com/llmariner/llmariner/cli/internal/admin/clusters/config"
 	ihttp "github.com/llmariner/llmariner/cli/internal/http"
 	"github.com/llmariner/llmariner/cli/internal/runtime"
 	"github.com/llmariner/llmariner/cli/internal/ui"
@@ -28,6 +29,7 @@ func Cmd() *cobra.Command {
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
 	}
+	cmd.AddCommand(config.Cmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
 	cmd.AddCommand(registerCmd())
