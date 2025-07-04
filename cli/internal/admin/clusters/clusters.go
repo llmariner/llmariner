@@ -83,7 +83,7 @@ func register(ctx context.Context, name string) error {
 		return err
 	}
 
-	req := &cv1.CreateClusterRequest{
+	req := cv1.CreateClusterRequest{
 		Name: name,
 	}
 	var resp cv1.Cluster
@@ -160,7 +160,7 @@ func unregister(ctx context.Context, name string) error {
 		return err
 	}
 
-	req := &cv1.DeleteClusterRequest{
+	req := cv1.DeleteClusterRequest{
 		Id: id,
 	}
 	var resp cv1.DeleteClusterResponse

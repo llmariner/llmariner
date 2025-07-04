@@ -146,7 +146,7 @@ func create(
 		return err
 	}
 
-	req := &uv1.CreateAPIKeyRequest{
+	req := uv1.CreateAPIKeyRequest{
 		Name:             name,
 		OrganizationId:   orgID,
 		ProjectId:        projectID,
@@ -174,13 +174,13 @@ func list(ctx context.Context, orgTitle, projectTitle string) error {
 		return err
 	}
 
-	req := &uv1.ListProjectAPIKeysRequest{
+	req := uv1.ListProjectAPIKeysRequest{
 		OrganizationId: orgID,
 		ProjectId:      projectID,
 	}
 	var resp uv1.ListAPIKeysResponse
 	path := fmt.Sprintf(pathPattern, orgID, projectID)
-	if err := ihttp.NewClient(env).Send(http.MethodGet, path, req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
 		return err
 	}
 
@@ -227,7 +227,7 @@ func delete(ctx context.Context, name, orgTitle, projectTitle string) error {
 		return fmt.Errorf("API key %q not found", name)
 	}
 
-	req := &uv1.DeleteProjectAPIKeyRequest{
+	req := uv1.DeleteProjectAPIKeyRequest{
 		Id:             key.Id,
 		OrganizationId: orgID,
 		ProjectId:      projectID,
@@ -262,7 +262,7 @@ func update(ctx context.Context, name, orgTitle, projectTitle, newName string) e
 		return fmt.Errorf("API key %q not found", name)
 	}
 
-	req := &uv1.APIKey{
+	req := uv1.APIKey{
 		Name: newName,
 	}
 
@@ -335,7 +335,7 @@ func findKeyByName(
 	orgID string,
 	projectID string,
 ) (*uv1.APIKey, bool, error) {
-	req := &uv1.ListProjectAPIKeysRequest{
+	req := uv1.ListProjectAPIKeysRequest{
 		OrganizationId: orgID,
 		ProjectId:      projectID,
 	}

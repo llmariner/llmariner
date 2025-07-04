@@ -155,7 +155,7 @@ func delete(ctx context.Context, name string) error {
 		return err
 	}
 
-	req := &vsv1.DeleteVectorStoreRequest{
+	req := vsv1.DeleteVectorStoreRequest{
 		Id: vs.Id,
 	}
 	var resp vsv1.DeleteVectorStoreResponse
@@ -225,7 +225,7 @@ func deleteFile(ctx context.Context, name, fileID string) error {
 		return err
 	}
 
-	req := &vsv1.DeleteVectorStoreFileRequest{
+	req := vsv1.DeleteVectorStoreFileRequest{
 		VectorStoreId: vs.Id,
 		FileId:        fileID,
 	}

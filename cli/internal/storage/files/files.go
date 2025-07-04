@@ -175,7 +175,7 @@ func delete(ctx context.Context, id string) error {
 		return err
 	}
 
-	req := &fv1.DeleteFileRequest{
+	req := fv1.DeleteFileRequest{
 		Id: id,
 	}
 	var resp fv1.DeleteFileResponse
