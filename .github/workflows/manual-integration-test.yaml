@@ -32,6 +32,11 @@ on:
         required: true
         default: true
         type: boolean
+      testGpuSharing:
+        description: 'Test GPU sharing?'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   run-integration-test:
@@ -145,3 +150,9 @@ jobs:
         LLMARINER_API_KEY: default-key-secret
       run: |
         ./provision/dev/tests/dynamic-model-creation/test_hugging_face_download.sh
+    - name: test-gpu-sharing
+      if: github.event.inputs.testGpuSharing == 'true'
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        ./provision/dev/tests/gpu-sharing/create_cluster_config.sh
