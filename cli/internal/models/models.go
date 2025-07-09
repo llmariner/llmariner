@@ -32,7 +32,8 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(deleteCmd())
-
+	cmd.AddCommand(activateCmd())
+	cmd.AddCommand(deactivateCmd())
 	return cmd
 }
 
@@ -116,6 +117,26 @@ func deleteCmd() *cobra.Command {
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return delete(cmd.Context(), args[0])
+		},
+	}
+}
+
+func activateCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "activate <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return activate(cmd.Context(), args[0])
+		},
+	}
+}
+
+func deactivateCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:  "deactivate <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return deactivate(cmd.Context(), args[0])
 		},
 	}
 }
@@ -246,6 +267,56 @@ func delete(ctx context.Context, id string) error {
 	}
 
 	fmt.Printf("Deleted the model (ID: %q).\n", id)
+
+	return nil
+}
+
+func activate(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := &mv1.ActivateModelRequest{
+		Id: id,
+	}
+	var resp mv1.ActivateModelResponse
+	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s:activate", path, id), &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sent the activaiton request for the model (ID: %q).\n", id)
+
+	return nil
+}
+
+func deactivate(ctx context.Context, id string) error {
+	p := ui.NewPrompter()
+	s := &survey.Confirm{
+		Message: fmt.Sprintf("Deactivate model %q?", id),
+		Default: false,
+	}
+	var ok bool
+	if err := p.Ask(s, &ok); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := &mv1.DeactivateModelRequest{
+		Id: id,
+	}
+	var resp mv1.DeactivateModelResponse
+	if err := ihttp.NewClient(env).Send(http.MethodPost, fmt.Sprintf("%s/%s:deactivate", path, id), &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Sent the deeactivation request for the model (ID: %q).\n", id)
 
 	return nil
 }
