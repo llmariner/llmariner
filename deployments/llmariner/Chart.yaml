@@ -15,115 +15,115 @@ annotations:
   "artifacthub.io/license": Apache-2.0
 dependencies:
 - name: api-usage-cleaner
-  version: 1.8.0
+  version: 1.9.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: api-usage-cleaner.enable
   tags:
   - control-plane
 - name: api-usage-server
-  version: 1.8.0
+  version: 1.9.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: api-usage-server.enable
   tags:
   - control-plane
 - name: cluster-manager-server
-  version: 1.7.0
+  version: 1.7.1
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-server.enable
   tags:
   - control-plane
 - name: cluster-monitor-agent
-  version: 0.6.0
+  version: 0.7.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-agent.enable
   tags:
   - worker
 - name: cluster-monitor-server
-  version: 0.6.0
+  version: 0.7.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: cluster-manager-server.enable
   tags:
   - control-plane
 - name: dex-server
-  version: 1.15.1
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: dex-server.enable
   tags:
   - control-plane
 - name: file-manager-server
-  version: 1.9.0
+  version: 1.10.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: file-manager-server.enable
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.30.1
+  version: 1.30.2
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-engine.enable
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.30.1
+  version: 1.30.2
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-dispatcher
-  version: 1.20.0
+  version: 1.21.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-dispatcher.enable
   tags:
   - worker
 - name: job-manager-server
-  version: 1.20.0
+  version: 1.21.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-server.enable
   tags:
   - control-plane
 - name: job-manager-syncer
-  version: 1.20.0
+  version: 1.21.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: job-manager-syncer.enable
   tags:
   - tenant-control-plane
 - name: model-manager-loader
-  version: 1.19.2
+  version: 1.20.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-loader.enable
   tags:
   - worker
 - name: model-manager-server
-  version: 1.19.2
+  version: 1.20.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: model-manager-server.enable
   tags:
   - control-plane
 - name: rbac-server
-  version: 1.15.1
+  version: 1.16.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: rbac-server.enable
   tags:
   - control-plane
 - name: session-manager-agent
-  version: 1.6.0
+  version: 1.7.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: session-manager-agent.enable
   tags:
   - worker
 - name: session-manager-server
-  version: 1.6.0
+  version: 1.7.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: session-manager-server.enable
   tags:
   - control-plane
 - name: user-manager-server
-  version: 1.20.0
+  version: 1.21.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: user-manager-server.enable
   tags:
   - control-plane
 - name: vector-store-manager-server
-  version: 1.5.0
+  version: 1.6.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: vector-store-manager-server.enable
   tags:
