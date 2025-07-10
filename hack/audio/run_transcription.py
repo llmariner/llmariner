@@ -1,5 +1,5 @@
-import base64
 import os
+import sys
 
 from openai import OpenAI
 
