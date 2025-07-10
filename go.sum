@@ -90,8 +90,8 @@ github.com/llmariner/cluster-monitor v0.6.0 h1:7Att6W8onePxn50zkxSp8nZm8wPs6upIK
 github.com/llmariner/cluster-monitor v0.6.0/go.mod h1:/ArWyqUhy2HK0pWaIx/rLXluPsoPkCaBWf0He+tIWSs=
 github.com/llmariner/file-manager v1.7.0 h1:VhANLvQ45KrwCobpRrldIJ9wG+cgoZnNs4Amx+ypqIU=
 github.com/llmariner/file-manager v1.7.0/go.mod h1:rXGrR8pQUApzkEQitnl+wG34UprU7HP1Mb7RrkveY4I=
-github.com/llmariner/inference-manager v1.29.0 h1:j9jBYVD9aPkv1m49b2mGWZH9cmXP5RRPGWq3p2A6WkY=
-github.com/llmariner/inference-manager v1.29.0/go.mod h1:qbEtOfwSGr3U9pTLk9Wc8PTft9qwgEyrdjr2GtJ9uUA=
+github.com/llmariner/inference-manager v1.32.0 h1:fJT2eA1Lw++3GegfvvD44Kmggt5tK5l0YjHjlV9RZVw=
+github.com/llmariner/inference-manager v1.32.0/go.mod h1:osXVGWwrMmeh1O9FXikM+DsiN+s1SUKIg+XAIqSrof4=
 github.com/llmariner/job-manager v1.7.0 h1:jL1b4j48bdfsm+1TNeQ2Bxpbw/0TBcECVqQaoN0+tY0=
 github.com/llmariner/job-manager v1.7.0/go.mod h1:91nXgfOkIAL1XdyQcElAslNzmoccrlEvVXR9wsrYNFI=
 github.com/llmariner/model-manager v1.18.1 h1:x5gTIMY9KIb9LysvWchskiPZvh8KTmbS14wR9yH8Mfw=

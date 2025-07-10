@@ -17,7 +17,7 @@ require (
 	github.com/llmariner/cluster-manager v1.7.0
 	github.com/llmariner/cluster-monitor v0.6.0
 	github.com/llmariner/file-manager v1.7.0
-	github.com/llmariner/inference-manager v1.29.0
+	github.com/llmariner/inference-manager v1.32.0
 	github.com/llmariner/job-manager v1.7.0
 	github.com/llmariner/model-manager v1.18.1
 	github.com/llmariner/user-manager v1.9.1

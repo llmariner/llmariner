@@ -39,17 +39,8 @@ func (c *Client) Send(
 		return err
 	}
 
-	defer func() {
-		_ = body.Close()
-	}()
-	respBody, err := io.ReadAll(body)
-	if err != nil {
-		return fmt.Errorf("read response body: %s", err)
-	}
-
-	m := newMarshaler()
-	if err := m.Unmarshal(respBody, resp); err != nil {
-		return fmt.Errorf("unmarshal response: %s", err)
+	if err := unmarshalResponse(body, resp); err != nil {
+		return err
 	}
 
 	return nil
@@ -67,7 +58,6 @@ func (c *Client) SendRequest(
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %s", err)
 	}
-
 	var params map[string]interface{}
 	if method == http.MethodGet {
 		// Convert the body data to params as GET requests don't have a body.
@@ -79,8 +69,36 @@ func (c *Client) SendRequest(
 		}
 		reqBody = []byte{}
 	}
+	return c.sendRequest(method, path, params, bytes.NewReader(reqBody), "")
+}
 
-	hreq, err := http.NewRequest(method, c.env.Config.EndpointURL+path, bytes.NewReader(reqBody))
+// SendMultipart sends a request to the server.
+func (c *Client) SendMultipart(
+	path string,
+	req io.Reader,
+	contentType string,
+	resp any,
+) error {
+	body, err := c.sendRequest(http.MethodPost, path, map[string]interface{}{}, req, contentType)
+	if err != nil {
+		return err
+	}
+
+	if err := unmarshalResponse(body, resp); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) sendRequest(
+	method string,
+	path string,
+	params map[string]interface{},
+	reqBody io.Reader,
+	contentType string,
+) (io.ReadCloser, error) {
+	hreq, err := http.NewRequest(method, c.env.Config.EndpointURL+path, reqBody)
 	if err != nil {
 		return nil, fmt.Errorf("create request: %s", err)
 	}
@@ -90,6 +108,10 @@ func (c *Client) SendRequest(
 		query.Add(key, fmt.Sprintf("%v", value))
 	}
 	hreq.URL.RawQuery = query.Encode()
+
+	if contentType != "" {
+		hreq.Header.Set("Content-Type", contentType)
+	}
 
 	c.addHeaders(hreq)
 	hresp, err := http.DefaultClient.Do(hreq)
@@ -106,6 +128,23 @@ func (c *Client) SendRequest(
 	}
 
 	return hresp.Body, nil
+}
+
+func unmarshalResponse(body io.ReadCloser, resp any) error {
+	defer func() {
+		_ = body.Close()
+	}()
+	respBody, err := io.ReadAll(body)
+	if err != nil {
+		return fmt.Errorf("read response body: %s", err)
+	}
+
+	m := newMarshaler()
+	if err := m.Unmarshal(respBody, resp); err != nil {
+		return fmt.Errorf("unmarshal response: %s", err)
+	}
+
+	return nil
 }
 
 func extractErrorMessage(body io.ReadCloser) string {

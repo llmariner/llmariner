@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/llmariner/llmariner/cli/internal/admin"
+	"github.com/llmariner/llmariner/cli/internal/audio"
 	"github.com/llmariner/llmariner/cli/internal/auth"
 	"github.com/llmariner/llmariner/cli/internal/batch"
 	"github.com/llmariner/llmariner/cli/internal/chat"
@@ -29,8 +30,9 @@ func Cmd() *cobra.Command {
 	}
 	cmd.PersistentFlags().StringVar(&ui.Color, "color", string(ui.ColorAuto), "Control color output. Available options are 'auto', 'always' and 'never'.")
 
-	cmd.AddCommand(auth.Cmd())
 	cmd.AddCommand(admin.Cmd())
+	cmd.AddCommand(audio.Cmd())
+	cmd.AddCommand(auth.Cmd())
 	cmd.AddCommand(chat.Cmd())
 	cmd.AddCommand(context.Cmd())
 	cmd.AddCommand(embeddings.Cmd())
