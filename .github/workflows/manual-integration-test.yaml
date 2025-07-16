@@ -75,6 +75,7 @@ jobs:
           --state-values-set llmariner.enableOllamaDynamicModelLoading=${{ github.event.inputs.enableOllamaDynamicModelLoading }} \
           --state-values-set llmariner.enableHuggingFaceDownload=${{ github.event.inputs.enableHuggingFaceDownload }} \
           --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }} \
+          --state-values-set llmariner.useGpuSharing=${{ github.event.inputs.testGpuSharing }}
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |

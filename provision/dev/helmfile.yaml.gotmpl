@@ -255,6 +255,10 @@ releases:
         image: public.ecr.aws/cloudnatix/llmariner/fake-job
         version: latest
   {{ end }}
+  {{ if .Values.llmariner.useGpuSharing }}
+  - session-manager-agent:
+      gpuOperatorNamespace: nvidia
+  {{ end }}
   - prepare:
       database:
         createSecret: {{ (and (ne .Environment.Name "worker") (ne .Environment.Name "tenant-control")) | toYaml }}

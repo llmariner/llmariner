@@ -17,3 +17,4 @@ llmariner:
   enableOllamaDynamicModelLoading: false
   enableHuggingFaceDownload: false
   useFakeFineTuningJob: false
+  useGpuSharing: false
