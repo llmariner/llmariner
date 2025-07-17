@@ -15,7 +15,7 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
 	github.com/llmariner/cluster-manager v1.7.0
-	github.com/llmariner/cluster-monitor v0.6.0
+	github.com/llmariner/cluster-monitor v0.9.0
 	github.com/llmariner/file-manager v1.7.0
 	github.com/llmariner/inference-manager v1.32.0
 	github.com/llmariner/job-manager v1.7.0

@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	path = "/clustertelemetry/clustersnapshots"
+	snapshotPath = "/clustertelemetry/clustersnapshots"
+	gpuUsagePath = "/clustertelemetry/gpu-usages"
 )
 
 // Cmd is the root command for usage.
@@ -26,6 +27,7 @@ func Cmd() *cobra.Command {
 	}
 	cmd.Hidden = true
 	cmd.AddCommand(listClusterSnapshotsCmd())
+	cmd.AddCommand(listGPUUsagesCmd())
 	return cmd
 }
 
@@ -47,6 +49,17 @@ func listClusterSnapshotsCmd() *cobra.Command {
 	return cmd
 }
 
+func listGPUUsagesCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "list-gpu-usages",
+		Short: "List GPU usages",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return listGPUUsages(cmd.Context())
+		},
+	}
+	return cmd
+}
+
 func listClusterSnapshots(ctx context.Context, groupBy cv1.ListClusterSnapshotsRequest_GroupBy) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
@@ -56,7 +69,27 @@ func listClusterSnapshots(ctx context.Context, groupBy cv1.ListClusterSnapshotsR
 		GroupBy: groupBy,
 	}
 	var resp cv1.ListClusterSnapshotsResponse
-	if err := ihttp.NewClient(env).Send(http.MethodGet, path, &req, &resp); err != nil {
+	if err := ihttp.NewClient(env).Send(http.MethodGet, snapshotPath, &req, &resp); err != nil {
+		return err
+	}
+
+	b, err := json.MarshalIndent(&resp, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
+
+	return nil
+}
+
+func listGPUUsages(ctx context.Context) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+	req := cv1.ListGpuUsagesRequest{}
+	var resp cv1.ListGpuUsagesResponse
+	if err := ihttp.NewClient(env).Send(http.MethodGet, gpuUsagePath, &req, &resp); err != nil {
 		return err
 	}
 
