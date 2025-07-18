@@ -1,6 +1,7 @@
 package hidden
 
 import (
+	"github.com/llmariner/llmariner/cli/internal/hidden/apiusage"
 	"github.com/llmariner/llmariner/cli/internal/hidden/clustertelemetry"
 	"github.com/llmariner/llmariner/cli/internal/hidden/inference"
 	"github.com/llmariner/llmariner/cli/internal/hidden/jobs"
@@ -19,5 +20,6 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(jobs.Cmd())
 	cmd.AddCommand(inference.Cmd())
 	cmd.AddCommand(clustertelemetry.Cmd())
+	cmd.AddCommand(apiusage.Cmd())
 	return cmd
 }
