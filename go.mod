@@ -14,13 +14,14 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
+	github.com/llmariner/api-usage v1.12.0
 	github.com/llmariner/cluster-manager v1.7.0
 	github.com/llmariner/cluster-monitor v0.9.0
 	github.com/llmariner/file-manager v1.7.0
 	github.com/llmariner/inference-manager v1.32.0
 	github.com/llmariner/job-manager v1.7.0
 	github.com/llmariner/model-manager v1.18.1
-	github.com/llmariner/user-manager v1.9.1
+	github.com/llmariner/user-manager v1.16.0
 	github.com/llmariner/vector-store-manager v0.52.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d

@@ -20,7 +20,7 @@ const (
 // Cmd is the root command for usage.
 func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                "clustertelemetry",
+		Use:                "clustert-elemetry",
 		Short:              "Cluster Telemetry commands",
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
@@ -50,14 +50,13 @@ func listClusterSnapshotsCmd() *cobra.Command {
 }
 
 func listGPUUsagesCmd() *cobra.Command {
-	cmd := &cobra.Command{
+	return &cobra.Command{
 		Use:   "list-gpu-usages",
 		Short: "List GPU usages",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return listGPUUsages(cmd.Context())
 		},
 	}
-	return cmd
 }
 
 func listClusterSnapshots(ctx context.Context, groupBy cv1.ListClusterSnapshotsRequest_GroupBy) error {
