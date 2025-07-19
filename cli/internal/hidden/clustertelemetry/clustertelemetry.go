@@ -20,7 +20,7 @@ const (
 // Cmd is the root command for usage.
 func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                "clustert-elemetry",
+		Use:                "clustert-telemetry",
 		Short:              "Cluster Telemetry commands",
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
