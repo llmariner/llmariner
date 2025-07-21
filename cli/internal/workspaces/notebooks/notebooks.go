@@ -69,6 +69,7 @@ func createCmd() *cobra.Command {
 	cmd.Flags().StringVar(&opts.imageURI, "image-uri", "", "URI of the Notebook Image")
 	cmd.Flags().StringArrayVar(&envs, "env", nil, "Environment variables used within the Notebook (e.g., MY_ENV=somevalue)")
 	cmd.Flags().Int32Var(&opts.gpuCount, "gpu", 0, "Number of GPUs")
+	cmd.Flags().Int32SliceVar(&opts.additionalExposedPorts, "port", nil, "Additional ports to expose for the Notebook")
 	return cmd
 }
 
@@ -166,6 +167,8 @@ type createOpts struct {
 	imageURI  string
 	envs      map[string]string
 	gpuCount  int32
+
+	additionalExposedPorts []int32
 }
 
 func create(ctx context.Context, name string, opts createOpts) error {
@@ -186,6 +189,8 @@ func create(ctx context.Context, name string, opts createOpts) error {
 		Name:  name,
 		Image: image,
 		Envs:  opts.envs,
+
+		AdditionalExposedPorts: opts.additionalExposedPorts,
 	}
 	if opts.gpuCount > 0 {
 		req.Resources = &jv1.Resources{

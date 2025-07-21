@@ -94,8 +94,8 @@ github.com/llmariner/file-manager v1.7.0 h1:VhANLvQ45KrwCobpRrldIJ9wG+cgoZnNs4Am
 github.com/llmariner/file-manager v1.7.0/go.mod h1:rXGrR8pQUApzkEQitnl+wG34UprU7HP1Mb7RrkveY4I=
 github.com/llmariner/inference-manager v1.32.0 h1:fJT2eA1Lw++3GegfvvD44Kmggt5tK5l0YjHjlV9RZVw=
 github.com/llmariner/inference-manager v1.32.0/go.mod h1:osXVGWwrMmeh1O9FXikM+DsiN+s1SUKIg+XAIqSrof4=
-github.com/llmariner/job-manager v1.7.0 h1:jL1b4j48bdfsm+1TNeQ2Bxpbw/0TBcECVqQaoN0+tY0=
-github.com/llmariner/job-manager v1.7.0/go.mod h1:91nXgfOkIAL1XdyQcElAslNzmoccrlEvVXR9wsrYNFI=
+github.com/llmariner/job-manager v1.24.1 h1:M2pAwX8nA6yLTGtKYXP1uA03iQMMc3TaT8oh9KkjXJw=
+github.com/llmariner/job-manager v1.24.1/go.mod h1:ddotCdCEYKvvV399y0uoHIjL4yH2wna7Gk5fTmXfRaE=
 github.com/llmariner/model-manager v1.18.1 h1:x5gTIMY9KIb9LysvWchskiPZvh8KTmbS14wR9yH8Mfw=
 github.com/llmariner/model-manager v1.18.1/go.mod h1:IbbSLHi25WnKDedgdsZ3bv8N18bm2bYT+pXK3VW0J10=
 github.com/llmariner/user-manager v1.16.0 h1:IV5NJBPZuYAbhZUp8WwRjcniPrumSG2U2nQbgeS0nyY=
