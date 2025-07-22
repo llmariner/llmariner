@@ -144,6 +144,7 @@ func deleteCmd() *cobra.Command {
 func openCmd() *cobra.Command {
 	var (
 		noOpen bool
+		port   int32
 	)
 	cmd := &cobra.Command{
 		Use:  "open <NAME>",
@@ -154,10 +155,11 @@ func openCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return open(ctx, nb, noOpen)
+			return open(ctx, nb, noOpen, port)
 		},
 	}
 	cmd.Flags().BoolVar(&noOpen, "no-open", false, "Do not open the browser")
+	cmd.Flags().Int32Var(&port, "port", 0, "Notebook port to access")
 	return cmd
 }
 
@@ -271,7 +273,7 @@ func validateNameArg(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func open(ctx context.Context, nb *jv1.Notebook, noOpen bool) error {
+func open(ctx context.Context, nb *jv1.Notebook, noOpen bool, port int32) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -286,7 +288,13 @@ func open(ctx context.Context, nb *jv1.Notebook, noOpen bool) error {
 	}
 
 	fmt.Println("Opening browser...")
-	nbURL := fmt.Sprintf("%s/sessions/%s/v1/services/notebooks/%s/%s?token=%s", env.Config.EndpointURL, resp.ClusterId, nb.Id, resp.KubernetesNamespace, nb.Token)
+	nbURLBase := fmt.Sprintf("%s/sessions/%s/v1/services/notebooks/%s/%s", env.Config.EndpointURL, resp.ClusterId, nb.Id, resp.KubernetesNamespace)
+	var nbURL string
+	if port > 0 {
+		nbURL = fmt.Sprintf("%s/%d/", nbURLBase, port)
+	} else {
+		nbURL = fmt.Sprintf("%s?token=%s", nbURLBase, nb.Token)
+	}
 	if noOpen {
 		fmt.Printf("Please open the following URL from your browser:\n%s\n", nbURL)
 		return nil
