@@ -15,13 +15,13 @@ annotations:
   "artifacthub.io/license": Apache-2.0
 dependencies:
 - name: api-usage-cleaner
-  version: 1.12.1
+  version: 1.13.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: api-usage-cleaner.enable
   tags:
   - control-plane
 - name: api-usage-server
-  version: 1.12.1
+  version: 1.13.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: api-usage-server.enable
   tags:
