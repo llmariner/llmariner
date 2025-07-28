@@ -51,7 +51,8 @@ func createCmd() *cobra.Command {
 
 func createBaseCmd() *cobra.Command {
 	var (
-		repoStr string
+		repoStr       string
+		projectScoped bool
 	)
 	cmd := &cobra.Command{
 		Use:  "base <ID>",
@@ -61,11 +62,12 @@ func createBaseCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return createBase(cmd.Context(), args[0], repo)
+			return createBase(cmd.Context(), args[0], repo, projectScoped)
 		},
 	}
 
 	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
+	cmd.Flags().BoolVar(&projectScoped, "project-scoped", false, "If true, the model is project scoped. Otherwise, it has a global scope.")
 	_ = cmd.MarkFlagRequired("source-repository")
 	return cmd
 }
@@ -145,6 +147,7 @@ func createBase(
 	ctx context.Context,
 	id string,
 	repo mv1.SourceRepository,
+	projectScoped bool,
 ) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
@@ -155,6 +158,7 @@ func createBase(
 		IsFineTunedModel: false,
 		Id:               id,
 		SourceRepository: repo,
+		IsProjectScoped:  projectScoped,
 	}
 	var resp mv1.Model
 	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
