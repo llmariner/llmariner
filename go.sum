@@ -96,8 +96,8 @@ github.com/llmariner/inference-manager v1.32.0 h1:fJT2eA1Lw++3GegfvvD44Kmggt5tK5
 github.com/llmariner/inference-manager v1.32.0/go.mod h1:osXVGWwrMmeh1O9FXikM+DsiN+s1SUKIg+XAIqSrof4=
 github.com/llmariner/job-manager v1.24.1 h1:M2pAwX8nA6yLTGtKYXP1uA03iQMMc3TaT8oh9KkjXJw=
 github.com/llmariner/job-manager v1.24.1/go.mod h1:ddotCdCEYKvvV399y0uoHIjL4yH2wna7Gk5fTmXfRaE=
-github.com/llmariner/model-manager v1.22.0 h1:t4EczQC1lJ8LIHKcix0XQoDwfM1TttfnROeYJcSkfAA=
-github.com/llmariner/model-manager v1.22.0/go.mod h1:nm3+ILA+cOJ5I7ji3nJCltpKTD1WalqG2skTEhHcVD8=
+github.com/llmariner/model-manager v1.23.0 h1:LftraeXcbCpN8XYfTqelLH6Gg61wr658oDIweEfNKu0=
+github.com/llmariner/model-manager v1.23.0/go.mod h1:nm3+ILA+cOJ5I7ji3nJCltpKTD1WalqG2skTEhHcVD8=
 github.com/llmariner/user-manager v1.16.0 h1:IV5NJBPZuYAbhZUp8WwRjcniPrumSG2U2nQbgeS0nyY=
 github.com/llmariner/user-manager v1.16.0/go.mod h1:7ZYhWrKP59Qjmnoz2LFXTs5Qx8QkSL1OG+wZ1gJrUJw=
 github.com/llmariner/vector-store-manager v0.52.0 h1:LxwAqYTSDuejuSualtZh8WfeoXGgxhqiFUprzZbZuos=

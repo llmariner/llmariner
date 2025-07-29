@@ -225,7 +225,12 @@ func list(ctx context.Context) error {
 
 	for _, m := range ms {
 		r := toloadingStatusString(m.LoadingStatus)
-		if m.LoadingStatus == mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_FAILED {
+		switch m.LoadingStatus {
+		case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_LOADING:
+			if msg := m.LoadingStatusMessage; msg != "" {
+				r = fmt.Sprintf("%s (%s)", r, msg)
+			}
+		case mv1.ModelLoadingStatus_MODEL_LOADING_STATUS_FAILED:
 			r = fmt.Sprintf("%s (%s)", r, m.LoadingFailureReason)
 		}
 		a := toActivationStatusString(m.ActivationStatus)
