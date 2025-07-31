@@ -34,6 +34,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
+	cmd.AddCommand(updateCmd())
 	cmd.AddCommand(activateCmd())
 	cmd.AddCommand(deactivateCmd())
 	return cmd
@@ -153,6 +154,29 @@ func deleteCmd() *cobra.Command {
 			return delete(cmd.Context(), args[0])
 		},
 	}
+}
+
+func updateCmd() *cobra.Command {
+	var (
+		config = mv1.ModelConfig{
+			RuntimeConfig: &mv1.ModelConfig_RuntimeConfig{
+				Resources: &mv1.ModelConfig_RuntimeConfig_Resources{},
+			},
+			ClusterAllocationPolicy: &mv1.ModelConfig_ClusterAllocationPolicy{},
+		}
+	)
+	cmd := &cobra.Command{
+		Use:  "update <ID>",
+		Args: validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return update(cmd.Context(), args[0], &config)
+		},
+	}
+
+	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
+	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+
+	return cmd
 }
 
 func activateCmd() *cobra.Command {
@@ -336,6 +360,28 @@ func delete(ctx context.Context, id string) error {
 
 	fmt.Printf("Deleted the model (ID: %q).\n", id)
 
+	return nil
+}
+
+func update(
+	ctx context.Context,
+	id string,
+	config *mv1.ModelConfig,
+) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := &mv1.Model{
+		Config: config,
+	}
+	var resp mv1.Model
+	if err := ihttp.NewClient(env).Send(http.MethodPatch, fmt.Sprintf("%s/%s", path, id), &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Updated the model (ID: %q).\n", id)
 	return nil
 }
 
