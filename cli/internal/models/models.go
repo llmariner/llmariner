@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -31,6 +32,7 @@ func Cmd() *cobra.Command {
 	}
 	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
+	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
 	cmd.AddCommand(activateCmd())
 	cmd.AddCommand(deactivateCmd())
@@ -111,6 +113,18 @@ func listCmd() *cobra.Command {
 			return list(cmd.Context())
 		},
 	}
+}
+
+func getCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "get <ID>",
+		Short: "Retrieve details of a specific model by ID",
+		Args:  validateIDArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return get(cmd.Context(), args[0])
+		},
+	}
+	return cmd
 }
 
 func deleteCmd() *cobra.Command {
@@ -245,6 +259,29 @@ func list(ctx context.Context) error {
 	}
 
 	tbl.Print()
+
+	return nil
+}
+
+func get(ctx context.Context, id string) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	req := mv1.GetModelRequest{
+		IncludeLoadingModel: true,
+	}
+	var m mv1.Model
+	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &req, &m); err != nil {
+		return err
+	}
+
+	b, err := json.MarshalIndent(&m, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 
 	return nil
 }
