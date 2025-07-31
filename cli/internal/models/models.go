@@ -114,7 +114,7 @@ func createFineTunedCmd() *cobra.Command {
 	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
 	cmd.Flags().StringVar(&modelFileLocation, "model-file-location", "", "Model file location.")
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
-	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicass to use for the model. Default is 1.")
+	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
 
 	_ = cmd.MarkFlagRequired("base-model-id")
 	_ = cmd.MarkFlagRequired("suffix")
