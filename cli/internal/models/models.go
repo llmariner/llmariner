@@ -117,9 +117,9 @@ func listCmd() *cobra.Command {
 
 func getCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "get <ID>",
+		Use:   "get <ID>",
 		Short: "Retrieve details of a specific model by ID",
-		Args: validateIDArg,
+		Args:  validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return get(cmd.Context(), args[0])
 		},
@@ -273,7 +273,6 @@ func get(ctx context.Context, id string) error {
 		IncludeLoadingModel: true,
 	}
 	var m mv1.Model
-	fmt.Printf("path = %s/%s\n", path, id)
 	if err := ihttp.NewClient(env).Send(http.MethodGet, fmt.Sprintf("%s/%s", path, id), &req, &m); err != nil {
 		return err
 	}
