@@ -118,6 +118,7 @@ func listCmd() *cobra.Command {
 func getCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "get <ID>",
+		Short: "Retrieve details of a specific model by ID",
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return get(cmd.Context(), args[0])
