@@ -180,7 +180,9 @@ func updateCmd() *cobra.Command {
 		Use:  "update <ID>",
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			config.ClusterAllocationPolicy.EnableOnDemandAllocation = !disableOnDemandAllocation
+			if cmd.Flags().Changed("disable-on-demand-allocation") {
+				config.ClusterAllocationPolicy.EnableOnDemandAllocation = !disableOnDemandAllocation
+			}
 			return update(cmd.Context(), args[0], &config)
 		},
 	}
