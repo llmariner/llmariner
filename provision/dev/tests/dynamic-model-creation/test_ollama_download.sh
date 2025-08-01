@@ -14,5 +14,8 @@ for i in {1..300}; do
 done
 
 echo "Model is loaded!"
+
+llma models get deepseek-r1:1.5b
+
 echo "Running chat completion..."
 llma chat completions create --model deepseek-r1:1.5b --role user --completion "What is the capital of France?"
