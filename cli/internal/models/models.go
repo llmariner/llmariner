@@ -168,27 +168,38 @@ func deleteCmd() *cobra.Command {
 
 func updateCmd() *cobra.Command {
 	var (
-		config = mv1.ModelConfig{
-			RuntimeConfig: &mv1.ModelConfig_RuntimeConfig{
-				Resources: &mv1.ModelConfig_RuntimeConfig_Resources{},
-			},
-			ClusterAllocationPolicy: &mv1.ModelConfig_ClusterAllocationPolicy{},
-		}
+		gpu                       int32
+		replicas                  int32
 		disableOnDemandAllocation bool
 	)
 	cmd := &cobra.Command{
 		Use:  "update <ID>",
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			var config mv1.ModelConfig
+
 			if cmd.Flags().Changed("disable-on-demand-allocation") {
-				config.ClusterAllocationPolicy.EnableOnDemandAllocation = !disableOnDemandAllocation
+				config.ClusterAllocationPolicy = &mv1.ModelConfig_ClusterAllocationPolicy{
+					EnableOnDemandAllocation: !disableOnDemandAllocation,
+				}
 			}
+			if cmd.Flags().Changed("gpu") || cmd.Flags().Changed("replicas") {
+				config.RuntimeConfig = &mv1.ModelConfig_RuntimeConfig{}
+				if cmd.Flags().Changed("gpu") {
+					config.RuntimeConfig.Resources = &mv1.ModelConfig_RuntimeConfig_Resources{}
+					config.RuntimeConfig.Resources.Gpu = gpu
+				}
+				if cmd.Flags().Changed("replicas") {
+					config.RuntimeConfig.Replicas = replicas
+				}
+			}
+
 			return update(cmd.Context(), args[0], &config)
 		},
 	}
 
-	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
-	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+	cmd.Flags().Int32Var(&gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
+	cmd.Flags().Int32Var(&replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
 	cmd.Flags().BoolVar(&disableOnDemandAllocation, "disable-on-demand-allocation", false, "If true, the model is not activated on demand.")
 
 	return cmd
