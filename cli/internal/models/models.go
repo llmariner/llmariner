@@ -56,12 +56,14 @@ func createBaseCmd() *cobra.Command {
 	var (
 		repoStr       string
 		projectScoped bool
-		config        = mv1.ModelConfig{
+
+		config = mv1.ModelConfig{
 			RuntimeConfig: &mv1.ModelConfig_RuntimeConfig{
 				Resources: &mv1.ModelConfig_RuntimeConfig_Resources{},
 			},
 			ClusterAllocationPolicy: &mv1.ModelConfig_ClusterAllocationPolicy{},
 		}
+		disableOnDemandAllocation bool
 	)
 	cmd := &cobra.Command{
 		Use:  "base <ID>",
@@ -71,14 +73,17 @@ func createBaseCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			config.ClusterAllocationPolicy.EnableOnDemandAllocation = !disableOnDemandAllocation
 			return createBase(cmd.Context(), args[0], repo, projectScoped, &config)
 		},
 	}
 
 	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
 	cmd.Flags().BoolVar(&projectScoped, "project-scoped", false, "If true, the model is project scoped. Otherwise, it has a global scope.")
+
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+	cmd.Flags().BoolVar(&disableOnDemandAllocation, "disable-on-demand-allocation", false, "If true, the model is not activated on demand.")
 
 	_ = cmd.MarkFlagRequired("source-repository")
 	return cmd
@@ -90,12 +95,14 @@ func createFineTunedCmd() *cobra.Command {
 		suffix            string
 		repoStr           string
 		modelFileLocation string
-		config            = mv1.ModelConfig{
+
+		config = mv1.ModelConfig{
 			RuntimeConfig: &mv1.ModelConfig_RuntimeConfig{
 				Resources: &mv1.ModelConfig_RuntimeConfig_Resources{},
 			},
 			ClusterAllocationPolicy: &mv1.ModelConfig_ClusterAllocationPolicy{},
 		}
+		disableOnDemandAllocation bool
 	)
 
 	cmd := &cobra.Command{
@@ -106,6 +113,7 @@ func createFineTunedCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			config.ClusterAllocationPolicy.EnableOnDemandAllocation = !disableOnDemandAllocation
 			return createFineTuned(cmd.Context(), baseModelID, suffix, repo, modelFileLocation, &config)
 		},
 	}
@@ -114,8 +122,10 @@ func createFineTunedCmd() *cobra.Command {
 	cmd.Flags().StringVar(&suffix, "suffix", "", "Suffix for the model ID.")
 	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
 	cmd.Flags().StringVar(&modelFileLocation, "model-file-location", "", "Model file location.")
+
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+	cmd.Flags().BoolVar(&disableOnDemandAllocation, "disable-on-demand-allocation", false, "If true, the model is not activated on demand.")
 
 	_ = cmd.MarkFlagRequired("base-model-id")
 	_ = cmd.MarkFlagRequired("suffix")
@@ -158,23 +168,39 @@ func deleteCmd() *cobra.Command {
 
 func updateCmd() *cobra.Command {
 	var (
-		config = mv1.ModelConfig{
-			RuntimeConfig: &mv1.ModelConfig_RuntimeConfig{
-				Resources: &mv1.ModelConfig_RuntimeConfig_Resources{},
-			},
-			ClusterAllocationPolicy: &mv1.ModelConfig_ClusterAllocationPolicy{},
-		}
+		gpu                       int32
+		replicas                  int32
+		disableOnDemandAllocation bool
 	)
 	cmd := &cobra.Command{
 		Use:  "update <ID>",
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			var config mv1.ModelConfig
+
+			if cmd.Flags().Changed("disable-on-demand-allocation") {
+				config.ClusterAllocationPolicy = &mv1.ModelConfig_ClusterAllocationPolicy{
+					EnableOnDemandAllocation: !disableOnDemandAllocation,
+				}
+			}
+			if cmd.Flags().Changed("gpu") || cmd.Flags().Changed("replicas") {
+				config.RuntimeConfig = &mv1.ModelConfig_RuntimeConfig{}
+				if cmd.Flags().Changed("gpu") {
+					config.RuntimeConfig.Resources = &mv1.ModelConfig_RuntimeConfig_Resources{}
+					config.RuntimeConfig.Resources.Gpu = gpu
+				}
+				if cmd.Flags().Changed("replicas") {
+					config.RuntimeConfig.Replicas = replicas
+				}
+			}
+
 			return update(cmd.Context(), args[0], &config)
 		},
 	}
 
-	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
-	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+	cmd.Flags().Int32Var(&gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
+	cmd.Flags().Int32Var(&replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+	cmd.Flags().BoolVar(&disableOnDemandAllocation, "disable-on-demand-allocation", false, "If true, the model is not activated on demand.")
 
 	return cmd
 }
