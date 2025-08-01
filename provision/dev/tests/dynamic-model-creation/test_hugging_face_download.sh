@@ -14,5 +14,8 @@ for i in {1..300}; do
 done
 
 echo "Model is loaded!"
+
+llma models get TheBloke-TinyLlama-1.1B-Chat-v1.0-GGUF-tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+
 echo "Running chat completion..."
 llma chat completions create --model TheBloke-TinyLlama-1.1B-Chat-v1.0-GGUF-tinyllama-1.1b-chat-v1.0.Q2_K.gguf  --role user --completion "What is the capital of France?"
