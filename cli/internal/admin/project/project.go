@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -45,16 +46,22 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var orgTitle, namespace string
+	var (
+		orgTitle     string
+		namespace    string
+		nodeSelector []string
+	)
 	cmd := &cobra.Command{
 		Use:  "create <TITLE>",
 		Args: validateTitleArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return create(cmd.Context(), args[0], orgTitle, namespace)
+			return create(cmd.Context(), args[0], orgTitle, namespace, nodeSelector)
 		},
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&namespace, "kubernetes-namespace", "n", "", "Kubernetes namesapce of the project")
+	cmd.Flags().StringSlice("node-selector", nodeSelector, "Node selector for the project. This is used to schedule the project pods on specific nodes. Format: key=value")
+
 	_ = cmd.MarkFlagRequired("kubernetes-namespace")
 	return cmd
 }
@@ -148,7 +155,13 @@ func removeMemberCmd() *cobra.Command {
 	return cmd
 }
 
-func create(ctx context.Context, title, orgTitle, namespace string) error {
+func create(
+	ctx context.Context,
+	title,
+	orgTitle,
+	namespace string,
+	nodeSelectorStr []string,
+) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
@@ -158,10 +171,28 @@ func create(ctx context.Context, title, orgTitle, namespace string) error {
 	if err != nil {
 		return err
 	}
+
+	var nodeSelector []*uv1.ProjectAssignment_NodeSelector
+	for _, ns := range nodeSelectorStr {
+		l := strings.SplitN(ns, "=", 2)
+		if len(l) != 2 {
+			return fmt.Errorf("invalid node selector format: %q, expected key=value", ns)
+		}
+		nodeSelector = append(nodeSelector, &uv1.ProjectAssignment_NodeSelector{
+			Key:   l[0],
+			Value: l[1],
+		})
+	}
+
 	req := uv1.CreateProjectRequest{
-		Title:               title,
-		OrganizationId:      orgID,
-		KubernetesNamespace: namespace,
+		Title:          title,
+		OrganizationId: orgID,
+		Assignments: []*uv1.ProjectAssignment{
+			{
+				Namespace:    namespace,
+				NodeSelector: nodeSelector,
+			},
+		},
 	}
 	var resp uv1.Project
 	if err := ihttp.NewClient(env).Send(http.MethodPost, path, &req, &resp); err != nil {
