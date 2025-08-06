@@ -17,5 +17,18 @@ echo "Model is loaded!"
 
 llma models get deepseek-r1:1.5b
 
+echo "Waiting for the inference runtime pod is created..."
+
+for i in {1..300}; do
+  if kubectl get pod -n llmariner -l app.kubernetes.io/name=runtime; then
+    break
+  fi
+  sleep 1
+done
+
+kubectl wait --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/name=runtime
+
+echo "Inference runtime pod is ready!"
+
 echo "Running chat completion..."
 llma chat completions create --model deepseek-r1:1.5b --role user --completion "What is the capital of France?"
