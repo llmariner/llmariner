@@ -17,5 +17,26 @@ echo "Model is loaded!"
 
 llma models get TheBloke-TinyLlama-1.1B-Chat-v1.0-GGUF-tinyllama-1.1b-chat-v1.0.Q2_K.gguf
 
+echo "Activating the model."
+
+llma models activate TheBloke-TinyLlama-1.1B-Chat-v1.0-GGUF-tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+
+echo "Waiting for the inference runtime pod is created..."
+
+
+for i in {1..300}; do
+  if kubectl get pod -n llmariner ollama--v1-0-gguf-tinyllama-1-1b-chat-v1-0-q2-k-gguf-0; then
+    break
+  fi
+  sleep 1
+done
+
+kubectl wait --timeout=300s --for=condition=ready pod -n llmariner ollama--v1-0-gguf-tinyllama-1-1b-chat-v1-0-q2-k-gguf-0
+
+echo "Inference runtime pod is ready!"
+
 echo "Running chat completion..."
+
 llma chat completions create --model TheBloke-TinyLlama-1.1B-Chat-v1.0-GGUF-tinyllama-1.1b-chat-v1.0.Q2_K.gguf  --role user --completion "What is the capital of France?"
+
+echo "Chat completion is done!"
