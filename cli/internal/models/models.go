@@ -54,8 +54,8 @@ func createCmd() *cobra.Command {
 
 func createBaseCmd() *cobra.Command {
 	var (
-		repoStr       string
-		projectScoped bool
+		repoStr      string
+		globalScoped bool
 
 		config = mv1.ModelConfig{
 			RuntimeConfig: &mv1.ModelConfig_RuntimeConfig{
@@ -74,12 +74,12 @@ func createBaseCmd() *cobra.Command {
 				return err
 			}
 			config.ClusterAllocationPolicy.EnableOnDemandAllocation = !disableOnDemandAllocation
-			return createBase(cmd.Context(), args[0], repo, projectScoped, &config)
+			return createBase(cmd.Context(), args[0], repo, globalScoped, &config)
 		},
 	}
 
 	cmd.Flags().StringVar(&repoStr, "source-repository", "", "Source repository. One of 'object-store', 'hugging-face' or 'ollama'.")
-	cmd.Flags().BoolVar(&projectScoped, "project-scoped", false, "If true, the model is project scoped. Otherwise, it has a global scope.")
+	cmd.Flags().BoolVar(&globalScoped, "global-scoped", false, "If true, the model is global scoped. Otherwise, it has a project scope.")
 
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Resources.Gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
 	cmd.Flags().Int32Var(&config.RuntimeConfig.Replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
@@ -229,7 +229,7 @@ func createBase(
 	ctx context.Context,
 	id string,
 	repo mv1.SourceRepository,
-	projectScoped bool,
+	globalScoped bool,
 	config *mv1.ModelConfig,
 ) error {
 	env, err := runtime.NewEnv(ctx)
@@ -241,7 +241,7 @@ func createBase(
 		IsFineTunedModel: false,
 		Id:               id,
 		SourceRepository: repo,
-		IsProjectScoped:  projectScoped,
+		IsProjectScoped:  !globalScoped,
 		Config:           config,
 	}
 	var resp mv1.Model
