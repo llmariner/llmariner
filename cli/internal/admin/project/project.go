@@ -60,7 +60,7 @@ func createCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVarP(&namespace, "kubernetes-namespace", "n", "", "Kubernetes namesapce of the project")
-	cmd.Flags().StringSlice("node-selector", nodeSelector, "Node selector for the project. This is used to schedule the project pods on specific nodes. Format: key=value")
+	cmd.Flags().StringSliceVar(&nodeSelector, "node-selector", nil, "Node selector for the project. This is used to schedule the project pods on specific nodes. Format: key=value")
 
 	_ = cmd.MarkFlagRequired("kubernetes-namespace")
 	return cmd
