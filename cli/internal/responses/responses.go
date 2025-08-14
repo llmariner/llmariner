@@ -31,7 +31,6 @@ func Cmd() *cobra.Command {
 func createCmd() *cobra.Command {
 	var req iv1.CreateModelResponseRequest
 	cmd := &cobra.Command{
-		Use:  "create",
 		Use:   "create",
 		Short: "Create a model response",
 		Args:  cobra.NoArgs,
