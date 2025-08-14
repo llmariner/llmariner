@@ -16,7 +16,7 @@ const (
 	path = "/responses"
 )
 
-// Cmd is the root command for completions.
+// Cmd is the root command for Model Responses commands.
 func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "responses",
