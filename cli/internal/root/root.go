@@ -14,6 +14,7 @@ import (
 	"github.com/llmariner/llmariner/cli/internal/hidden"
 	"github.com/llmariner/llmariner/cli/internal/legacy"
 	"github.com/llmariner/llmariner/cli/internal/models"
+	"github.com/llmariner/llmariner/cli/internal/responses"
 	"github.com/llmariner/llmariner/cli/internal/storage"
 	"github.com/llmariner/llmariner/cli/internal/ui"
 	"github.com/llmariner/llmariner/cli/internal/version"
@@ -33,14 +34,15 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(admin.Cmd())
 	cmd.AddCommand(audio.Cmd())
 	cmd.AddCommand(auth.Cmd())
+	cmd.AddCommand(batch.Cmd())
 	cmd.AddCommand(chat.Cmd())
 	cmd.AddCommand(context.Cmd())
 	cmd.AddCommand(embeddings.Cmd())
 	cmd.AddCommand(finetuning.Cmd())
-	cmd.AddCommand(workspaces.Cmd())
-	cmd.AddCommand(batch.Cmd())
 	cmd.AddCommand(models.Cmd())
 	cmd.AddCommand(storage.Cmd())
+	cmd.AddCommand(responses.Cmd())
+	cmd.AddCommand(workspaces.Cmd())
 	cmd.AddCommand(version.Cmd())
 	cmd.AddCommand(hidden.Cmd())
 
