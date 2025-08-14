@@ -32,7 +32,9 @@ func createCmd() *cobra.Command {
 	var req iv1.CreateModelResponseRequest
 	cmd := &cobra.Command{
 		Use:  "create",
-		Args: cobra.NoArgs,
+		Use:   "create",
+		Short: "Create a model response",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return create(cmd.Context(), &req)
 		},
