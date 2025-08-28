@@ -18,3 +18,6 @@ llmariner:
   enableHuggingFaceDownload: false
   useFakeFineTuningJob: false
   useGpuSharing: false
+  useInferenceSim: false
+  enableDynamicLoRALoading: false
+  defaultRuntime: ollama

@@ -236,10 +236,20 @@ releases:
   {{ if .Values.llmariner.deployLatest }}
   - "./values/latest.yaml"
   {{ end }}
-  {{ if .Values.llmariner.enableOllamaDynamicModelLoading }}
   - inference-manager-engine:
+      {{ if .Values.llmariner.useInferenceSim }}
+      runtime:
+        runtimeImages:
+          vllm: ghcr.io/llm-d/llm-d-inference-sim:v0.4.0
+      {{ end }}
+      model:
+        default:
+          runtimeName: {{ .Values.llmariner.defaultRuntime }}
       ollama:
-        dynamicModelLoading: true
+        dynamicModelLoading: {{ .Values.llmariner.enableOllamaDynamicModelLoading }}
+      vllm:
+        dynamicLoRALoading: {{ .Values.llmariner.enableDynamicLoRALoading }}
+  {{ if .Values.llmariner.enableOllamaDynamicModelLoading }}
   - vector-store-manager-server:
       llmEngineAddr: ollama-dynamic:11434
   {{ end }}
