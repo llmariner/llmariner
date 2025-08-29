@@ -37,7 +37,16 @@ on:
         required: true
         default: true
         type: boolean
-
+      defaultRuntime:
+        description: 'Default inference runtime?'
+        required: true
+        default: ollama
+        type: string
+      useInferenceSim:
+        description: 'Use Inference Sim for vLLM?'
+        required: true
+        default: false
+        type: boolean
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
@@ -75,7 +84,9 @@ jobs:
           --state-values-set llmariner.enableOllamaDynamicModelLoading=${{ github.event.inputs.enableOllamaDynamicModelLoading }} \
           --state-values-set llmariner.enableHuggingFaceDownload=${{ github.event.inputs.enableHuggingFaceDownload }} \
           --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }} \
-          --state-values-set llmariner.useGpuSharing=${{ github.event.inputs.testGpuSharing }}
+          --state-values-set llmariner.useGpuSharing=${{ github.event.inputs.testGpuSharing }} \
+          --state-values-set llmariner.defaultRuntime=${{ github.event.inputs.defaultRuntime }} \
+          --state-values-set llmariner.useInferenceSim=${{ github.event.inputs.useInferenceSim }}
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
