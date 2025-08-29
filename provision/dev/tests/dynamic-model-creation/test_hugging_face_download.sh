@@ -24,7 +24,7 @@ llma models activate TheBloke-TinyLlama-1.1B-Chat-v1.0-GGUF-tinyllama-1.1b-chat-
 echo "Waiting for the inference runtime pod is created..."
 
 for i in {1..300}; do
-  if kubectl get pod -n llmariner -l app.kubernetes.io/name=runtime; then
+  if kubectl get pod -n llmariner -l app.kubernetes.io/name=runtime 2>&1 | grep -v "No resources found"; then
     break
   fi
   sleep 1
