@@ -25,7 +25,7 @@ on:
       testFineTuning:
         description: 'Test fine-tuning?'
         required: true
-        default: true
+        default: false
         type: boolean
       testDynamicModelLoading:
         description: 'Test dynamic model loading?'
