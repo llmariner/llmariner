@@ -7,28 +7,18 @@ on:
         required: true
         default: false
         type: boolean
-      enableOllamaDynamicModelLoading:
-        description: 'Enable Ollama dynamic model loading?'
-        required: true
-        default: false
-        type: boolean
       enableHuggingFaceDownload:
         description: 'Enable Hugging Face model loading?'
         required: true
         default: true
         type: boolean
-      testRag:
-        description: 'Test RAG?'
+      testDynamicModelLoading:
+        description: 'Test dynamic model loading?'
         required: true
         default: true
         type: boolean
-      testFineTuning:
-        description: 'Test fine-tuning?'
-        required: true
-        default: false
-        type: boolean
-      testDynamicModelLoading:
-        description: 'Test dynamic model loading?'
+      testRag:
+        description: 'Test RAG?'
         required: true
         default: true
         type: boolean
@@ -47,6 +37,16 @@ on:
           - vllm
       useInferenceSim:
         description: 'Use Inference Sim for vLLM?'
+        required: true
+        default: false
+        type: boolean
+      enableOllamaDynamicModelLoading:
+        description: 'Enable Ollama dynamic model loading?'
+        required: true
+        default: false
+        type: boolean
+      testFineTuning:
+        description: 'Test fine-tuning?'
         required: true
         default: false
         type: boolean
