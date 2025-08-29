@@ -37,11 +37,10 @@ on:
         required: true
         default: true
         type: boolean
-      defaultRuntime:
-        description: 'Default inference runtime?'
-        required: true
-        default: ollama
         type: string
+        choices:
+          - ollama
+          - vllm
       useInferenceSim:
         description: 'Use Inference Sim for vLLM?'
         required: true
