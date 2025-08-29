@@ -28,6 +28,8 @@ for i in {1..300}; do
   sleep 1
 done
 
+kubectl get pods -n llmariner vllm-google-gemma-2b-it-q4-0-0  -o yaml
+
 kubectl wait --timeout=300s --for=condition=ready pod -n llmariner -l app.kubernetes.io/name=runtime
 
 echo "Inference runtime pod is ready!"
