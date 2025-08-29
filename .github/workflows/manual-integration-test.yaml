@@ -41,7 +41,6 @@ on:
         description: 'Default inference runtime?'
         required: true
         default: ollama
-        type: string
         choices:
           - ollama
           - vllm
