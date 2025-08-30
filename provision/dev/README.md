@@ -89,3 +89,14 @@ helmfile apply -e tenant-control -l app=llmariner --skip-diff-on-install
 ```bash
 LLMARINER_API_KEY=default-key-secret ./validate_deployment.sh
 ```
+
+## Accessing S3
+
+```bash
+export AWS_ACCESS_KEY_ID=llmariner-key
+export AWS_SECRET_ACCESS_KEY=llmariner-secret
+
+kubectl port-forward -n minio service/minio 9000:9000 &
+
+aws --endpoint-url http://localhost:9000 s3 ls s3://llmariner/models/
+```
