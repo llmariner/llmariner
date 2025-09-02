@@ -249,6 +249,8 @@ releases:
         dynamicModelLoading: {{ .Values.llmariner.enableOllamaDynamicModelLoading }}
       vllm:
         dynamicLoRALoading: {{ .Values.llmariner.enableDynamicLoRALoading }}
+      driftedPodUpdater:
+        enable: {{ .Values.llmariner.enableDriftedPodUpdater }}
   {{ if .Values.llmariner.enableOllamaDynamicModelLoading }}
   - vector-store-manager-server:
       llmEngineAddr: ollama-dynamic:11434
