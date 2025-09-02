@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-trap 'kill $(jobs -p)' EXIT
 
 echo "Creating a base model..."
 
