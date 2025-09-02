@@ -37,3 +37,5 @@ for i in {1..300}; do
 done
 
 llma models activate "${model_id}"
+
+llma chat completions create --model "${model_id}" --role user --completion "Hello"

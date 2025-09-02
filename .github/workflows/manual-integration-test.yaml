@@ -45,6 +45,11 @@ on:
         required: true
         default: false
         type: boolean
+      testDynamicLoraLoading:
+        description: 'Test Dynamic LoRA Loading?'
+        required: true
+        default: false
+        type: boolean
       testFineTuning:
         description: 'Test fine-tuning?'
         required: true
@@ -89,7 +94,8 @@ jobs:
           --state-values-set llmariner.useFakeFineTuningJob=${{ github.event.inputs.testFineTuning }} \
           --state-values-set llmariner.useGpuSharing=${{ github.event.inputs.testGpuSharing }} \
           --state-values-set llmariner.defaultRuntime=${{ github.event.inputs.defaultRuntime }} \
-          --state-values-set llmariner.useInferenceSim=${{ github.event.inputs.useInferenceSim }}
+          --state-values-set llmariner.useInferenceSim=${{ github.event.inputs.useInferenceSim }} \
+          --state-values-set llmariner.enableDynamicLoRALoading=${{ github.event.inputs.testDynamicLoraLoading }}
         helmfile-workdirectory: ./provision/dev/
     - name: set-up-cli-config
       run: |
@@ -171,3 +177,9 @@ jobs:
         LLMARINER_API_KEY: default-key-secret
       run: |
         ./provision/dev/tests/gpu-sharing/create_cluster_config.sh
+    - name: test-dynamic-lora-loading
+      if: github.event.inputs.testDynamicLoraLoading == 'true'
+      env:
+        LLMARINER_API_KEY: default-key-secret
+      run: |
+        ./provision/dev/tests/dynamic-lora-loading/run.sh
