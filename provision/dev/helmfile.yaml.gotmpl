@@ -245,6 +245,9 @@ releases:
       model:
         default:
           runtimeName: {{ .Values.llmariner.defaultRuntime }}
+          {{ if .Values.llmariner.enableInferenceManagerGracefulShutdown }}
+          replicas: 2
+          {{ end }}
       ollama:
         dynamicModelLoading: {{ .Values.llmariner.enableOllamaDynamicModelLoading }}
       vllm:
@@ -259,14 +262,11 @@ releases:
       {{ end }}
   {{ if .Values.llmariner.enableInferenceManagerGracefulShutdown }}
   - inference-manager-server:
-      replicas: 2
+      replicaCount: 2
       engineHeartbeat:
         enable: true
       gracefulShutdownDelay: 30s
       terminationGracePeriodSeconds: "300"
-      model:
-        default:
-          replicas: 2
   {{ end }}
   {{ if .Values.llmariner.enableOllamaDynamicModelLoading }}
   - vector-store-manager-server:
