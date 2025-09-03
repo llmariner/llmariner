@@ -251,6 +251,19 @@ releases:
         dynamicLoRALoading: {{ .Values.llmariner.enableDynamicLoRALoading }}
       driftedPodUpdater:
         enable: {{ .Values.llmariner.enableDriftedPodUpdater }}
+     {{ if .Values.llmariner.enableInferenceManagerGracefulShutdown }}
+      engineHeartbeat:
+        reconnectOnNoHeartbeat: true
+        heartbeatTimeout: 120s
+      gracefulShutdownDelay: 30s
+      {{ end }}
+  {{ if .Values.llmariner.enableInferenceManagerGracefulShutdown }}
+  - inference-manager-server:
+      engineHeartbeat:
+        enable: true
+      gracefulShutdownDelay: 30s
+      terminationGracePeriodSeconds: "300"
+  {{ end }}
   {{ if .Values.llmariner.enableOllamaDynamicModelLoading }}
   - vector-store-manager-server:
       llmEngineAddr: ollama-dynamic:11434
