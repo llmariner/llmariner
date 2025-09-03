@@ -22,3 +22,4 @@ llmariner:
   enableDynamicLoRALoading: false
   defaultRuntime: ollama
   enableDriftedPodUpdater: true
+  enableInferenceManagerGracefulShutdown: false
