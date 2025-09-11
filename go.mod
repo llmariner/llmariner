@@ -20,7 +20,7 @@ require (
 	github.com/llmariner/file-manager v1.7.0
 	github.com/llmariner/inference-manager v1.39.0
 	github.com/llmariner/job-manager v1.24.1
-	github.com/llmariner/model-manager v1.25.0
+	github.com/llmariner/model-manager v1.27.0
 	github.com/llmariner/user-manager v1.23.0
 	github.com/llmariner/vector-store-manager v0.52.0
 	github.com/mattn/go-colorable v0.1.13
