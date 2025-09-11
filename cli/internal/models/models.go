@@ -16,6 +16,7 @@ import (
 	mv1 "github.com/llmariner/model-manager/api/v1"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 )
 
 const (
@@ -168,38 +169,63 @@ func deleteCmd() *cobra.Command {
 
 func updateCmd() *cobra.Command {
 	var (
-		gpu                       int32
-		replicas                  int32
+		gpu      int32
+		replicas int32
+
+		extraArgs      []string
+		clearExtraArgs bool
+
 		disableOnDemandAllocation bool
 	)
 	cmd := &cobra.Command{
 		Use:  "update <ID>",
 		Args: validateIDArg,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			var config mv1.ModelConfig
+			var (
+				config     mv1.ModelConfig
+				updateMask fieldmaskpb.FieldMask
+			)
 
 			if cmd.Flags().Changed("disable-on-demand-allocation") {
 				config.ClusterAllocationPolicy = &mv1.ModelConfig_ClusterAllocationPolicy{
 					EnableOnDemandAllocation: !disableOnDemandAllocation,
 				}
+				updateMask.Paths = append(updateMask.Paths, "cluster_allocation_policy.enable_on_demand_allocation")
 			}
-			if cmd.Flags().Changed("gpu") || cmd.Flags().Changed("replicas") {
+			if cmd.Flags().Changed("gpu") || cmd.Flags().Changed("replicas") || cmd.Flags().Changed("extra-args") {
 				config.RuntimeConfig = &mv1.ModelConfig_RuntimeConfig{}
 				if cmd.Flags().Changed("gpu") {
 					config.RuntimeConfig.Resources = &mv1.ModelConfig_RuntimeConfig_Resources{}
 					config.RuntimeConfig.Resources.Gpu = gpu
+					updateMask.Paths = append(updateMask.Paths, "config.runtime_config.resources.gpu")
 				}
 				if cmd.Flags().Changed("replicas") {
 					config.RuntimeConfig.Replicas = replicas
+					updateMask.Paths = append(updateMask.Paths, "config.runtime_config.replicas")
+				}
+				if cmd.Flags().Changed("extra-args") {
+					config.RuntimeConfig.ExtraArgs = extraArgs
+					updateMask.Paths = append(updateMask.Paths, "config.runtime_config.extra_args")
 				}
 			}
 
-			return update(cmd.Context(), args[0], &config)
+			if clearExtraArgs {
+				if cmd.Flags().Changed("extra-args") {
+					return errors.New("cannot use --extra-args and --clear-extra-args together")
+				}
+				updateMask.Paths = append(updateMask.Paths, "config.runtime_config.extra_args")
+			}
+
+			return update(cmd.Context(), args[0], &config, &updateMask)
 		},
 	}
 
 	cmd.Flags().Int32Var(&gpu, "gpu", 1, "Number of GPUs to use for the model. Default is 1.")
 	cmd.Flags().Int32Var(&replicas, "replicas", 1, "Number of replicas to use for the model. Default is 1.")
+
+	cmd.Flags().StringSliceVar(&extraArgs, "extra-args", nil, "Extra arguments to pass to an inference runtime that serves the model.")
+	cmd.Flags().BoolVar(&clearExtraArgs, "clear-extra-args", false, "If true, clear the extra arguments.")
+
 	cmd.Flags().BoolVar(&disableOnDemandAllocation, "disable-on-demand-allocation", false, "If true, the model is not activated on demand.")
 
 	return cmd
@@ -393,15 +419,21 @@ func update(
 	ctx context.Context,
 	id string,
 	config *mv1.ModelConfig,
+	updateMask *fieldmaskpb.FieldMask,
 ) error {
 	env, err := runtime.NewEnv(ctx)
 	if err != nil {
 		return err
 	}
 
-	req := &mv1.Model{
-		Config: config,
+	req := mv1.UpdateModelRequest{
+		Model: &mv1.Model{
+			Id:     id,
+			Config: config,
+		},
+		UpdateMask: updateMask,
 	}
+
 	var resp mv1.Model
 	if err := ihttp.NewClient(env).Send(http.MethodPatch, fmt.Sprintf("%s/%s", path, id), &req, &resp); err != nil {
 		return err
