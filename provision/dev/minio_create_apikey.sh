@@ -10,6 +10,13 @@ SECRET_KEY=${4:?SECRET_KEY}
 KUBECONFIG_CONTEXT=${5}
 NAMESPACE=${6:?NAMESPACE}
 
+for i in {1..100}; do
+  kubectl get pod --context="${KUBECONFIG_CONTEXT}" --namespace="${NAMESPACE}" -l app.kubernetes.io/name=minio
+  sleep 1
+done
+
+kubectl get pod --context="${KUBECONFIG_CONTEXT}" --namespace="${NAMESPACE}" -l app.kubernetes.io/name=minio -o yaml
+
 kubectl wait pod \
         --context="${KUBECONFIG_CONTEXT}" \
         --timeout=180s \
