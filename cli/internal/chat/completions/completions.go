@@ -32,15 +32,15 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	msg := &iv1.CreateChatCompletionRequest_Message{
-		Content: []*iv1.CreateChatCompletionRequest_Message_Content{
+	msg := &iv1.ChatCompletionMessage{
+		Content: []*iv1.ChatCompletionMessage_Content{
 			{
 				Type: "text",
 			},
 		},
 	}
 	req := &iv1.CreateChatCompletionRequest{
-		Messages: []*iv1.CreateChatCompletionRequest_Message{msg},
+		Messages: []*iv1.ChatCompletionMessage{msg},
 		Stream:   true,
 	}
 	var (
