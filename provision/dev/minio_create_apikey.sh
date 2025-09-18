@@ -12,7 +12,7 @@ NAMESPACE=${6:?NAMESPACE}
 
 kubectl wait pod \
         --context="${KUBECONFIG_CONTEXT}" \
-        --timeout=90s \
+        --timeout=180s \
         --for=condition=ready \
         --namespace="${NAMESPACE}" \
         -l app.kubernetes.io/name=minio
