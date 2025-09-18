@@ -5,6 +5,7 @@ import (
 	"github.com/llmariner/llmariner/cli/internal/hidden/clustertelemetry"
 	"github.com/llmariner/llmariner/cli/internal/hidden/inference"
 	"github.com/llmariner/llmariner/cli/internal/hidden/jobs"
+	"github.com/llmariner/llmariner/cli/internal/hidden/tokenize"
 	"github.com/spf13/cobra"
 )
 
@@ -21,5 +22,6 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(inference.Cmd())
 	cmd.AddCommand(clustertelemetry.Cmd())
 	cmd.AddCommand(apiusage.Cmd())
+	cmd.AddCommand(tokenize.Cmd())
 	return cmd
 }
