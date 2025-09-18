@@ -72,6 +72,8 @@ releases:
     value: {{ .Values.postgres.user }}
   - name: auth.password
     value: {{ .Values.postgres.pass }}
+  - name: image.repository
+    value: bitnamilegacy/postgresql
 
 - name: minio
   namespace: minio
@@ -87,6 +89,8 @@ releases:
     value: {{ .Values.minio.adminPass }}
   - name: defaultBuckets
     value: {{ .Values.minio.bucket }}
+  - name: image.repository
+    value: bitnamilegacy/minio
   hooks:
   - events: ["postsync"]
     showlogs: true
@@ -119,6 +123,8 @@ releases:
   set:
   - name: auth.password
     value: {{ .Values.redis.password }}
+  - name: image.repository
+    value: bitnamilegacy/redis
 
 - name: milvus
   namespace: milvus
