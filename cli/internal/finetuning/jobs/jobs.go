@@ -42,7 +42,9 @@ func Cmd() *cobra.Command {
 }
 
 func createCmd() *cobra.Command {
-	var req jv1.CreateJobRequest
+	req := jv1.CreateJobRequest{
+		Resources: &jv1.Job_Resources{},
+	}
 	cmd := &cobra.Command{
 		Use:  "create",
 		Args: cobra.NoArgs,
@@ -54,6 +56,7 @@ func createCmd() *cobra.Command {
 	cmd.Flags().StringVar(&req.Model, "model", "", "Base model to fine-tune")
 	cmd.Flags().StringVar(&req.TrainingFile, "training-file-id", "", "Training file ID")
 	cmd.Flags().StringVar(&req.Suffix, "suffix", "", "Suffix for the fine-tuned model name")
+	cmd.Flags().Int32Var(&req.Resources.GpuCount, "gpu", 1, "Number of GPUs to use")
 
 	_ = cmd.MarkFlagRequired("model")
 	_ = cmd.MarkFlagRequired("training-file-id")
