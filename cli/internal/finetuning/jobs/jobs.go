@@ -32,11 +32,33 @@ func Cmd() *cobra.Command {
 		Args:               cobra.NoArgs,
 		DisableFlagParsing: true,
 	}
+	cmd.AddCommand(createCmd())
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
 	cmd.AddCommand(cancelCmd())
 	cmd.AddCommand(execCmd())
 	cmd.AddCommand(logsCmd())
+	return cmd
+}
+
+func createCmd() *cobra.Command {
+	var req jv1.CreateJobRequest
+	cmd := &cobra.Command{
+		Use:  "create",
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return create(cmd.Context(), &req)
+		},
+	}
+
+	cmd.Flags().StringVar(&req.Model, "model", "", "Base model to fine-tune")
+	cmd.Flags().StringVar(&req.TrainingFile, "training-file-id", "", "Training file ID")
+	cmd.Flags().StringVar(&req.Suffix, "suffix", "", "Suffix for the fine-tuned model name")
+
+	_ = cmd.MarkFlagRequired("model")
+	_ = cmd.MarkFlagRequired("training-file-id")
+	_ = cmd.MarkFlagRequired("suffix")
+
 	return cmd
 }
 
@@ -120,6 +142,22 @@ func validateIDArg(cmd *cobra.Command, args []string) error {
 	if len(args) != 1 {
 		return errors.New("<ID> is required argument")
 	}
+	return nil
+}
+
+func create(ctx context.Context, req *jv1.CreateJobRequest) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	var resp jv1.Job
+	if err := ihttp.NewClient(env).Send(http.MethodPost, path, req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Created the job (ID: %q).\n", resp.Id)
+
 	return nil
 }
 
