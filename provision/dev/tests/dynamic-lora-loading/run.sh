@@ -15,6 +15,10 @@ for i in {1..300}; do
   sleep 1
 done
 
+llma models list
+
+llma models get TinyLlama-TinyLlama-1.1B-Chat-v1.0
+
 echo "Creating a fine-tuned model..."
 
 # TODO(kenji): Use a proper model. Currently the test assumes that inference-sim is used as a runtime and
