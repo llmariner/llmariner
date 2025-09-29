@@ -98,8 +98,8 @@ github.com/llmariner/job-manager v1.24.1 h1:M2pAwX8nA6yLTGtKYXP1uA03iQMMc3TaT8oh
 github.com/llmariner/job-manager v1.24.1/go.mod h1:ddotCdCEYKvvV399y0uoHIjL4yH2wna7Gk5fTmXfRaE=
 github.com/llmariner/model-manager v1.27.0 h1:Z+Hs9/BEA4jNj8vlIsKNkAIgMgBHpCNHLIa4se7NkDU=
 github.com/llmariner/model-manager v1.27.0/go.mod h1:lPB86X2T7pTIcV2K/jJzuQEMVJTUecd7xGoTso9c9uQ=
-github.com/llmariner/user-manager v1.23.0 h1:CDMUx7mjKgAnsNnhboiHwZhHcRPOALHD28RWfJkMizs=
-github.com/llmariner/user-manager v1.23.0/go.mod h1:rT57geWb9Q7QB15ZboXa/f8tO3vvsqhRjVt2XShKAWE=
+github.com/llmariner/user-manager v1.25.0 h1:WfU1cq8hibPTirvytE6uDMu+GOdyjVNwONPT09OM4E8=
+github.com/llmariner/user-manager v1.25.0/go.mod h1:rT57geWb9Q7QB15ZboXa/f8tO3vvsqhRjVt2XShKAWE=
 github.com/llmariner/vector-store-manager v0.52.0 h1:LxwAqYTSDuejuSualtZh8WfeoXGgxhqiFUprzZbZuos=
 github.com/llmariner/vector-store-manager v0.52.0/go.mod h1:ES0MelQY+8TQxLxxubpJeS7zTpF+dZpxU6NM6JeTHk8=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
