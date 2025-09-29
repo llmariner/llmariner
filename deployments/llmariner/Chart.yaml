@@ -57,13 +57,13 @@ dependencies:
   tags:
   - control-plane
 - name: inference-manager-engine
-  version: 1.44.0
+  version: 1.45.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-engine.enable
   tags:
   - worker
 - name: inference-manager-server
-  version: 1.44.0
+  version: 1.45.0
   repository: "oci://public.ecr.aws/cloudnatix/llmariner-charts"
   condition: inference-manager-server.enable
   tags:
