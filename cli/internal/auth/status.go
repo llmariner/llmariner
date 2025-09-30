@@ -2,6 +2,8 @@ package auth
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/llmariner/llmariner/cli/internal/accesstoken"
@@ -39,8 +41,14 @@ func status(ctx context.Context) error {
 	}
 
 	p.Printf("Logged in.\n")
-	p.Printf("- ID: %s\n", user.Id)
-	p.Printf("- Token file location: %s\n", accesstoken.TokenFilePath())
+	p.Printf("Token file location: %s\n", accesstoken.TokenFilePath())
+	p.Printf("Login user:\n")
+
+	b, err := json.MarshalIndent(&user, "", "    ")
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 
 	return nil
 }
