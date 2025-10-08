@@ -4,6 +4,7 @@ import (
 	"github.com/llmariner/llmariner/cli/internal/admin/clusters"
 	"github.com/llmariner/llmariner/cli/internal/admin/org"
 	"github.com/llmariner/llmariner/cli/internal/admin/project"
+	"github.com/llmariner/llmariner/cli/internal/admin/user"
 	"github.com/spf13/cobra"
 )
 
@@ -18,5 +19,6 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(clusters.Cmd())
 	cmd.AddCommand(org.Cmd())
 	cmd.AddCommand(project.Cmd())
+	cmd.AddCommand(user.Cmd())
 	return cmd
 }
