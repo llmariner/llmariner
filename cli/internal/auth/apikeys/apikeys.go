@@ -17,6 +17,7 @@ import (
 	"github.com/llmariner/user-manager/pkg/role"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 )
 
 const (
@@ -262,8 +263,13 @@ func update(ctx context.Context, name, orgTitle, projectTitle, newName string) e
 		return fmt.Errorf("API key %q not found", name)
 	}
 
-	req := uv1.APIKey{
-		Name: newName,
+	req := uv1.UpdateAPIKeyRequest{
+		ApiKey: &uv1.APIKey{
+			Name: newName,
+		},
+		UpdateMask: &fieldmaskpb.FieldMask{
+			Paths: []string{"name"},
+		},
 	}
 
 	var resp uv1.APIKey
