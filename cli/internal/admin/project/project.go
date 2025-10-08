@@ -359,7 +359,11 @@ func listMembers(ctx context.Context, title, orgTitle string) error {
 	tbl := table.New("User ID", "Role")
 	ui.FormatTable(tbl)
 	for _, u := range resp.Users {
-		tbl.AddRow(u.UserId, u.Role.String())
+		r, ok := role.ProjectRoleToString(u.Role)
+		if !ok {
+			return fmt.Errorf("invalid role %q", u.Role)
+		}
+		tbl.AddRow(u.UserId, r)
 	}
 
 	tbl.Print()
