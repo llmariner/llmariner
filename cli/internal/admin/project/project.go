@@ -18,6 +18,7 @@ import (
 	"github.com/llmariner/user-manager/pkg/role"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 )
 
 const (
@@ -38,6 +39,7 @@ func Cmd() *cobra.Command {
 	cmd.AddCommand(listCmd())
 	cmd.AddCommand(getCmd())
 	cmd.AddCommand(deleteCmd())
+	cmd.AddCommand(updateCmd())
 	cmd.AddCommand(addMemberCmd())
 	cmd.AddCommand(listMembersCmd())
 	cmd.AddCommand(removeMemberCmd())
@@ -102,6 +104,34 @@ func deleteCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
+	return cmd
+}
+
+func updateCmd() *cobra.Command {
+	var (
+		orgTitle string
+		newTitle string
+	)
+	cmd := &cobra.Command{
+		Use:  "update <TITLE>",
+		Args: validateTitleArg,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			var (
+				proj       uv1.Project
+				updateMask fieldmaskpb.FieldMask
+			)
+			if cmd.Flags().Changed("new-title") {
+				proj.Title = newTitle
+				updateMask.Paths = append(updateMask.Paths, "title")
+			}
+
+			return update(cmd.Context(), args[0], orgTitle, &proj, &updateMask)
+		},
+	}
+
+	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
+	cmd.Flags().StringVar(&newTitle, "new-title", "", "New title of the project")
+
 	return cmd
 }
 
@@ -289,6 +319,46 @@ func delete(ctx context.Context, title, orgTitle string) error {
 	}
 
 	fmt.Printf("Deleted the project (ID: %q).\n", project.Id)
+
+	return nil
+}
+
+func update(
+	ctx context.Context,
+	title string,
+	orgTitle string,
+	proj *uv1.Project,
+	updateMask *fieldmaskpb.FieldMask,
+) error {
+	env, err := runtime.NewEnv(ctx)
+	if err != nil {
+		return err
+	}
+
+	project, found, err := FindProjectByTitle(env, title, orgTitle)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("project %q not found", title)
+	}
+
+	path, _, err := buildPath(env, orgTitle)
+	if err != nil {
+		return err
+	}
+
+	req := uv1.UpdateProjectRequest{
+		Project:    proj,
+		UpdateMask: updateMask,
+	}
+
+	var resp uv1.Project
+	if err := ihttp.NewClient(env).Send(http.MethodPatch, fmt.Sprintf("%s/%s", path, project.Id), &req, &resp); err != nil {
+		return err
+	}
+
+	fmt.Printf("Updated the project (ID: %q).\n", project.Id)
 
 	return nil
 }
