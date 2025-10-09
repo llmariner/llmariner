@@ -109,8 +109,10 @@ func deleteCmd() *cobra.Command {
 
 func updateCmd() *cobra.Command {
 	var (
-		orgTitle string
-		newTitle string
+		orgTitle        string
+		newTitle        string
+		namespace       string
+		nodeSelectorStr []string
 	)
 	cmd := &cobra.Command{
 		Use:  "update <TITLE>",
@@ -124,6 +126,19 @@ func updateCmd() *cobra.Command {
 				proj.Title = newTitle
 				updateMask.Paths = append(updateMask.Paths, "title")
 			}
+			if cmd.Flags().Changed("kubernetes-namespace") || cmd.Flags().Changed("node-selector") {
+				nodeSelector, err := parseNodeSelectorStr(nodeSelectorStr)
+				if err != nil {
+					return err
+				}
+				proj.Assignments = []*uv1.ProjectAssignment{
+					{
+						Namespace:    namespace,
+						NodeSelector: nodeSelector,
+					},
+				}
+				updateMask.Paths = append(updateMask.Paths, "assignments")
+			}
 
 			return update(cmd.Context(), args[0], orgTitle, &proj, &updateMask)
 		},
@@ -131,6 +146,8 @@ func updateCmd() *cobra.Command {
 
 	cmd.Flags().StringVarP(&orgTitle, "organization-title", "o", "", "Organization title of the project. The organization in the current context is used if not specified.")
 	cmd.Flags().StringVar(&newTitle, "new-title", "", "New title of the project")
+	cmd.Flags().StringVarP(&namespace, "kubernetes-namespace", "n", "", "Kubernetes namesapce of the project")
+	cmd.Flags().StringSliceVar(&nodeSelectorStr, "node-selector", nil, "Node selector for the project. This is used to schedule the project pods on specific nodes. Format: key=value")
 
 	return cmd
 }
@@ -202,16 +219,9 @@ func create(
 		return err
 	}
 
-	var nodeSelector []*uv1.ProjectAssignment_NodeSelector
-	for _, ns := range nodeSelectorStr {
-		l := strings.SplitN(ns, "=", 2)
-		if len(l) != 2 {
-			return fmt.Errorf("invalid node selector format: %q, expected key=value", ns)
-		}
-		nodeSelector = append(nodeSelector, &uv1.ProjectAssignment_NodeSelector{
-			Key:   l[0],
-			Value: l[1],
-		})
+	nodeSelector, err := parseNodeSelectorStr(nodeSelectorStr)
+	if err != nil {
+		return err
 	}
 
 	req := uv1.CreateProjectRequest{
@@ -551,4 +561,19 @@ func validateTitleArg(cmd *cobra.Command, args []string) error {
 		return errors.New("<TITLE> is required argument")
 	}
 	return nil
+}
+
+func parseNodeSelectorStr(nss []string) ([]*uv1.ProjectAssignment_NodeSelector, error) {
+	var nodeSelector []*uv1.ProjectAssignment_NodeSelector
+	for _, ns := range nss {
+		l := strings.SplitN(ns, "=", 2)
+		if len(l) != 2 {
+			return nil, fmt.Errorf("invalid node selector format: %q, expected key=value", ns)
+		}
+		nodeSelector = append(nodeSelector, &uv1.ProjectAssignment_NodeSelector{
+			Key:   l[0],
+			Value: l[1],
+		})
+	}
+	return nodeSelector, nil
 }
