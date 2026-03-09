@@ -10,7 +10,7 @@ require (
 	github.com/cli/browser v1.3.0
 	github.com/cli/go-gh/v2 v2.12.1
 	github.com/coreos/go-oidc/v3 v3.10.0
-	github.com/docker/cli v26.1.3+incompatible
+	github.com/docker/cli v29.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
